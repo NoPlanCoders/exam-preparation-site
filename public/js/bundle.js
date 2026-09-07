@@ -8440,9 +8440,12 @@
   function showView(view) {
     for (const v of [viewExam, viewSubject, viewSettings, viewDashboard, viewQuiz, viewResult]) {
       v.hidden = v !== view;
+      v.classList.remove("view-entering");
     }
     if (view === viewDashboard) setMainNav("dashboard");
     else if (view !== viewSettings) setMainNav("library");
+    void view.offsetWidth;
+    view.classList.add("view-entering");
   }
   var THEME_STORAGE_KEY = "quiz-theme";
   function loadTheme() {
@@ -8550,10 +8553,11 @@
       dashboardSubjectList.appendChild(empty);
       return;
     }
-    for (const entry of entries) {
+    for (const [index, entry] of entries.entries()) {
       const accuracy = entry.answered ? Math.round(entry.correct / entry.answered * 100) : 0;
       const item = document.createElement("article");
       item.className = "dashboard-subject-item";
+      item.style.setProperty("--stagger-index", String(index));
       const heading = document.createElement("div");
       heading.className = "dashboard-subject-heading";
       const titleGroup = document.createElement("div");
@@ -8600,10 +8604,11 @@
   function renderExamList() {
     const exams = getExams();
     examList.innerHTML = "";
-    for (const exam of exams) {
+    for (const [index, exam] of exams.entries()) {
       const card = document.createElement("button");
       card.type = "button";
       card.className = "card";
+      card.style.setProperty("--stagger-index", String(index));
       card.innerHTML = `
       <span class="card-icon">${getIcon(exam.icon, DEFAULT_EXAM_ICON)}</span>
       <span class="card-body"><h3>${exam.name}</h3><p>${exam.description}</p></span>
@@ -8632,13 +8637,14 @@
         groups.set(groupName, { name: groupName, icon: subject.icon, subjects: [subject] });
       }
     }
-    for (const group of groups.values()) {
+    for (const [index, group] of Array.from(groups.values()).entries()) {
       const totalQuestions = group.subjects.reduce(
         (sum, subject) => sum + getQuestions(examId, subject.id).length,
         0
       );
       const card = document.createElement("div");
       card.className = "card subject-card subject-group-card";
+      card.style.setProperty("--stagger-index", String(index));
       const modesHtml = group.subjects.map((subject) => {
         const { modeName } = splitSubjectName(subject.name);
         const questions18 = getQuestions(examId, subject.id);
@@ -9121,6 +9127,7 @@
     menuMain.hidden = false;
   }
   function closeMenu() {
+    menuPanel.classList.remove("menu-panel-entering");
     menuPanel.hidden = true;
     btnMenuToggle.setAttribute("aria-expanded", "false");
     closeSearch();
@@ -9128,6 +9135,9 @@
   function openMenu() {
     renderPinnedMenu();
     menuPanel.hidden = false;
+    menuPanel.classList.remove("menu-panel-entering");
+    void menuPanel.offsetWidth;
+    menuPanel.classList.add("menu-panel-entering");
     btnMenuToggle.setAttribute("aria-expanded", "true");
   }
   function confirmLeaveQuizIfNeeded() {

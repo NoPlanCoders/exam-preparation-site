@@ -49,6 +49,69 @@
   --shadow-card-hover: 0 10px 24px rgba(0, 0, 0, 0.3);
 }
 
+:root {
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+@keyframes view-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes list-enter {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes surface-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes gentle-fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes success-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 * {
   box-sizing: border-box;
 }
@@ -399,6 +462,21 @@ body {
 
 .view[hidden] {
   display: none;
+}
+
+.view.view-entering {
+  animation: view-enter 220ms var(--ease-out) both;
+}
+
+.card-list > .card,
+.dashboard-subject-item {
+  animation: list-enter 260ms var(--ease-out) backwards;
+  animation-delay: calc(var(--stagger-index, 0) * 45ms);
+}
+
+.menu-panel.menu-panel-entering {
+  transform-origin: top right;
+  animation: surface-enter 180ms var(--ease-out) both;
 }
 
 h2 {
@@ -946,6 +1024,11 @@ button.card:hover {
 
 button {
   cursor: pointer;
+  transition: transform 140ms var(--ease-out);
+}
+
+button:active:not(:disabled) {
+  transform: scale(0.98);
 }
 
 .start-btn,
@@ -1269,6 +1352,13 @@ button {
   border-radius: var(--radius-sm);
 }
 
+.quiz-feedback:not([hidden]),
+.quiz-explanation:not([hidden]),
+.handwriting-answer-reveal:not([hidden]),
+.btn-next:not([hidden]) {
+  animation: surface-enter 180ms var(--ease-out) backwards;
+}
+
 .quiz-feedback.correct {
   color: var(--color-correct);
   background: var(--color-correct-bg);
@@ -1399,6 +1489,7 @@ button {
   align-items: center;
   justify-content: center;
   gap: 0.4rem;
+  animation: success-pop 360ms var(--ease-out) both;
 }
 
 .all-correct svg {
@@ -1583,6 +1674,10 @@ button {
   display: none;
 }
 
+.confirm-overlay:not([hidden]) .confirm-dialog {
+  animation: surface-enter 180ms var(--ease-out) both;
+}
+
 .confirm-dialog {
   background: var(--color-surface);
   border-radius: var(--radius-lg);
@@ -1633,4 +1728,30 @@ button {
 .confirm-btn-ok:hover {
   transform: translateY(-1px);
   box-shadow: 0 6px 16px rgba(79, 70, 229, 0.32);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .view.view-entering,
+  .card-list > .card,
+  .dashboard-subject-item,
+  .menu-panel.menu-panel-entering,
+  .quiz-feedback:not([hidden]),
+  .quiz-explanation:not([hidden]),
+  .handwriting-answer-reveal:not([hidden]),
+  .btn-next:not([hidden]),
+  .all-correct,
+  .confirm-overlay:not([hidden]) .confirm-dialog {
+    animation-name: gentle-fade-in;
+    animation-duration: 180ms;
+    animation-delay: 0ms;
+  }
+
+  button:active:not(:disabled) {
+    transform: scale(0.99);
+  }
+
+  .progress-bar-fill,
+  .dashboard-progress-fill {
+    transition-duration: 180ms;
+  }
 }
