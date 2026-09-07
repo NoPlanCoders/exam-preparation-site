@@ -8307,6 +8307,7 @@
   // src/app.ts
   var state = null;
   var currentExam = null;
+  var deferredInstallPrompt = null;
   function $(id) {
     const el = document.getElementById(id);
     if (!el) throw new Error(`\u8981\u7D20\u304C\u898B\u3064\u304B\u308A\u307E\u305B\u3093: #${id}`);
@@ -8351,6 +8352,7 @@
   var menuPinnedList = $("menu-pinned-list");
   var menuAddSubject = $("menu-add-subject");
   var menuSettings = $("menu-settings");
+  var menuInstall = $("menu-install");
   var menuSearch = $("menu-search");
   var menuSearchBack = $("menu-search-back");
   var menuSearchInput = $("menu-search-input");
@@ -9213,6 +9215,23 @@
     showView(viewSettings);
   }
   menuSettings.addEventListener("click", openSettings);
+  window.addEventListener("beforeinstallprompt", (event) => {
+    event.preventDefault();
+    deferredInstallPrompt = event;
+    menuInstall.hidden = false;
+  });
+  window.addEventListener("appinstalled", () => {
+    deferredInstallPrompt = null;
+    menuInstall.hidden = true;
+  });
+  menuInstall.addEventListener("click", async () => {
+    if (!deferredInstallPrompt) return;
+    const installPrompt = deferredInstallPrompt;
+    deferredInstallPrompt = null;
+    menuInstall.hidden = true;
+    await installPrompt.prompt();
+    await installPrompt.userChoice;
+  });
   menuSearchBack.addEventListener("click", () => {
     closeSearch();
   });

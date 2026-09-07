@@ -19,8 +19,14 @@ interface AttemptState {
   masteryRecorded: boolean;
 }
 
+interface InstallPromptEvent extends Event {
+  prompt(): Promise<void>;
+  userChoice: Promise<{ outcome: 'accepted' | 'dismissed'; platform: string }>;
+}
+
 let state: AttemptState | null = null;
 let currentExam: { id: string; name: string } | null = null;
+let deferredInstallPrompt: InstallPromptEvent | null = null;
 
 function $<T extends HTMLElement>(id: string): T {
   const el = document.getElementById(id);
@@ -71,6 +77,7 @@ const menuPinnedDivider = $<HTMLElement>('menu-pinned-divider');
 const menuPinnedList = $<HTMLElement>('menu-pinned-list');
 const menuAddSubject = $<HTMLButtonElement>('menu-add-subject');
 const menuSettings = $<HTMLButtonElement>('menu-settings');
+const menuInstall = $<HTMLButtonElement>('menu-install');
 const menuSearch = $<HTMLElement>('menu-search');
 const menuSearchBack = $<HTMLButtonElement>('menu-search-back');
 const menuSearchInput = $<HTMLInputElement>('menu-search-input');
@@ -1158,6 +1165,26 @@ function openSettings(): void {
 }
 
 menuSettings.addEventListener('click', openSettings);
+
+window.addEventListener('beforeinstallprompt', (event) => {
+  event.preventDefault();
+  deferredInstallPrompt = event as InstallPromptEvent;
+  menuInstall.hidden = false;
+});
+
+window.addEventListener('appinstalled', () => {
+  deferredInstallPrompt = null;
+  menuInstall.hidden = true;
+});
+
+menuInstall.addEventListener('click', async () => {
+  if (!deferredInstallPrompt) return;
+  const installPrompt = deferredInstallPrompt;
+  deferredInstallPrompt = null;
+  menuInstall.hidden = true;
+  await installPrompt.prompt();
+  await installPrompt.userChoice;
+});
 
 menuSearchBack.addEventListener('click', () => {
   closeSearch();
