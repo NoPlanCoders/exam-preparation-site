@@ -37,10 +37,15 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
       </button>
     </div>
+    <nav class="app-main-nav" aria-label="メインナビゲーション">
+      <button type="button" class="app-nav-item is-active" id="nav-library">ライブラリ</button>
+      <button type="button" class="app-nav-item" id="nav-dashboard">ダッシュボード</button>
+    </nav>
     <nav class="menu-panel" id="menu-panel" hidden>
       <div class="menu-main" id="menu-main">
-        <button type="button" class="menu-item" id="menu-go-exam">試験選択に戻る</button>
+        <button type="button" class="menu-item" id="menu-go-exam">ライブラリ</button>
         <button type="button" class="menu-item" id="menu-go-subject" hidden>科目選択に戻る</button>
+        <button type="button" class="menu-item" id="menu-go-dashboard">ダッシュボード</button>
         <div class="menu-divider" id="menu-pinned-divider" hidden></div>
         <div id="menu-pinned-list"></div>
         <div class="menu-divider"></div>
@@ -62,7 +67,13 @@
 
   <main class="container">
     <section id="view-exam" class="view">
-      <h2>試験を選んでください</h2>
+      <div class="library-heading">
+        <div>
+          <p class="section-kicker">学習ライブラリ</p>
+          <h2>試験を選んでください</h2>
+          <p>試験を選ぶと、教科ごとの問題を探せます。</p>
+        </div>
+      </div>
       <div id="exam-list" class="card-list"></div>
     </section>
 
@@ -94,6 +105,44 @@
         </div>
       </div>
       <p class="settings-note">テーマ設定はこの端末のブラウザに保存されます。</p>
+    </section>
+
+    <section id="view-dashboard" class="view dashboard-view" hidden>
+      <div class="dashboard-heading">
+        <div>
+          <p class="section-kicker">学習の記録</p>
+          <h2>ダッシュボード</h2>
+          <p>これまでの回答状況を確認できます。</p>
+        </div>
+        <span class="dashboard-heading-mark" aria-hidden="true">↗</span>
+      </div>
+      <div class="dashboard-stats" aria-label="学習サマリー">
+        <div class="dashboard-stat">
+          <span class="dashboard-stat-label">回答数</span>
+          <strong id="dashboard-answered">0</strong>
+          <span class="dashboard-stat-note">累計</span>
+        </div>
+        <div class="dashboard-stat dashboard-stat-accent">
+          <span class="dashboard-stat-label">正答率</span>
+          <strong id="dashboard-accuracy">—</strong>
+          <span class="dashboard-stat-note">自動採点分</span>
+        </div>
+        <div class="dashboard-stat">
+          <span class="dashboard-stat-label">学習した科目</span>
+          <strong id="dashboard-subject-count">0</strong>
+          <span class="dashboard-stat-note">科目</span>
+        </div>
+      </div>
+      <div class="dashboard-section">
+        <div class="dashboard-section-heading">
+          <div>
+            <h3>科目ごとの記録</h3>
+            <p>最近学習した順に表示しています。</p>
+          </div>
+          <button type="button" class="dashboard-library-btn" id="dashboard-go-library">学習を始める</button>
+        </div>
+        <div id="dashboard-subject-list" class="dashboard-subject-list"></div>
+      </div>
     </section>
 
     <section id="view-quiz" class="view" hidden>

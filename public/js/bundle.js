@@ -8299,6 +8299,7 @@
   var viewExam = $("view-exam");
   var viewSubject = $("view-subject");
   var viewSettings = $("view-settings");
+  var viewDashboard = $("view-dashboard");
   var viewQuiz = $("view-quiz");
   var viewResult = $("view-result");
   var settingsReturnView = viewExam;
@@ -8329,6 +8330,7 @@
   var menuMain = $("menu-main");
   var menuGoExam = $("menu-go-exam");
   var menuGoSubject = $("menu-go-subject");
+  var menuGoDashboard = $("menu-go-dashboard");
   var menuPinnedDivider = $("menu-pinned-divider");
   var menuPinnedList = $("menu-pinned-list");
   var menuAddSubject = $("menu-add-subject");
@@ -8341,6 +8343,13 @@
   var darkModeToggle = $("dark-mode-toggle");
   var themeSettingSummary = $("theme-setting-summary");
   var themeColorMeta = document.querySelector('meta[name="theme-color"]');
+  var navLibrary = $("nav-library");
+  var navDashboard = $("nav-dashboard");
+  var dashboardAnswered = $("dashboard-answered");
+  var dashboardAccuracy = $("dashboard-accuracy");
+  var dashboardSubjectCount = $("dashboard-subject-count");
+  var dashboardSubjectList = $("dashboard-subject-list");
+  var dashboardGoLibrary = $("dashboard-go-library");
   var confirmOverlay = $("confirm-overlay");
   var confirmMessage = $("confirm-message");
   var confirmBtnOk = $("confirm-btn-ok");
@@ -8424,10 +8433,16 @@
   quizCanvas.addEventListener("pointerleave", stopDrawing);
   quizCanvas.addEventListener("pointercancel", stopDrawing);
   btnClearCanvas.addEventListener("click", clearCanvas);
+  function setMainNav(section) {
+    navLibrary.classList.toggle("is-active", section === "library");
+    navDashboard.classList.toggle("is-active", section === "dashboard");
+  }
   function showView(view) {
-    for (const v of [viewExam, viewSubject, viewSettings, viewQuiz, viewResult]) {
+    for (const v of [viewExam, viewSubject, viewSettings, viewDashboard, viewQuiz, viewResult]) {
       v.hidden = v !== view;
     }
+    if (view === viewDashboard) setMainNav("dashboard");
+    else if (view !== viewSettings) setMainNav("library");
   }
   var THEME_STORAGE_KEY = "quiz-theme";
   function loadTheme() {
@@ -8448,6 +8463,131 @@
     darkModeToggle.checked = theme === "dark";
     themeSettingSummary.textContent = theme === "dark" ? "\u30C0\u30FC\u30AF\u30E2\u30FC\u30C9\u304C\u6709\u52B9\u3067\u3059" : "\u30E9\u30A4\u30C8\u30E2\u30FC\u30C9\u304C\u6709\u52B9\u3067\u3059";
     themeColorMeta?.setAttribute("content", theme === "dark" ? "#11162a" : "#6366f1");
+  }
+  var LEARNING_PROGRESS_STORAGE_KEY = "quiz-learning-progress";
+  function loadLearningProgress() {
+    try {
+      const raw = localStorage.getItem(LEARNING_PROGRESS_STORAGE_KEY);
+      if (!raw) return {};
+      const parsed = JSON.parse(raw);
+      if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) return {};
+      return Object.fromEntries(
+        Object.entries(parsed).filter(([, value]) => {
+          if (!value || typeof value !== "object") return false;
+          const entry = value;
+          return typeof entry.examId === "string" && typeof entry.examName === "string" && typeof entry.subjectId === "string" && typeof entry.subjectName === "string" && Number.isFinite(entry.answered) && Number.isFinite(entry.correct) && Number.isFinite(entry.lastStudied) && Number.isFinite(entry.masteryCount);
+        })
+      );
+    } catch {
+      return {};
+    }
+  }
+  function saveLearningProgress() {
+    try {
+      localStorage.setItem(LEARNING_PROGRESS_STORAGE_KEY, JSON.stringify(learningProgress));
+    } catch {
+    }
+  }
+  var learningProgress = loadLearningProgress();
+  function getProgressKey(examId, subjectId) {
+    return `${examId}::${subjectId}`;
+  }
+  function getOrCreateProgressEntry() {
+    if (!state) return null;
+    const key = getProgressKey(state.examId, state.subjectId);
+    const existing = learningProgress[key];
+    if (existing) return existing;
+    const entry = {
+      examId: state.examId,
+      examName: state.examName,
+      subjectId: state.subjectId,
+      subjectName: state.subjectName,
+      answered: 0,
+      correct: 0,
+      lastStudied: 0,
+      masteryCount: 0
+    };
+    learningProgress[key] = entry;
+    return entry;
+  }
+  function recordAnswer(correct) {
+    const entry = getOrCreateProgressEntry();
+    if (!entry) return;
+    entry.answered++;
+    if (correct) entry.correct++;
+    entry.lastStudied = Date.now();
+    saveLearningProgress();
+  }
+  function recordMasteryCompletion() {
+    const entry = getOrCreateProgressEntry();
+    if (!entry) return;
+    entry.masteryCount++;
+    entry.lastStudied = Date.now();
+    saveLearningProgress();
+  }
+  function formatCount(value) {
+    return new Intl.NumberFormat("ja-JP").format(value);
+  }
+  function formatProgressDate(timestamp) {
+    return new Intl.DateTimeFormat("ja-JP", {
+      year: "numeric",
+      month: "numeric",
+      day: "numeric"
+    }).format(timestamp);
+  }
+  function renderDashboard() {
+    const entries = Object.values(learningProgress).sort((a, b) => b.lastStudied - a.lastStudied);
+    const answered = entries.reduce((sum, entry) => sum + entry.answered, 0);
+    const correct = entries.reduce((sum, entry) => sum + entry.correct, 0);
+    dashboardAnswered.textContent = formatCount(answered);
+    dashboardAccuracy.textContent = answered ? `${Math.round(correct / answered * 100)}%` : "\u2014";
+    dashboardSubjectCount.textContent = formatCount(entries.length);
+    dashboardSubjectList.innerHTML = "";
+    if (entries.length === 0) {
+      const empty = document.createElement("p");
+      empty.className = "dashboard-empty";
+      empty.textContent = "\u307E\u3060\u5B66\u7FD2\u8A18\u9332\u304C\u3042\u308A\u307E\u305B\u3093\u3002\u30E9\u30A4\u30D6\u30E9\u30EA\u304B\u3089\u554F\u984C\u3092\u89E3\u3044\u3066\u307F\u307E\u3057\u3087\u3046\u3002";
+      dashboardSubjectList.appendChild(empty);
+      return;
+    }
+    for (const entry of entries) {
+      const accuracy = entry.answered ? Math.round(entry.correct / entry.answered * 100) : 0;
+      const item = document.createElement("article");
+      item.className = "dashboard-subject-item";
+      const heading = document.createElement("div");
+      heading.className = "dashboard-subject-heading";
+      const titleGroup = document.createElement("div");
+      titleGroup.className = "dashboard-subject-title";
+      const subjectName = document.createElement("h4");
+      subjectName.textContent = entry.subjectName;
+      const examName = document.createElement("p");
+      examName.textContent = entry.examName;
+      titleGroup.append(subjectName, examName);
+      heading.appendChild(titleGroup);
+      if (entry.masteryCount > 0) {
+        const badge = document.createElement("span");
+        badge.className = "dashboard-mastery-badge";
+        badge.textContent = "\u5168\u554F\u6B63\u89E3\u9054\u6210";
+        heading.appendChild(badge);
+      }
+      item.appendChild(heading);
+      const score = document.createElement("div");
+      score.className = "dashboard-subject-score";
+      score.innerHTML = `<strong>${accuracy}%</strong><span>${entry.correct} / ${entry.answered}\u554F\u6B63\u89E3</span>`;
+      item.appendChild(score);
+      const progress = document.createElement("div");
+      progress.className = "dashboard-progress-bar";
+      const progressFill = document.createElement("div");
+      progressFill.className = "dashboard-progress-fill";
+      progressFill.style.width = `${accuracy}%`;
+      progress.appendChild(progressFill);
+      item.appendChild(progress);
+      const meta = document.createElement("p");
+      meta.className = "dashboard-subject-meta";
+      meta.textContent = `\u6700\u7D42\u5B66\u7FD2: ${formatProgressDate(entry.lastStudied)}`;
+      item.appendChild(meta);
+      dashboardSubjectList.appendChild(item);
+    }
   }
   function shuffle(items) {
     const arr = items.slice();
@@ -8568,7 +8708,8 @@
       answered: false,
       masteryMode,
       masteryTotal: queue.length,
-      masteryRemaining: masteryMode ? new Set(queue) : null
+      masteryRemaining: masteryMode ? new Set(queue) : null,
+      masteryRecorded: false
     };
     quizModeLabel.hidden = !masteryMode;
     quizModeLabel.textContent = masteryMode ? `${queue.some((question) => question.type === "handwriting") ? "\u5168\u554F\u78BA\u8A8D" : "\u5168\u554F\u6B63\u89E3"}\u30E2\u30FC\u30C9` : "";
@@ -8704,6 +8845,7 @@
   function finishAnswer(correct, correctText) {
     if (!state) return;
     const q = state.queue[state.index];
+    recordAnswer(correct);
     if (correct) {
       state.score++;
       state.masteryRemaining?.delete(q);
@@ -8742,6 +8884,11 @@
     const total = state.masteryMode ? state.masteryTotal : state.queue.length;
     const judged = state.masteryMode ? state.masteryTotal : state.queue.filter((q) => q.type !== "handwriting").length;
     const scoreForResult = state.masteryMode ? state.masteryTotal - (state.masteryRemaining?.size ?? 0) : state.score;
+    const masteryComplete = state.masteryMode && (state.masteryRemaining?.size ?? 0) === 0;
+    if (masteryComplete && !state.masteryRecorded) {
+      recordMasteryCompletion();
+      state.masteryRecorded = true;
+    }
     if (judged === 0) {
       resultScoreRing.hidden = true;
       resultMessage.hidden = true;
@@ -8767,7 +8914,7 @@
       resultMessage.style.color = ringColor;
     }
     resultWrongList.innerHTML = "";
-    const masteryIncomplete = state.masteryMode && (state.masteryRemaining?.size ?? 0) > 0;
+    const masteryIncomplete = state.masteryMode && !masteryComplete;
     if (judged === 0) {
       btnReviewWrong.hidden = true;
     } else if (state.wrong.length === 0 && !masteryIncomplete) {
@@ -8820,7 +8967,8 @@
       answered: false,
       masteryMode: false,
       masteryTotal: wrongQuestions.length,
-      masteryRemaining: null
+      masteryRemaining: null,
+      masteryRecorded: false
     };
     quizModeLabel.hidden = true;
     quizModeLabel.textContent = "";
@@ -9004,17 +9152,29 @@
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") closeMenu();
   });
-  menuGoExam.addEventListener("click", async () => {
+  async function openLibrary() {
     closeMenu();
     if (!await confirmLeaveQuizIfNeeded()) return;
     state = null;
     showView(viewExam);
-  });
+  }
+  async function openDashboard() {
+    closeMenu();
+    if (!await confirmLeaveQuizIfNeeded()) return;
+    if (!viewQuiz.hidden) state = null;
+    renderDashboard();
+    showView(viewDashboard);
+  }
+  navLibrary.addEventListener("click", openLibrary);
+  navDashboard.addEventListener("click", openDashboard);
+  menuGoExam.addEventListener("click", openLibrary);
+  menuGoDashboard.addEventListener("click", openDashboard);
+  dashboardGoLibrary.addEventListener("click", openLibrary);
   menuAddSubject.addEventListener("click", () => {
     openSearch();
   });
   function openSettings() {
-    settingsReturnView = [viewExam, viewSubject, viewQuiz, viewResult].find((view) => !view.hidden) ?? viewExam;
+    settingsReturnView = [viewExam, viewSubject, viewDashboard, viewQuiz, viewResult].find((view) => !view.hidden) ?? viewExam;
     closeMenu();
     showView(viewSettings);
   }

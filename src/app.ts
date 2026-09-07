@@ -15,6 +15,7 @@ interface AttemptState {
   masteryMode: boolean;
   masteryTotal: number;
   masteryRemaining: Set<Question> | null;
+  masteryRecorded: boolean;
 }
 
 let state: AttemptState | null = null;
@@ -29,6 +30,7 @@ function $<T extends HTMLElement>(id: string): T {
 const viewExam = $<HTMLElement>('view-exam');
 const viewSubject = $<HTMLElement>('view-subject');
 const viewSettings = $<HTMLElement>('view-settings');
+const viewDashboard = $<HTMLElement>('view-dashboard');
 const viewQuiz = $<HTMLElement>('view-quiz');
 const viewResult = $<HTMLElement>('view-result');
 
@@ -63,6 +65,7 @@ const menuPanel = $<HTMLElement>('menu-panel');
 const menuMain = $<HTMLElement>('menu-main');
 const menuGoExam = $<HTMLButtonElement>('menu-go-exam');
 const menuGoSubject = $<HTMLButtonElement>('menu-go-subject');
+const menuGoDashboard = $<HTMLButtonElement>('menu-go-dashboard');
 const menuPinnedDivider = $<HTMLElement>('menu-pinned-divider');
 const menuPinnedList = $<HTMLElement>('menu-pinned-list');
 const menuAddSubject = $<HTMLButtonElement>('menu-add-subject');
@@ -76,6 +79,14 @@ const btnBackFromSettings = $<HTMLButtonElement>('btn-back-from-settings');
 const darkModeToggle = $<HTMLInputElement>('dark-mode-toggle');
 const themeSettingSummary = $<HTMLElement>('theme-setting-summary');
 const themeColorMeta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
+
+const navLibrary = $<HTMLButtonElement>('nav-library');
+const navDashboard = $<HTMLButtonElement>('nav-dashboard');
+const dashboardAnswered = $<HTMLElement>('dashboard-answered');
+const dashboardAccuracy = $<HTMLElement>('dashboard-accuracy');
+const dashboardSubjectCount = $<HTMLElement>('dashboard-subject-count');
+const dashboardSubjectList = $<HTMLElement>('dashboard-subject-list');
+const dashboardGoLibrary = $<HTMLButtonElement>('dashboard-go-library');
 
 const confirmOverlay = $<HTMLElement>('confirm-overlay');
 const confirmMessage = $<HTMLElement>('confirm-message');
@@ -175,10 +186,17 @@ quizCanvas.addEventListener('pointercancel', stopDrawing);
 
 btnClearCanvas.addEventListener('click', clearCanvas);
 
+function setMainNav(section: 'library' | 'dashboard'): void {
+  navLibrary.classList.toggle('is-active', section === 'library');
+  navDashboard.classList.toggle('is-active', section === 'dashboard');
+}
+
 function showView(view: HTMLElement): void {
-  for (const v of [viewExam, viewSubject, viewSettings, viewQuiz, viewResult]) {
+  for (const v of [viewExam, viewSubject, viewSettings, viewDashboard, viewQuiz, viewResult]) {
     v.hidden = v !== view;
   }
+  if (view === viewDashboard) setMainNav('dashboard');
+  else if (view !== viewSettings) setMainNav('library');
 }
 
 const THEME_STORAGE_KEY = 'quiz-theme';
@@ -205,6 +223,175 @@ function applyTheme(theme: Theme): void {
   darkModeToggle.checked = theme === 'dark';
   themeSettingSummary.textContent = theme === 'dark' ? 'ダークモードが有効です' : 'ライトモードが有効です';
   themeColorMeta?.setAttribute('content', theme === 'dark' ? '#11162a' : '#6366f1');
+}
+
+interface LearningProgressEntry {
+  examId: string;
+  examName: string;
+  subjectId: string;
+  subjectName: string;
+  answered: number;
+  correct: number;
+  lastStudied: number;
+  masteryCount: number;
+}
+
+type LearningProgressStore = Record<string, LearningProgressEntry>;
+
+const LEARNING_PROGRESS_STORAGE_KEY = 'quiz-learning-progress';
+
+function loadLearningProgress(): LearningProgressStore {
+  try {
+    const raw = localStorage.getItem(LEARNING_PROGRESS_STORAGE_KEY);
+    if (!raw) return {};
+    const parsed: unknown = JSON.parse(raw);
+    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return {};
+
+    return Object.fromEntries(
+      Object.entries(parsed).filter(([, value]) => {
+        if (!value || typeof value !== 'object') return false;
+        const entry = value as Record<string, unknown>;
+        return (
+          typeof entry.examId === 'string' &&
+          typeof entry.examName === 'string' &&
+          typeof entry.subjectId === 'string' &&
+          typeof entry.subjectName === 'string' &&
+          Number.isFinite(entry.answered) &&
+          Number.isFinite(entry.correct) &&
+          Number.isFinite(entry.lastStudied) &&
+          Number.isFinite(entry.masteryCount)
+        );
+      }),
+    ) as LearningProgressStore;
+  } catch {
+    return {};
+  }
+}
+
+function saveLearningProgress(): void {
+  try {
+    localStorage.setItem(LEARNING_PROGRESS_STORAGE_KEY, JSON.stringify(learningProgress));
+  } catch {
+    // 保存できなくても、現在のセッションには反映する。
+  }
+}
+
+let learningProgress: LearningProgressStore = loadLearningProgress();
+
+function getProgressKey(examId: string, subjectId: string): string {
+  return `${examId}::${subjectId}`;
+}
+
+function getOrCreateProgressEntry(): LearningProgressEntry | null {
+  if (!state) return null;
+  const key = getProgressKey(state.examId, state.subjectId);
+  const existing = learningProgress[key];
+  if (existing) return existing;
+
+  const entry: LearningProgressEntry = {
+    examId: state.examId,
+    examName: state.examName,
+    subjectId: state.subjectId,
+    subjectName: state.subjectName,
+    answered: 0,
+    correct: 0,
+    lastStudied: 0,
+    masteryCount: 0,
+  };
+  learningProgress[key] = entry;
+  return entry;
+}
+
+function recordAnswer(correct: boolean): void {
+  const entry = getOrCreateProgressEntry();
+  if (!entry) return;
+  entry.answered++;
+  if (correct) entry.correct++;
+  entry.lastStudied = Date.now();
+  saveLearningProgress();
+}
+
+function recordMasteryCompletion(): void {
+  const entry = getOrCreateProgressEntry();
+  if (!entry) return;
+  entry.masteryCount++;
+  entry.lastStudied = Date.now();
+  saveLearningProgress();
+}
+
+function formatCount(value: number): string {
+  return new Intl.NumberFormat('ja-JP').format(value);
+}
+
+function formatProgressDate(timestamp: number): string {
+  return new Intl.DateTimeFormat('ja-JP', {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+  }).format(timestamp);
+}
+
+function renderDashboard(): void {
+  const entries = Object.values(learningProgress).sort((a, b) => b.lastStudied - a.lastStudied);
+  const answered = entries.reduce((sum, entry) => sum + entry.answered, 0);
+  const correct = entries.reduce((sum, entry) => sum + entry.correct, 0);
+
+  dashboardAnswered.textContent = formatCount(answered);
+  dashboardAccuracy.textContent = answered ? `${Math.round((correct / answered) * 100)}%` : '—';
+  dashboardSubjectCount.textContent = formatCount(entries.length);
+  dashboardSubjectList.innerHTML = '';
+
+  if (entries.length === 0) {
+    const empty = document.createElement('p');
+    empty.className = 'dashboard-empty';
+    empty.textContent = 'まだ学習記録がありません。ライブラリから問題を解いてみましょう。';
+    dashboardSubjectList.appendChild(empty);
+    return;
+  }
+
+  for (const entry of entries) {
+    const accuracy = entry.answered ? Math.round((entry.correct / entry.answered) * 100) : 0;
+    const item = document.createElement('article');
+    item.className = 'dashboard-subject-item';
+
+    const heading = document.createElement('div');
+    heading.className = 'dashboard-subject-heading';
+    const titleGroup = document.createElement('div');
+    titleGroup.className = 'dashboard-subject-title';
+    const subjectName = document.createElement('h4');
+    subjectName.textContent = entry.subjectName;
+    const examName = document.createElement('p');
+    examName.textContent = entry.examName;
+    titleGroup.append(subjectName, examName);
+    heading.appendChild(titleGroup);
+
+    if (entry.masteryCount > 0) {
+      const badge = document.createElement('span');
+      badge.className = 'dashboard-mastery-badge';
+      badge.textContent = '全問正解達成';
+      heading.appendChild(badge);
+    }
+    item.appendChild(heading);
+
+    const score = document.createElement('div');
+    score.className = 'dashboard-subject-score';
+    score.innerHTML = `<strong>${accuracy}%</strong><span>${entry.correct} / ${entry.answered}問正解</span>`;
+    item.appendChild(score);
+
+    const progress = document.createElement('div');
+    progress.className = 'dashboard-progress-bar';
+    const progressFill = document.createElement('div');
+    progressFill.className = 'dashboard-progress-fill';
+    progressFill.style.width = `${accuracy}%`;
+    progress.appendChild(progressFill);
+    item.appendChild(progress);
+
+    const meta = document.createElement('p');
+    meta.className = 'dashboard-subject-meta';
+    meta.textContent = `最終学習: ${formatProgressDate(entry.lastStudied)}`;
+    item.appendChild(meta);
+    dashboardSubjectList.appendChild(item);
+  }
 }
 
 function shuffle<T>(items: T[]): T[] {
@@ -359,6 +546,7 @@ function startQuiz(
     masteryMode,
     masteryTotal: queue.length,
     masteryRemaining: masteryMode ? new Set(queue) : null,
+    masteryRecorded: false,
   };
 
   quizModeLabel.hidden = !masteryMode;
@@ -526,6 +714,7 @@ function revealHandwritingAnswer(): void {
 function finishAnswer(correct: boolean, correctText: string): void {
   if (!state) return;
   const q = state.queue[state.index];
+  recordAnswer(correct);
 
   if (correct) {
     state.score++;
@@ -572,6 +761,12 @@ function renderResult(): void {
   const scoreForResult = state.masteryMode
     ? state.masteryTotal - (state.masteryRemaining?.size ?? 0)
     : state.score;
+  const masteryComplete = state.masteryMode && (state.masteryRemaining?.size ?? 0) === 0;
+
+  if (masteryComplete && !state.masteryRecorded) {
+    recordMasteryCompletion();
+    state.masteryRecorded = true;
+  }
 
   if (judged === 0) {
     resultScoreRing.hidden = true;
@@ -603,7 +798,7 @@ function renderResult(): void {
   }
 
   resultWrongList.innerHTML = '';
-  const masteryIncomplete = state.masteryMode && (state.masteryRemaining?.size ?? 0) > 0;
+  const masteryIncomplete = state.masteryMode && !masteryComplete;
 
   if (judged === 0) {
     btnReviewWrong.hidden = true;
@@ -664,6 +859,7 @@ btnReviewWrong.addEventListener('click', () => {
     masteryMode: false,
     masteryTotal: wrongQuestions.length,
     masteryRemaining: null,
+    masteryRecorded: false,
   };
   quizModeLabel.hidden = true;
   quizModeLabel.textContent = '';
@@ -910,19 +1106,33 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') closeMenu();
 });
 
-menuGoExam.addEventListener('click', async () => {
+async function openLibrary(): Promise<void> {
   closeMenu();
   if (!(await confirmLeaveQuizIfNeeded())) return;
   state = null;
   showView(viewExam);
-});
+}
+
+async function openDashboard(): Promise<void> {
+  closeMenu();
+  if (!(await confirmLeaveQuizIfNeeded())) return;
+  if (!viewQuiz.hidden) state = null;
+  renderDashboard();
+  showView(viewDashboard);
+}
+
+navLibrary.addEventListener('click', openLibrary);
+navDashboard.addEventListener('click', openDashboard);
+menuGoExam.addEventListener('click', openLibrary);
+menuGoDashboard.addEventListener('click', openDashboard);
+dashboardGoLibrary.addEventListener('click', openLibrary);
 
 menuAddSubject.addEventListener('click', () => {
   openSearch();
 });
 
 function openSettings(): void {
-  settingsReturnView = [viewExam, viewSubject, viewQuiz, viewResult].find((view) => !view.hidden) ?? viewExam;
+  settingsReturnView = [viewExam, viewSubject, viewDashboard, viewQuiz, viewResult].find((view) => !view.hidden) ?? viewExam;
   closeMenu();
   showView(viewSettings);
 }
