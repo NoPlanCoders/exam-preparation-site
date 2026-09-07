@@ -556,6 +556,29 @@ button {
   box-shadow: 0 6px 16px rgba(79, 70, 229, 0.32);
 }
 
+.subject-card-controls .start-btn,
+.subject-card-controls .mastery-btn {
+  flex: none;
+  white-space: nowrap;
+}
+
+.mastery-btn {
+  background: var(--color-correct-bg);
+  color: #166534;
+  border: 1px solid #86efac;
+  border-radius: 999px;
+  padding: 0.6rem 0.9rem;
+  font: inherit;
+  font-weight: 700;
+  transition: transform 0.12s ease, background 0.12s ease, border-color 0.12s ease;
+}
+
+.mastery-btn:hover {
+  background: #bbf7d0;
+  border-color: var(--color-correct);
+  transform: translateY(-1px);
+}
+
 @media (max-width: 480px) {
   .subject-mode-row {
     align-items: flex-start;
@@ -573,6 +596,7 @@ button {
 }
 
 .start-btn:active,
+.mastery-btn:active,
 #btn-submit-text:active,
 .btn-next:active,
 .result-actions button:active {
@@ -583,6 +607,21 @@ button {
   display: flex;
   justify-content: flex-end;
   margin-bottom: 0.5rem;
+}
+
+.quiz-mode-label {
+  margin-right: auto;
+  padding: 0.25rem 0.65rem;
+  border: 1px solid #86efac;
+  border-radius: 999px;
+  background: var(--color-correct-bg);
+  color: #166534;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.quiz-mode-label[hidden] {
+  display: none;
 }
 
 .btn-end-quiz {
@@ -942,6 +981,11 @@ button {
   width: 1.3rem;
   height: 1.3rem;
   flex: none;
+}
+
+.result-pending {
+  color: var(--color-muted);
+  text-align: center;
 }
 
 .result-actions {

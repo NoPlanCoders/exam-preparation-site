@@ -8306,6 +8306,7 @@
   var quizProgressText = $("quiz-progress-text");
   var quizScoreText = $("quiz-score-text");
   var quizProgressFill = $("quiz-progress-fill");
+  var quizModeLabel = $("quiz-mode-label");
   var quizQuestion = $("quiz-question");
   var quizChoices = $("quiz-choices");
   var quizTextInputArea = $("quiz-text-input-area");
@@ -8473,7 +8474,9 @@
       card.className = "card subject-card subject-group-card";
       const modesHtml = group.subjects.map((subject) => {
         const { modeName } = splitSubjectName(subject.name);
-        const total = getQuestions(examId, subject.id).length;
+        const questions18 = getQuestions(examId, subject.id);
+        const total = questions18.length;
+        const masteryLabel = questions18.some((question) => question.type === "handwriting") ? "\u5168\u554F\u78BA\u8A8D\u307E\u3067" : "\u5168\u554F\u6B63\u89E3\u307E\u3067";
         const countOptions = [];
         if (total > 20) countOptions.push(20);
         if (total > 10) countOptions.push(10);
@@ -8490,6 +8493,7 @@
                 <select class="count-select" aria-label="${group.name} ${modeName}\u306E\u51FA\u984C\u6570">${optionsHtml}</select>
               </div>
               <button type="button" class="start-btn">\u958B\u59CB</button>
+              <button type="button" class="mastery-btn" title="${masteryLabel === "\u5168\u554F\u78BA\u8A8D\u307E\u3067" ? "\u5168\u3066\u306E\u624B\u66F8\u304D\u554F\u984C\u3092\u78BA\u8A8D\u3059\u308B\u307E\u3067\u7E70\u308A\u8FD4\u3059" : "\u5168\u554F\u6B63\u89E3\u3059\u308B\u307E\u3067\u7E70\u308A\u8FD4\u3059"}">${masteryLabel}</button>
             </div>
           </div>
         `;
@@ -8508,16 +8512,21 @@
         if (!subject) return;
         const select = modeRow.querySelector(".count-select");
         const startBtn = modeRow.querySelector(".start-btn");
+        const masteryBtn = modeRow.querySelector(".mastery-btn");
         startBtn.addEventListener("click", () => {
           const count = Number(select.value);
           startQuiz(examId, examName, subject.id, subject.name, count);
+        });
+        masteryBtn.addEventListener("click", () => {
+          const count = Number(select.value);
+          startQuiz(examId, examName, subject.id, subject.name, count, true);
         });
       });
       subjectList.appendChild(card);
     }
     showView(viewSubject);
   }
-  function startQuiz(examId, examName, subjectId, subjectName, count) {
+  function startQuiz(examId, examName, subjectId, subjectName, count, masteryMode = false) {
     const all = getQuestions(examId, subjectId);
     const queue = shuffle(all).slice(0, count);
     state = {
@@ -8529,18 +8538,35 @@
       index: 0,
       score: 0,
       wrong: [],
-      answered: false
+      answered: false,
+      masteryMode,
+      masteryTotal: queue.length,
+      masteryRemaining: masteryMode ? new Set(queue) : null
     };
+    quizModeLabel.hidden = !masteryMode;
+    quizModeLabel.textContent = masteryMode ? `${queue.some((question) => question.type === "handwriting") ? "\u5168\u554F\u78BA\u8A8D" : "\u5168\u554F\u6B63\u89E3"}\u30E2\u30FC\u30C9` : "";
     showView(viewQuiz);
     renderQuestion();
+  }
+  function updateQuizProgress() {
+    if (!state) return;
+    if (state.masteryMode) {
+      const remaining = state.masteryRemaining?.size ?? 0;
+      const completed = state.masteryTotal - remaining;
+      quizProgressText.textContent = `\u6B63\u89E3\u6E08\u307F ${completed} / ${state.masteryTotal} \u554F`;
+      quizScoreText.textContent = `\u6B8B\u308A: ${remaining}\u554F`;
+      quizProgressFill.style.width = `${completed / state.masteryTotal * 100}%`;
+      return;
+    }
+    quizProgressText.textContent = `\u7B2C ${state.index + 1} / ${state.queue.length} \u554F`;
+    quizScoreText.textContent = `\u6B63\u89E3\u6570: ${state.score}`;
+    quizProgressFill.style.width = `${state.index / state.queue.length * 100}%`;
   }
   function renderQuestion() {
     if (!state) return;
     const q = state.queue[state.index];
     state.answered = false;
-    quizProgressText.textContent = `\u7B2C ${state.index + 1} / ${state.queue.length} \u554F`;
-    quizScoreText.textContent = `\u6B63\u89E3\u6570: ${state.score}`;
-    quizProgressFill.style.width = `${state.index / state.queue.length * 100}%`;
+    updateQuizProgress();
     quizQuestion.textContent = q.question;
     quizFeedback.hidden = true;
     quizFeedback.textContent = "";
@@ -8639,11 +8665,12 @@
     const q = state.queue[state.index];
     if (q.type !== "handwriting") return;
     state.answered = true;
+    state.masteryRemaining?.delete(q);
     handwritingCorrectAnswer.textContent = q.answer;
     handwritingAnswerReveal.hidden = false;
     btnCheckHandwriting.hidden = true;
     quizCanvas.style.pointerEvents = "none";
-    quizProgressFill.style.width = `${(state.index + 1) / state.queue.length * 100}%`;
+    updateQuizProgress();
     btnNext.hidden = false;
     btnNext.textContent = state.index + 1 < state.queue.length ? "\u6B21\u3078" : "\u7D50\u679C\u3092\u898B\u308B";
   }
@@ -8652,16 +8679,24 @@
     const q = state.queue[state.index];
     if (correct) {
       state.score++;
+      state.masteryRemaining?.delete(q);
+      if (state.masteryMode) {
+        state.wrong = state.wrong.filter((candidate) => candidate !== q);
+      }
       quizFeedback.textContent = "\u6B63\u89E3!";
       quizFeedback.classList.add("correct");
     } else {
-      state.wrong.push(q);
+      if (state.masteryMode) {
+        if (!state.wrong.includes(q)) state.wrong.push(q);
+        state.queue.push(q);
+      } else {
+        state.wrong.push(q);
+      }
       quizFeedback.textContent = `\u4E0D\u6B63\u89E3\u2026 \u6B63\u89E3\u306F\u300C${correctText}\u300D`;
       quizFeedback.classList.add("incorrect");
     }
     quizFeedback.hidden = false;
-    quizScoreText.textContent = `\u6B63\u89E3\u6570: ${state.score}`;
-    quizProgressFill.style.width = `${(state.index + 1) / state.queue.length * 100}%`;
+    updateQuizProgress();
     btnNext.hidden = false;
     btnNext.textContent = state.index + 1 < state.queue.length ? "\u6B21\u3078" : "\u7D50\u679C\u3092\u898B\u308B";
   }
@@ -8677,8 +8712,9 @@
   function renderResult() {
     if (!state) return;
     showView(viewResult);
-    const total = state.queue.length;
-    const judged = state.queue.filter((q) => q.type !== "handwriting").length;
+    const total = state.masteryMode ? state.masteryTotal : state.queue.length;
+    const judged = state.masteryMode ? state.masteryTotal : state.queue.filter((q) => q.type !== "handwriting").length;
+    const scoreForResult = state.masteryMode ? state.masteryTotal - (state.masteryRemaining?.size ?? 0) : state.score;
     if (judged === 0) {
       resultScoreRing.hidden = true;
       resultMessage.hidden = true;
@@ -8686,8 +8722,8 @@
     } else {
       resultScoreRing.hidden = false;
       resultMessage.hidden = false;
-      const percent = Math.round(state.score / judged * 100);
-      resultScore.textContent = `${judged}\u554F\u4E2D ${state.score}\u554F\u6B63\u89E3`;
+      const percent = Math.round(scoreForResult / judged * 100);
+      resultScore.textContent = state.masteryMode ? `${total}\u554F\u4E2D ${scoreForResult}\u554F\u30AF\u30EA\u30A2` : `${judged}\u554F\u4E2D ${scoreForResult}\u554F\u6B63\u89E3`;
       resultScorePercent.textContent = `${percent}%`;
       let ringColor = "#dc2626";
       let message = "\u3082\u3046\u4E00\u606F!\u9593\u9055\u3048\u305F\u554F\u984C\u3092\u5FA9\u7FD2\u3057\u3088\u3046";
@@ -8704,10 +8740,14 @@
       resultMessage.style.color = ringColor;
     }
     resultWrongList.innerHTML = "";
+    const masteryIncomplete = state.masteryMode && (state.masteryRemaining?.size ?? 0) > 0;
     if (judged === 0) {
       btnReviewWrong.hidden = true;
-    } else if (state.wrong.length === 0) {
+    } else if (state.wrong.length === 0 && !masteryIncomplete) {
       resultWrongList.innerHTML = `<p class="all-correct">${ICONS.star} \u5168\u554F\u6B63\u89E3\u3067\u3059!\u3059\u3054\u3044!</p>`;
+      btnReviewWrong.hidden = true;
+    } else if (state.wrong.length === 0) {
+      resultWrongList.innerHTML = '<p class="result-pending">\u672A\u56DE\u7B54\u306E\u554F\u984C\u304C\u6B8B\u3063\u3066\u3044\u307E\u3059\u3002</p>';
       btnReviewWrong.hidden = true;
     } else {
       btnReviewWrong.hidden = false;
@@ -8750,8 +8790,13 @@
       index: 0,
       score: 0,
       wrong: [],
-      answered: false
+      answered: false,
+      masteryMode: false,
+      masteryTotal: wrongQuestions.length,
+      masteryRemaining: null
     };
+    quizModeLabel.hidden = true;
+    quizModeLabel.textContent = "";
     showView(viewQuiz);
     renderQuestion();
   });

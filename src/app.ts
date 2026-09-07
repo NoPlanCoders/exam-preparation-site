@@ -12,6 +12,9 @@ interface AttemptState {
   score: number;
   wrong: Question[];
   answered: boolean;
+  masteryMode: boolean;
+  masteryTotal: number;
+  masteryRemaining: Set<Question> | null;
 }
 
 let state: AttemptState | null = null;
@@ -35,6 +38,7 @@ const subjectViewTitle = $<HTMLElement>('subject-view-title');
 const quizProgressText = $<HTMLElement>('quiz-progress-text');
 const quizScoreText = $<HTMLElement>('quiz-score-text');
 const quizProgressFill = $<HTMLElement>('quiz-progress-fill');
+const quizModeLabel = $<HTMLElement>('quiz-mode-label');
 const quizQuestion = $<HTMLElement>('quiz-question');
 const quizChoices = $<HTMLElement>('quiz-choices');
 const quizTextInputArea = $<HTMLElement>('quiz-text-input-area');
@@ -232,7 +236,11 @@ function renderSubjectView(examId: string, examName: string): void {
     const modesHtml = group.subjects
       .map((subject) => {
         const { modeName } = splitSubjectName(subject.name);
-        const total = getQuestions(examId, subject.id).length;
+        const questions = getQuestions(examId, subject.id);
+        const total = questions.length;
+        const masteryLabel = questions.some((question) => question.type === 'handwriting')
+          ? '全問確認まで'
+          : '全問正解まで';
         const countOptions: number[] = [];
         if (total > 20) countOptions.push(20);
         if (total > 10) countOptions.push(10);
@@ -253,6 +261,7 @@ function renderSubjectView(examId: string, examName: string): void {
                 <select class="count-select" aria-label="${group.name} ${modeName}の出題数">${optionsHtml}</select>
               </div>
               <button type="button" class="start-btn">開始</button>
+              <button type="button" class="mastery-btn" title="${masteryLabel === '全問確認まで' ? '全ての手書き問題を確認するまで繰り返す' : '全問正解するまで繰り返す'}">${masteryLabel}</button>
             </div>
           </div>
         `;
@@ -274,9 +283,14 @@ function renderSubjectView(examId: string, examName: string): void {
       if (!subject) return;
       const select = modeRow.querySelector('.count-select') as HTMLSelectElement;
       const startBtn = modeRow.querySelector('.start-btn') as HTMLButtonElement;
+      const masteryBtn = modeRow.querySelector('.mastery-btn') as HTMLButtonElement;
       startBtn.addEventListener('click', () => {
         const count = Number(select.value);
         startQuiz(examId, examName, subject.id, subject.name, count);
+      });
+      masteryBtn.addEventListener('click', () => {
+        const count = Number(select.value);
+        startQuiz(examId, examName, subject.id, subject.name, count, true);
       });
     });
 
@@ -292,6 +306,7 @@ function startQuiz(
   subjectId: string,
   subjectName: string,
   count: number,
+  masteryMode = false,
 ): void {
   const all = getQuestions(examId, subjectId);
   const queue = shuffle(all).slice(0, count);
@@ -306,10 +321,34 @@ function startQuiz(
     score: 0,
     wrong: [],
     answered: false,
+    masteryMode,
+    masteryTotal: queue.length,
+    masteryRemaining: masteryMode ? new Set(queue) : null,
   };
 
+  quizModeLabel.hidden = !masteryMode;
+  quizModeLabel.textContent = masteryMode
+    ? `${queue.some((question) => question.type === 'handwriting') ? '全問確認' : '全問正解'}モード`
+    : '';
   showView(viewQuiz);
   renderQuestion();
+}
+
+function updateQuizProgress(): void {
+  if (!state) return;
+
+  if (state.masteryMode) {
+    const remaining = state.masteryRemaining?.size ?? 0;
+    const completed = state.masteryTotal - remaining;
+    quizProgressText.textContent = `正解済み ${completed} / ${state.masteryTotal} 問`;
+    quizScoreText.textContent = `残り: ${remaining}問`;
+    quizProgressFill.style.width = `${(completed / state.masteryTotal) * 100}%`;
+    return;
+  }
+
+  quizProgressText.textContent = `第 ${state.index + 1} / ${state.queue.length} 問`;
+  quizScoreText.textContent = `正解数: ${state.score}`;
+  quizProgressFill.style.width = `${(state.index / state.queue.length) * 100}%`;
 }
 
 function renderQuestion(): void {
@@ -317,9 +356,7 @@ function renderQuestion(): void {
   const q = state.queue[state.index];
   state.answered = false;
 
-  quizProgressText.textContent = `第 ${state.index + 1} / ${state.queue.length} 問`;
-  quizScoreText.textContent = `正解数: ${state.score}`;
-  quizProgressFill.style.width = `${(state.index / state.queue.length) * 100}%`;
+  updateQuizProgress();
   quizQuestion.textContent = q.question;
 
   quizFeedback.hidden = true;
@@ -439,13 +476,14 @@ function revealHandwritingAnswer(): void {
   const q = state.queue[state.index];
   if (q.type !== 'handwriting') return;
   state.answered = true;
+  state.masteryRemaining?.delete(q);
 
   handwritingCorrectAnswer.textContent = q.answer;
   handwritingAnswerReveal.hidden = false;
   btnCheckHandwriting.hidden = true;
   quizCanvas.style.pointerEvents = 'none';
 
-  quizProgressFill.style.width = `${((state.index + 1) / state.queue.length) * 100}%`;
+  updateQuizProgress();
   btnNext.hidden = false;
   btnNext.textContent = state.index + 1 < state.queue.length ? '次へ' : '結果を見る';
 }
@@ -456,16 +494,24 @@ function finishAnswer(correct: boolean, correctText: string): void {
 
   if (correct) {
     state.score++;
+    state.masteryRemaining?.delete(q);
+    if (state.masteryMode) {
+      state.wrong = state.wrong.filter((candidate) => candidate !== q);
+    }
     quizFeedback.textContent = '正解!';
     quizFeedback.classList.add('correct');
   } else {
-    state.wrong.push(q);
+    if (state.masteryMode) {
+      if (!state.wrong.includes(q)) state.wrong.push(q);
+      state.queue.push(q);
+    } else {
+      state.wrong.push(q);
+    }
     quizFeedback.textContent = `不正解… 正解は「${correctText}」`;
     quizFeedback.classList.add('incorrect');
   }
   quizFeedback.hidden = false;
-  quizScoreText.textContent = `正解数: ${state.score}`;
-  quizProgressFill.style.width = `${((state.index + 1) / state.queue.length) * 100}%`;
+  updateQuizProgress();
   btnNext.hidden = false;
   btnNext.textContent = state.index + 1 < state.queue.length ? '次へ' : '結果を見る';
 }
@@ -484,8 +530,13 @@ function renderResult(): void {
   if (!state) return;
   showView(viewResult);
 
-  const total = state.queue.length;
-  const judged = state.queue.filter((q) => q.type !== 'handwriting').length;
+  const total = state.masteryMode ? state.masteryTotal : state.queue.length;
+  const judged = state.masteryMode
+    ? state.masteryTotal
+    : state.queue.filter((q) => q.type !== 'handwriting').length;
+  const scoreForResult = state.masteryMode
+    ? state.masteryTotal - (state.masteryRemaining?.size ?? 0)
+    : state.score;
 
   if (judged === 0) {
     resultScoreRing.hidden = true;
@@ -494,9 +545,11 @@ function renderResult(): void {
   } else {
     resultScoreRing.hidden = false;
     resultMessage.hidden = false;
-    const percent = Math.round((state.score / judged) * 100);
+    const percent = Math.round((scoreForResult / judged) * 100);
 
-    resultScore.textContent = `${judged}問中 ${state.score}問正解`;
+    resultScore.textContent = state.masteryMode
+      ? `${total}問中 ${scoreForResult}問クリア`
+      : `${judged}問中 ${scoreForResult}問正解`;
     resultScorePercent.textContent = `${percent}%`;
 
     let ringColor = '#dc2626';
@@ -515,11 +568,15 @@ function renderResult(): void {
   }
 
   resultWrongList.innerHTML = '';
+  const masteryIncomplete = state.masteryMode && (state.masteryRemaining?.size ?? 0) > 0;
 
   if (judged === 0) {
     btnReviewWrong.hidden = true;
-  } else if (state.wrong.length === 0) {
+  } else if (state.wrong.length === 0 && !masteryIncomplete) {
     resultWrongList.innerHTML = `<p class="all-correct">${ICONS.star} 全問正解です!すごい!</p>`;
+    btnReviewWrong.hidden = true;
+  } else if (state.wrong.length === 0) {
+    resultWrongList.innerHTML = '<p class="result-pending">未回答の問題が残っています。</p>';
     btnReviewWrong.hidden = true;
   } else {
     btnReviewWrong.hidden = false;
@@ -569,7 +626,12 @@ btnReviewWrong.addEventListener('click', () => {
     score: 0,
     wrong: [],
     answered: false,
+    masteryMode: false,
+    masteryTotal: wrongQuestions.length,
+    masteryRemaining: null,
   };
+  quizModeLabel.hidden = true;
+  quizModeLabel.textContent = '';
   showView(viewQuiz);
   renderQuestion();
 });
