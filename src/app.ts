@@ -193,6 +193,14 @@ function renderExamList(): void {
   }
 }
 
+function splitSubjectName(name: string): { groupName: string; modeName: string } {
+  // ponytail: グループ名は末尾の括弧表記に依存。例外的な命名が増えたらSubjectにgroup/modeを持たせる。
+  const match = name.match(/^(.*?)[（(]([^（）()]+)[）)]$/);
+  return match
+    ? { groupName: match[1].trim(), modeName: match[2].trim() }
+    : { groupName: name, modeName: '問題' };
+}
+
 function renderSubjectView(examId: string, examName: string): void {
   currentExam = { id: examId, name: examName };
   menuGoSubject.hidden = false;
@@ -202,37 +210,74 @@ function renderSubjectView(examId: string, examName: string): void {
   // 通常の科目一覧には履修科目のみを表示する。選択科目はメニューの
   // 「選択科目を追加」から検索してピン留めしたときだけ個別に表示される。
   const subjects: Subject[] = getSubjects(examId).filter((s) => s.category !== '選択科目');
+  const groups = new Map<string, { name: string; icon?: string; subjects: Subject[] }>();
   for (const subject of subjects) {
-    const total = getQuestions(examId, subject.id).length;
+    const { groupName } = splitSubjectName(subject.name);
+    const group = groups.get(groupName);
+    if (group) {
+      group.subjects.push(subject);
+    } else {
+      groups.set(groupName, { name: groupName, icon: subject.icon, subjects: [subject] });
+    }
+  }
+
+  for (const group of groups.values()) {
+    const totalQuestions = group.subjects.reduce(
+      (sum, subject) => sum + getQuestions(examId, subject.id).length,
+      0,
+    );
     const card = document.createElement('div');
-    card.className = 'card subject-card';
+    card.className = 'card subject-card subject-group-card';
 
-    const countOptions: number[] = [];
-    if (total > 20) countOptions.push(20);
-    if (total > 10) countOptions.push(10);
-    countOptions.push(total);
+    const modesHtml = group.subjects
+      .map((subject) => {
+        const { modeName } = splitSubjectName(subject.name);
+        const total = getQuestions(examId, subject.id).length;
+        const countOptions: number[] = [];
+        if (total > 20) countOptions.push(20);
+        if (total > 10) countOptions.push(10);
+        countOptions.push(total);
 
-    const optionsHtml = countOptions
-      .map((n) => `<option value="${n}">${n === total ? `全${n}問` : `${n}問`}</option>`)
+        const optionsHtml = countOptions
+          .map((n) => `<option value="${n}">${n === total ? `全${n}問` : `${n}問`}</option>`)
+          .join('');
+
+        return `
+          <div class="subject-mode-row" data-subject-id="${subject.id}">
+            <div class="subject-mode-heading">
+              <span class="subject-mode-name">${modeName}</span>
+              <span class="subject-mode-total">全${total}問</span>
+            </div>
+            <div class="subject-card-controls">
+              <div class="count-select-wrap">
+                <select class="count-select" aria-label="${group.name} ${modeName}の出題数">${optionsHtml}</select>
+              </div>
+              <button type="button" class="start-btn">開始</button>
+            </div>
+          </div>
+        `;
+      })
       .join('');
 
     card.innerHTML = `
-      <span class="card-icon">${getIcon(subject.icon, DEFAULT_SUBJECT_ICON)}</span>
+      <span class="card-icon">${getIcon(group.icon, DEFAULT_SUBJECT_ICON)}</span>
       <span class="card-body">
-        <h3>${subject.name}</h3>
-        <p>${subject.description}</p>
-        <div class="subject-card-controls">
-          <select class="count-select">${optionsHtml}</select>
-          <button type="button" class="start-btn">開始</button>
-        </div>
+        <h3>${group.name}</h3>
+        <p>全${totalQuestions}問・${group.subjects.length}形式</p>
+        <div class="subject-mode-list">${modesHtml}</div>
       </span>
     `;
 
-    const select = card.querySelector<HTMLSelectElement>('.count-select')!;
-    const startBtn = card.querySelector<HTMLButtonElement>('.start-btn')!;
-    startBtn.addEventListener('click', () => {
-      const count = Number(select.value);
-      startQuiz(examId, examName, subject.id, subject.name, count);
+    Array.from(card.querySelectorAll('.subject-mode-row')).forEach((row) => {
+      const modeRow = row as HTMLElement;
+      const subject = group.subjects.find((candidate) => candidate.id === modeRow.dataset.subjectId);
+      if (!subject) return;
+      const select = modeRow.querySelector('.count-select') as HTMLSelectElement;
+      const startBtn = modeRow.querySelector('.start-btn') as HTMLButtonElement;
+      startBtn.addEventListener('click', () => {
+        const count = Number(select.value);
+        startQuiz(examId, examName, subject.id, subject.name, count);
+      });
     });
 
     subjectList.appendChild(card);

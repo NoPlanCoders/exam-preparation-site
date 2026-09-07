@@ -7,6 +7,7 @@
   "scripts": {
     "build": "tsc --noEmit && esbuild src/main.ts --bundle --outfile=public/js/bundle.js --format=iife --target=es2020",
     "watch": "esbuild src/main.ts --bundle --outfile=public/js/bundle.js --format=iife --target=es2020 --watch",
+    "dev": "esbuild src/main.ts --bundle --outfile=public/js/bundle.js --format=iife --target=es2020 --watch --servedir=public --serve=5173",
     "deploy": "npx vercel --prod"
   },
   "devDependencies": {

@@ -8444,37 +8444,74 @@
       examList.appendChild(card);
     }
   }
+  function splitSubjectName(name) {
+    const match = name.match(/^(.*?)[（(]([^（）()]+)[）)]$/);
+    return match ? { groupName: match[1].trim(), modeName: match[2].trim() } : { groupName: name, modeName: "\u554F\u984C" };
+  }
   function renderSubjectView(examId, examName) {
     currentExam = { id: examId, name: examName };
     menuGoSubject.hidden = false;
     subjectViewTitle.textContent = `${examName} - \u79D1\u76EE\u3092\u9078\u3093\u3067\u304F\u3060\u3055\u3044`;
     subjectList.innerHTML = "";
     const subjects2 = getSubjects(examId).filter((s) => s.category !== "\u9078\u629E\u79D1\u76EE");
+    const groups = /* @__PURE__ */ new Map();
     for (const subject of subjects2) {
-      const total = getQuestions(examId, subject.id).length;
+      const { groupName } = splitSubjectName(subject.name);
+      const group = groups.get(groupName);
+      if (group) {
+        group.subjects.push(subject);
+      } else {
+        groups.set(groupName, { name: groupName, icon: subject.icon, subjects: [subject] });
+      }
+    }
+    for (const group of groups.values()) {
+      const totalQuestions = group.subjects.reduce(
+        (sum, subject) => sum + getQuestions(examId, subject.id).length,
+        0
+      );
       const card = document.createElement("div");
-      card.className = "card subject-card";
-      const countOptions = [];
-      if (total > 20) countOptions.push(20);
-      if (total > 10) countOptions.push(10);
-      countOptions.push(total);
-      const optionsHtml = countOptions.map((n) => `<option value="${n}">${n === total ? `\u5168${n}\u554F` : `${n}\u554F`}</option>`).join("");
+      card.className = "card subject-card subject-group-card";
+      const modesHtml = group.subjects.map((subject) => {
+        const { modeName } = splitSubjectName(subject.name);
+        const total = getQuestions(examId, subject.id).length;
+        const countOptions = [];
+        if (total > 20) countOptions.push(20);
+        if (total > 10) countOptions.push(10);
+        countOptions.push(total);
+        const optionsHtml = countOptions.map((n) => `<option value="${n}">${n === total ? `\u5168${n}\u554F` : `${n}\u554F`}</option>`).join("");
+        return `
+          <div class="subject-mode-row" data-subject-id="${subject.id}">
+            <div class="subject-mode-heading">
+              <span class="subject-mode-name">${modeName}</span>
+              <span class="subject-mode-total">\u5168${total}\u554F</span>
+            </div>
+            <div class="subject-card-controls">
+              <div class="count-select-wrap">
+                <select class="count-select" aria-label="${group.name} ${modeName}\u306E\u51FA\u984C\u6570">${optionsHtml}</select>
+              </div>
+              <button type="button" class="start-btn">\u958B\u59CB</button>
+            </div>
+          </div>
+        `;
+      }).join("");
       card.innerHTML = `
-      <span class="card-icon">${getIcon(subject.icon, DEFAULT_SUBJECT_ICON)}</span>
+      <span class="card-icon">${getIcon(group.icon, DEFAULT_SUBJECT_ICON)}</span>
       <span class="card-body">
-        <h3>${subject.name}</h3>
-        <p>${subject.description}</p>
-        <div class="subject-card-controls">
-          <select class="count-select">${optionsHtml}</select>
-          <button type="button" class="start-btn">\u958B\u59CB</button>
-        </div>
+        <h3>${group.name}</h3>
+        <p>\u5168${totalQuestions}\u554F\u30FB${group.subjects.length}\u5F62\u5F0F</p>
+        <div class="subject-mode-list">${modesHtml}</div>
       </span>
     `;
-      const select = card.querySelector(".count-select");
-      const startBtn = card.querySelector(".start-btn");
-      startBtn.addEventListener("click", () => {
-        const count = Number(select.value);
-        startQuiz(examId, examName, subject.id, subject.name, count);
+      Array.from(card.querySelectorAll(".subject-mode-row")).forEach((row) => {
+        const modeRow = row;
+        const subject = group.subjects.find((candidate) => candidate.id === modeRow.dataset.subjectId);
+        if (!subject) return;
+        const select = modeRow.querySelector(".count-select");
+        const startBtn = modeRow.querySelector(".start-btn");
+        startBtn.addEventListener("click", () => {
+          const count = Number(select.value);
+          startQuiz(examId, examName, subject.id, subject.name, count);
+        });
       });
       subjectList.appendChild(card);
     }
