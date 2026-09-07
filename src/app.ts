@@ -1,6 +1,7 @@
 import type { Question, Subject } from './types.js';
 import { getExams, getSubjects, getQuestions } from './data/registry.js';
 import { ICONS, getIcon } from './icons.js';
+import { getTestCountdown } from './countdown.js';
 
 interface AttemptState {
   examId: string;
@@ -85,6 +86,8 @@ const navDashboard = $<HTMLButtonElement>('nav-dashboard');
 const dashboardAnswered = $<HTMLElement>('dashboard-answered');
 const dashboardAccuracy = $<HTMLElement>('dashboard-accuracy');
 const dashboardSubjectCount = $<HTMLElement>('dashboard-subject-count');
+const dashboardRemainingHours = $<HTMLElement>('dashboard-remaining-hours');
+const dashboardRemainingDays = $<HTMLElement>('dashboard-remaining-days');
 const dashboardSubjectList = $<HTMLElement>('dashboard-subject-list');
 const dashboardGoLibrary = $<HTMLButtonElement>('dashboard-go-library');
 
@@ -334,6 +337,12 @@ function formatProgressDate(timestamp: number): string {
   }).format(timestamp);
 }
 
+function renderTestCountdown(): void {
+  const countdown = getTestCountdown();
+  dashboardRemainingHours.textContent = formatCount(countdown.hours);
+  dashboardRemainingDays.textContent = formatCount(countdown.days);
+}
+
 function renderDashboard(): void {
   const entries = Object.values(learningProgress).sort((a, b) => b.lastStudied - a.lastStudied);
   const answered = entries.reduce((sum, entry) => sum + entry.answered, 0);
@@ -342,6 +351,7 @@ function renderDashboard(): void {
   dashboardAnswered.textContent = formatCount(answered);
   dashboardAccuracy.textContent = answered ? `${Math.round((correct / answered) * 100)}%` : '—';
   dashboardSubjectCount.textContent = formatCount(entries.length);
+  renderTestCountdown();
   dashboardSubjectList.innerHTML = '';
 
   if (entries.length === 0) {
@@ -1179,4 +1189,7 @@ darkModeToggle.addEventListener('change', () => {
 export function initApp(): void {
   renderExamList();
   showView(viewExam);
+  window.setInterval(() => {
+    if (!viewDashboard.hidden) renderTestCountdown();
+  }, 60 * 1000);
 }

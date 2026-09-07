@@ -21,6 +21,8 @@ test('アプリシェルが必要な画面とPWA参照を持つ', async () => {
     'view-result',
     'menu-panel',
     'dark-mode-toggle',
+    'dashboard-remaining-hours',
+    'dashboard-remaining-days',
   ]) {
     assert.match(html, new RegExp(`id="${id}"`), `#${id} がありません`);
   }

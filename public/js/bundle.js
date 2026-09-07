@@ -8288,6 +8288,22 @@
     return ICONS[fallback];
   }
 
+  // src/countdown.ts
+  var TEST_START_MONTH = 7;
+  var TEST_START_DAY = 19;
+  var HOUR_MS = 60 * 60 * 1e3;
+  var DAY_MS = 24 * HOUR_MS;
+  function getTestCountdown(now = /* @__PURE__ */ new Date()) {
+    const target = new Date(now.getFullYear(), TEST_START_MONTH, TEST_START_DAY);
+    if (target <= now) target.setFullYear(target.getFullYear() + 1);
+    const remaining = target.getTime() - now.getTime();
+    return {
+      hours: Math.ceil(remaining / HOUR_MS),
+      days: Math.floor(remaining / DAY_MS),
+      target
+    };
+  }
+
   // src/app.ts
   var state = null;
   var currentExam = null;
@@ -8348,6 +8364,8 @@
   var dashboardAnswered = $("dashboard-answered");
   var dashboardAccuracy = $("dashboard-accuracy");
   var dashboardSubjectCount = $("dashboard-subject-count");
+  var dashboardRemainingHours = $("dashboard-remaining-hours");
+  var dashboardRemainingDays = $("dashboard-remaining-days");
   var dashboardSubjectList = $("dashboard-subject-list");
   var dashboardGoLibrary = $("dashboard-go-library");
   var confirmOverlay = $("confirm-overlay");
@@ -8538,6 +8556,11 @@
       day: "numeric"
     }).format(timestamp);
   }
+  function renderTestCountdown() {
+    const countdown = getTestCountdown();
+    dashboardRemainingHours.textContent = formatCount(countdown.hours);
+    dashboardRemainingDays.textContent = formatCount(countdown.days);
+  }
   function renderDashboard() {
     const entries = Object.values(learningProgress).sort((a, b) => b.lastStudied - a.lastStudied);
     const answered = entries.reduce((sum, entry) => sum + entry.answered, 0);
@@ -8545,6 +8568,7 @@
     dashboardAnswered.textContent = formatCount(answered);
     dashboardAccuracy.textContent = answered ? `${Math.round(correct / answered * 100)}%` : "\u2014";
     dashboardSubjectCount.textContent = formatCount(entries.length);
+    renderTestCountdown();
     dashboardSubjectList.innerHTML = "";
     if (entries.length === 0) {
       const empty = document.createElement("p");
@@ -9214,6 +9238,9 @@
   function initApp() {
     renderExamList();
     showView(viewExam);
+    window.setInterval(() => {
+      if (!viewDashboard.hidden) renderTestCountdown();
+    }, 60 * 1e3);
   }
 
   // src/main.ts
