@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "quiz-static",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["http-server", "public", "-p", "5173", "-c-1"],
+      "port": 5173
+    }
+  ]
+}

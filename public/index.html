@@ -1,0 +1,115 @@
+<!--自由に変えてね-->
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>テスト対策クイズ</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="app-header-bar">
+      <h1><span class="app-header-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="m9 14 2 2 4-4"/></svg></span>テスト対策クイズ</h1>
+      <button type="button" class="menu-toggle" id="btn-menu-toggle" aria-label="メニューを開く" aria-expanded="false" aria-controls="menu-panel">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+    </div>
+    <nav class="menu-panel" id="menu-panel" hidden>
+      <div class="menu-main" id="menu-main">
+        <button type="button" class="menu-item" id="menu-go-exam">試験選択に戻る</button>
+        <button type="button" class="menu-item" id="menu-go-subject" hidden>科目選択に戻る</button>
+        <div class="menu-divider" id="menu-pinned-divider" hidden></div>
+        <div id="menu-pinned-list"></div>
+        <div class="menu-divider"></div>
+        <button type="button" class="menu-item" id="menu-add-subject">+ 選択科目を追加</button>
+        <div class="menu-divider"></div>
+        <a class="menu-item" href="create.html" target="_blank" rel="noopener noreferrer">クイズを作成する</a>
+        <div class="menu-divider"></div>
+        <a class="menu-item" href="https://github.com/NoPlanCoders" target="_blank" rel="noopener noreferrer">GitHub: NoPlanCoders</a>
+      </div>
+      <div class="menu-search" id="menu-search" hidden>
+        <button type="button" class="menu-search-back" id="menu-search-back">&larr; 戻る</button>
+        <input type="text" id="menu-search-input" class="menu-search-input" autocomplete="off" placeholder="選択科目を検索…" />
+        <div id="menu-search-results" class="menu-search-results"></div>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section id="view-exam" class="view">
+      <h2>試験を選んでください</h2>
+      <div id="exam-list" class="card-list"></div>
+    </section>
+
+    <section id="view-subject" class="view" hidden>
+      <button type="button" class="back-btn" id="btn-back-to-exam">&larr; 試験選択に戻る</button>
+      <h2 id="subject-view-title">科目を選んでください</h2>
+      <div id="subject-list" class="card-list"></div>
+    </section>
+
+    <section id="view-quiz" class="view" hidden>
+      <div class="quiz-toolbar">
+        <button type="button" class="btn-end-quiz" id="btn-end-quiz"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="btn-end-quiz-icon"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg> 終了する</button>
+      </div>
+      <div class="quiz-progress">
+        <span id="quiz-progress-text"></span>
+        <span id="quiz-score-text"></span>
+      </div>
+      <div class="progress-bar"><div class="progress-bar-fill" id="quiz-progress-fill"></div></div>
+      <div class="quiz-card">
+        <p id="quiz-question" class="quiz-question"></p>
+        <div id="quiz-choices" class="quiz-choices"></div>
+        <div id="quiz-text-input-area" class="quiz-text-input-area" hidden>
+          <input type="text" id="quiz-text-input" autocomplete="off" placeholder="答えを入力" />
+          <button type="button" id="btn-submit-text">回答する</button>
+        </div>
+        <div id="quiz-handwriting-area" class="quiz-handwriting-area" hidden>
+          <canvas id="quiz-canvas" class="quiz-canvas" width="840" height="330"></canvas>
+          <div class="handwriting-controls">
+            <button type="button" id="btn-clear-canvas" class="btn-clear-canvas">消す</button>
+            <button type="button" id="btn-check-handwriting">答えを確認</button>
+          </div>
+          <div id="handwriting-answer-reveal" class="handwriting-answer-reveal" hidden>
+            <p>正解: <span id="handwriting-correct-answer"></span></p>
+          </div>
+        </div>
+        <p id="quiz-feedback" class="quiz-feedback" hidden></p>
+        <div id="quiz-explanation" class="quiz-explanation" hidden></div>
+        <button type="button" id="btn-next" class="btn-next" hidden>次へ</button>
+      </div>
+    </section>
+
+    <section id="view-result" class="view" hidden>
+      <h2>結果</h2>
+      <div class="result-score-ring" id="result-score-ring">
+        <span id="result-score-percent" class="result-score-percent"></span>
+      </div>
+      <p id="result-score" class="result-score"></p>
+      <p id="result-message" class="result-message"></p>
+      <div id="result-wrong-list" class="result-wrong-list"></div>
+      <div class="result-actions">
+        <button type="button" id="btn-review-wrong">間違えた問題だけ復習する</button>
+        <button type="button" id="btn-retry-subject">同じ科目をもう一度</button>
+        <button type="button" id="btn-back-to-subject">科目選択に戻る</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <a href="https://github.com/NoPlanCoders" target="_blank" rel="noopener noreferrer">NoPlanCoders</a>
+  </footer>
+
+  <div class="confirm-overlay" id="confirm-overlay" hidden>
+    <div class="confirm-dialog" role="alertdialog" aria-modal="true" aria-labelledby="confirm-message">
+      <p id="confirm-message" class="confirm-message"></p>
+      <div class="confirm-actions">
+        <button type="button" id="confirm-btn-cancel" class="confirm-btn-cancel">キャンセル</button>
+        <button type="button" id="confirm-btn-ok" class="confirm-btn-ok">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/bundle.js"></script>
+</body>
+</html>

@@ -1,0 +1,142 @@
+<!--自由に変えてね-->
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>クイズ作成ツール</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/create.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="app-header-bar">
+      <h1>
+        <span class="app-header-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+        </span>
+        クイズ作成ツール
+      </h1>
+      <a class="menu-toggle" href="index.html" aria-label="クイズサイトに戻る" title="クイズサイトに戻る">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11 12 3l9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg>
+      </a>
+    </div>
+  </header>
+
+  <main class="container builder-container">
+    <section class="builder-intro">
+      <h2>プログラミングなしでクイズを作れます</h2>
+      <p>
+        まず「履修科目」か「選択科目」かを選び、下のフォームに問題を入力して「この問題を追加する」を押すと、一覧に追加されます。
+        必要な問題をすべて追加し終えたら、一番下の「TypeScriptファイル(.ts)をダウンロード」からファイルを保存してください。
+        できあがった <code>.ts</code> ファイルをサイトの管理者に渡せば、クイズとして追加してもらえます。
+      </p>
+      <p class="builder-intro-note">
+        入力内容は自動的にこの端末のブラウザに一時保存されます(他の人には共有されません)。誤って閉じても続きから再開できます。
+      </p>
+    </section>
+
+    <section class="builder-card">
+      <h3>この科目の分類</h3>
+      <p class="builder-help">
+        今から作る問題セットが、試験の科目一覧に最初から表示される「履修科目」か、
+        メニューの「選択科目を追加」で検索したときだけ表示される「選択科目」かを選んでください。
+        迷ったら「履修科目」のままで大丈夫です。
+      </p>
+      <div class="builder-category-tabs" id="category-tabs">
+        <button type="button" class="builder-category-tab is-active" data-category="履修科目">
+          <span class="builder-category-tab-title">履修科目</span>
+          <span class="builder-category-tab-desc">科目一覧に最初から表示される</span>
+        </button>
+        <button type="button" class="builder-category-tab" data-category="選択科目">
+          <span class="builder-category-tab-title">選択科目</span>
+          <span class="builder-category-tab-desc">検索して追加したときだけ表示される</span>
+        </button>
+      </div>
+    </section>
+
+    <section class="builder-card">
+      <h3 id="form-heading">問題を追加</h3>
+
+      <div class="builder-field">
+        <label for="q-type">出題形式</label>
+        <div class="builder-type-tabs" id="type-tabs">
+          <button type="button" class="builder-type-tab is-active" data-type="choice">選択式(4択など)</button>
+          <button type="button" class="builder-type-tab" data-type="text">記述式(入力)</button>
+          <button type="button" class="builder-type-tab" data-type="handwriting">手書き(自己採点)</button>
+        </div>
+        <p class="builder-help" id="type-help"></p>
+      </div>
+
+      <div class="builder-field">
+        <label for="q-question">問題文</label>
+        <textarea id="q-question" rows="3" placeholder="例: 日本の首都はどこか。"></textarea>
+        <p class="builder-help">改行はそのまま表示されるので、表や式を複数行に分けて書きたいときに使えます。</p>
+      </div>
+
+      <!-- 選択式 -->
+      <div class="builder-field" id="choice-fields">
+        <label>選択肢(正解を1つ選んでください)</label>
+        <div id="choice-list" class="builder-choice-list"></div>
+        <button type="button" id="btn-add-choice" class="builder-add-btn">+ 選択肢を追加</button>
+        <p class="builder-help">
+          各選択肢の下の「解説」欄は任意です。入力しておくと、その選択肢を選んで不正解になったときに解説が表示されます(正解の選択肢に書いた解説も一緒に表示されます)。
+        </p>
+      </div>
+
+      <!-- 記述式 -->
+      <div class="builder-field" id="text-fields" hidden>
+        <label>正解(表記ゆれがある場合は複数登録できます)</label>
+        <div id="text-answer-list" class="builder-answer-list"></div>
+        <button type="button" id="btn-add-text-answer" class="builder-add-btn">+ 別の答え方を追加</button>
+      </div>
+
+      <!-- 手書き -->
+      <div class="builder-field" id="handwriting-fields" hidden>
+        <label for="q-handwriting-answer">正解(回答者が自分で答え合わせするときに表示される文字列)</label>
+        <textarea id="q-handwriting-answer" rows="2" placeholder="例: x = 3, y = -2"></textarea>
+      </div>
+
+      <p class="builder-error" id="form-error" hidden></p>
+
+      <div class="builder-form-actions">
+        <button type="button" id="btn-submit" class="builder-primary-btn">この問題を追加する</button>
+        <button type="button" id="btn-cancel-edit" class="builder-secondary-btn" hidden>編集をキャンセル</button>
+      </div>
+    </section>
+
+    <section class="builder-card">
+      <h3>追加した問題(<span id="question-count">0</span>問)</h3>
+      <p class="builder-help" id="question-list-empty">まだ問題がありません。上のフォームから追加してください。</p>
+      <div id="question-list" class="builder-question-list"></div>
+    </section>
+
+    <section class="builder-card">
+      <h3>ダウンロード</h3>
+      <div class="builder-field">
+        <label for="file-name">ファイル名</label>
+        <input type="text" id="file-name" value="questions" autocomplete="off" />
+        <p class="builder-help">
+          「.ts」は自動で付きます。科目名(英語)にしておくと管理者が扱いやすいです。
+          ファイルには問題の内容と、上で選んだ「履修科目/選択科目」の分類が一緒に保存されます。
+        </p>
+      </div>
+      <div class="builder-form-actions">
+        <button type="button" id="btn-download" class="builder-primary-btn" disabled>TypeScriptファイル(.ts)をダウンロード</button>
+      </div>
+
+      <div class="builder-import">
+        <label for="file-import" class="builder-secondary-btn builder-import-label">ファイルを読み込んで続きを編集する</label>
+        <input type="file" id="file-import" accept=".ts,.json,application/json,text/plain" hidden />
+        <button type="button" id="btn-clear-draft" class="builder-text-btn">すべての問題を削除してやり直す</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <a href="https://github.com/NoPlanCoders" target="_blank" rel="noopener noreferrer">NoPlanCoders</a>
+  </footer>
+
+  <script src="js/create.js"></script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+{
+  "name": "quiz-app",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "学校のテスト対策用クイズサイト",
+  "scripts": {
+    "build": "tsc --noEmit && esbuild src/main.ts --bundle --outfile=public/js/bundle.js --format=iife --target=es2020",
+    "watch": "esbuild src/main.ts --bundle --outfile=public/js/bundle.js --format=iife --target=es2020 --watch",
+    "deploy": "npx vercel --prod"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.1",
+    "typescript": "^5.9.3"
+  }
+}

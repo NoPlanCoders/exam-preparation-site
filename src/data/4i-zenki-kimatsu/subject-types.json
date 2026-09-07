@@ -1,0 +1,22 @@
+{
+  "履修科目": [
+    "database-choice",
+    "database-text",
+    "game-theory-choice",
+    "game-theory-text",
+    "game-theory-handwriting",
+    "mechatronics-choice",
+    "mechatronics-text",
+    "data-structures-choice",
+    "data-structures-text",
+    "os-choice",
+    "os-text",
+    "numerical-methods-choice",
+    "numerical-methods-text",
+    "numerical-methods-handwriting",
+    "control-engineering-choice",
+    "control-engineering-text",
+    "control-engineering-handwriting"
+  ],
+  "選択科目": []
+}
