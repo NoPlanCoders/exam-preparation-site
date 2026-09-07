@@ -28,8 +28,11 @@ function $<T extends HTMLElement>(id: string): T {
 
 const viewExam = $<HTMLElement>('view-exam');
 const viewSubject = $<HTMLElement>('view-subject');
+const viewSettings = $<HTMLElement>('view-settings');
 const viewQuiz = $<HTMLElement>('view-quiz');
 const viewResult = $<HTMLElement>('view-result');
+
+let settingsReturnView: HTMLElement = viewExam;
 
 const examList = $<HTMLElement>('exam-list');
 const subjectList = $<HTMLElement>('subject-list');
@@ -63,10 +66,16 @@ const menuGoSubject = $<HTMLButtonElement>('menu-go-subject');
 const menuPinnedDivider = $<HTMLElement>('menu-pinned-divider');
 const menuPinnedList = $<HTMLElement>('menu-pinned-list');
 const menuAddSubject = $<HTMLButtonElement>('menu-add-subject');
+const menuSettings = $<HTMLButtonElement>('menu-settings');
 const menuSearch = $<HTMLElement>('menu-search');
 const menuSearchBack = $<HTMLButtonElement>('menu-search-back');
 const menuSearchInput = $<HTMLInputElement>('menu-search-input');
 const menuSearchResults = $<HTMLElement>('menu-search-results');
+
+const btnBackFromSettings = $<HTMLButtonElement>('btn-back-from-settings');
+const darkModeToggle = $<HTMLInputElement>('dark-mode-toggle');
+const themeSettingSummary = $<HTMLElement>('theme-setting-summary');
+const themeColorMeta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
 
 const confirmOverlay = $<HTMLElement>('confirm-overlay');
 const confirmMessage = $<HTMLElement>('confirm-message');
@@ -167,9 +176,35 @@ quizCanvas.addEventListener('pointercancel', stopDrawing);
 btnClearCanvas.addEventListener('click', clearCanvas);
 
 function showView(view: HTMLElement): void {
-  for (const v of [viewExam, viewSubject, viewQuiz, viewResult]) {
+  for (const v of [viewExam, viewSubject, viewSettings, viewQuiz, viewResult]) {
     v.hidden = v !== view;
   }
+}
+
+const THEME_STORAGE_KEY = 'quiz-theme';
+type Theme = 'light' | 'dark';
+
+function loadTheme(): Theme {
+  try {
+    return localStorage.getItem(THEME_STORAGE_KEY) === 'dark' ? 'dark' : 'light';
+  } catch {
+    return 'light';
+  }
+}
+
+function saveTheme(theme: Theme): void {
+  try {
+    localStorage.setItem(THEME_STORAGE_KEY, theme);
+  } catch {
+    // 保存できなくても、現在の画面には反映する。
+  }
+}
+
+function applyTheme(theme: Theme): void {
+  document.documentElement.dataset.theme = theme;
+  darkModeToggle.checked = theme === 'dark';
+  themeSettingSummary.textContent = theme === 'dark' ? 'ダークモードが有効です' : 'ライトモードが有効です';
+  themeColorMeta?.setAttribute('content', theme === 'dark' ? '#11162a' : '#6366f1');
 }
 
 function shuffle<T>(items: T[]): T[] {
@@ -886,6 +921,14 @@ menuAddSubject.addEventListener('click', () => {
   openSearch();
 });
 
+function openSettings(): void {
+  settingsReturnView = [viewExam, viewSubject, viewQuiz, viewResult].find((view) => !view.hidden) ?? viewExam;
+  closeMenu();
+  showView(viewSettings);
+}
+
+menuSettings.addEventListener('click', openSettings);
+
 menuSearchBack.addEventListener('click', () => {
   closeSearch();
 });
@@ -900,6 +943,17 @@ menuGoSubject.addEventListener('click', async () => {
   if (!(await confirmLeaveQuizIfNeeded())) return;
   state = null;
   renderSubjectView(currentExam.id, currentExam.name);
+});
+
+btnBackFromSettings.addEventListener('click', () => {
+  showView(settingsReturnView);
+});
+
+applyTheme(loadTheme());
+darkModeToggle.addEventListener('change', () => {
+  const theme: Theme = darkModeToggle.checked ? 'dark' : 'light';
+  applyTheme(theme);
+  saveTheme(theme);
 });
 
 export function initApp(): void {

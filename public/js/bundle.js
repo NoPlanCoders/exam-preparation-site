@@ -8298,8 +8298,10 @@
   }
   var viewExam = $("view-exam");
   var viewSubject = $("view-subject");
+  var viewSettings = $("view-settings");
   var viewQuiz = $("view-quiz");
   var viewResult = $("view-result");
+  var settingsReturnView = viewExam;
   var examList = $("exam-list");
   var subjectList = $("subject-list");
   var subjectViewTitle = $("subject-view-title");
@@ -8330,10 +8332,15 @@
   var menuPinnedDivider = $("menu-pinned-divider");
   var menuPinnedList = $("menu-pinned-list");
   var menuAddSubject = $("menu-add-subject");
+  var menuSettings = $("menu-settings");
   var menuSearch = $("menu-search");
   var menuSearchBack = $("menu-search-back");
   var menuSearchInput = $("menu-search-input");
   var menuSearchResults = $("menu-search-results");
+  var btnBackFromSettings = $("btn-back-from-settings");
+  var darkModeToggle = $("dark-mode-toggle");
+  var themeSettingSummary = $("theme-setting-summary");
+  var themeColorMeta = document.querySelector('meta[name="theme-color"]');
   var confirmOverlay = $("confirm-overlay");
   var confirmMessage = $("confirm-message");
   var confirmBtnOk = $("confirm-btn-ok");
@@ -8418,9 +8425,29 @@
   quizCanvas.addEventListener("pointercancel", stopDrawing);
   btnClearCanvas.addEventListener("click", clearCanvas);
   function showView(view) {
-    for (const v of [viewExam, viewSubject, viewQuiz, viewResult]) {
+    for (const v of [viewExam, viewSubject, viewSettings, viewQuiz, viewResult]) {
       v.hidden = v !== view;
     }
+  }
+  var THEME_STORAGE_KEY = "quiz-theme";
+  function loadTheme() {
+    try {
+      return localStorage.getItem(THEME_STORAGE_KEY) === "dark" ? "dark" : "light";
+    } catch {
+      return "light";
+    }
+  }
+  function saveTheme(theme) {
+    try {
+      localStorage.setItem(THEME_STORAGE_KEY, theme);
+    } catch {
+    }
+  }
+  function applyTheme(theme) {
+    document.documentElement.dataset.theme = theme;
+    darkModeToggle.checked = theme === "dark";
+    themeSettingSummary.textContent = theme === "dark" ? "\u30C0\u30FC\u30AF\u30E2\u30FC\u30C9\u304C\u6709\u52B9\u3067\u3059" : "\u30E9\u30A4\u30C8\u30E2\u30FC\u30C9\u304C\u6709\u52B9\u3067\u3059";
+    themeColorMeta?.setAttribute("content", theme === "dark" ? "#11162a" : "#6366f1");
   }
   function shuffle(items) {
     const arr = items.slice();
@@ -8986,6 +9013,12 @@
   menuAddSubject.addEventListener("click", () => {
     openSearch();
   });
+  function openSettings() {
+    settingsReturnView = [viewExam, viewSubject, viewQuiz, viewResult].find((view) => !view.hidden) ?? viewExam;
+    closeMenu();
+    showView(viewSettings);
+  }
+  menuSettings.addEventListener("click", openSettings);
   menuSearchBack.addEventListener("click", () => {
     closeSearch();
   });
@@ -8998,6 +9031,15 @@
     if (!await confirmLeaveQuizIfNeeded()) return;
     state = null;
     renderSubjectView(currentExam.id, currentExam.name);
+  });
+  btnBackFromSettings.addEventListener("click", () => {
+    showView(settingsReturnView);
+  });
+  applyTheme(loadTheme());
+  darkModeToggle.addEventListener("change", () => {
+    const theme = darkModeToggle.checked ? "dark" : "light";
+    applyTheme(theme);
+    saveTheme(theme);
   });
   function initApp() {
     renderExamList();
