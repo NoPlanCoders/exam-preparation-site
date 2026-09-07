@@ -6,6 +6,7 @@
   "description": "学校のテスト対策用クイズサイト",
   "scripts": {
     "build": "tsc --noEmit && esbuild src/main.ts --bundle --outfile=public/js/bundle.js --format=iife --target=es2020",
+    "test": "npm run build && node --test Tests/registry.test.mjs Tests/site-shell.test.mjs",
     "watch": "esbuild src/main.ts --bundle --outfile=public/js/bundle.js --format=iife --target=es2020 --watch",
     "dev": "esbuild src/main.ts --bundle --outfile=public/js/bundle.js --format=iife --target=es2020 --watch --servedir=public --serve=5173",
     "deploy": "npx vercel --prod"
