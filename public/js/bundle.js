@@ -8313,6 +8313,7 @@
     if (!el) throw new Error(`\u8981\u7D20\u304C\u898B\u3064\u304B\u308A\u307E\u305B\u3093: #${id}`);
     return el;
   }
+  var splashScreen = $("splash-screen");
   var viewExam = $("view-exam");
   var viewSubject = $("view-subject");
   var viewSettings = $("view-settings");
@@ -8466,6 +8467,15 @@
     else if (view !== viewSettings) setMainNav("library");
     void view.offsetWidth;
     view.classList.add("view-entering");
+  }
+  function dismissSplash() {
+    splashScreen.classList.add("is-hiding");
+    const onAnimationEnd = (event) => {
+      if (event.target !== splashScreen) return;
+      splashScreen.hidden = true;
+      splashScreen.removeEventListener("animationend", onAnimationEnd);
+    };
+    splashScreen.addEventListener("animationend", onAnimationEnd);
   }
   var THEME_STORAGE_KEY = "quiz-theme";
   function loadTheme() {
@@ -9257,6 +9267,7 @@
   function initApp() {
     renderExamList();
     showView(viewExam);
+    window.setTimeout(dismissSplash, 520);
     window.setInterval(() => {
       if (!viewDashboard.hidden) renderTestCountdown();
     }, 60 * 1e3);

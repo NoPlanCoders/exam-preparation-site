@@ -112,6 +112,40 @@
   }
 }
 
+@keyframes splash-mark-in {
+  from {
+    opacity: 0;
+    transform: scale(0.92) translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes splash-copy-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes splash-screen-out {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
 * {
   box-sizing: border-box;
 }
@@ -123,6 +157,54 @@ body {
   background: linear-gradient(160deg, var(--color-bg-1), var(--color-bg-2) 60%);
   color: var(--color-text);
   line-height: 1.6;
+}
+
+.splash-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  background: linear-gradient(135deg, var(--color-primary), #8b5cf6);
+  color: #fff;
+}
+
+.splash-screen[hidden] {
+  display: none;
+}
+
+.splash-screen.is-hiding {
+  pointer-events: none;
+  animation: splash-screen-out 180ms var(--ease-out) both;
+}
+
+.splash-mark {
+  width: 4.25rem;
+  height: 4.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 1.35rem;
+  background: rgba(255, 255, 255, 0.16);
+  box-shadow: 0 12px 28px rgba(30, 36, 51, 0.18);
+  animation: splash-mark-in 420ms var(--ease-out) both;
+}
+
+.splash-mark svg {
+  width: 2.2rem;
+  height: 2.2rem;
+}
+
+.splash-title {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  animation: splash-copy-in 320ms var(--ease-out) 100ms backwards;
 }
 
 .app-header {
@@ -1097,7 +1179,24 @@ button:active:not(:disabled) {
   }
 
   .subject-mode-row .subject-card-controls {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     width: 100%;
+  }
+
+  .subject-mode-row .count-select-wrap {
+    grid-column: 1 / -1;
+  }
+
+  .subject-mode-row .subject-card-controls .start-btn,
+  .subject-mode-row .subject-card-controls .mastery-btn {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .subject-mode-row .subject-card-controls .mastery-btn {
+    padding-inline: 0.5rem;
+    font-size: 0.82rem;
   }
 }
 
@@ -1775,7 +1874,9 @@ button:active:not(:disabled) {
   .handwriting-answer-reveal:not([hidden]),
   .btn-next:not([hidden]),
   .all-correct,
-  .confirm-overlay:not([hidden]) .confirm-dialog {
+  .confirm-overlay:not([hidden]) .confirm-dialog,
+  .splash-mark,
+  .splash-title {
     animation-name: gentle-fade-in;
     animation-duration: 180ms;
     animation-delay: 0ms;

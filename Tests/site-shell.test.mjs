@@ -19,6 +19,7 @@ test('アプリシェルが必要な画面とPWA参照を持つ', async () => {
     'view-dashboard',
     'view-quiz',
     'view-result',
+    'splash-screen',
     'menu-panel',
     'menu-install',
     'dark-mode-toggle',
@@ -46,9 +47,13 @@ test('アニメーションが通常時と縮小モーション時の両方で�
   assert.match(css, /@media \(prefers-reduced-motion: reduce\)/);
   assert.match(css, /\.view\.view-entering/);
   assert.match(css, /\.menu-panel\.menu-panel-entering/);
+  assert.match(css, /@keyframes splash-mark-in/);
+  assert.match(css, /\.splash-screen\.is-hiding/);
   assert.match(css, /@media \(max-width: 699px\)/);
   assert.match(css, /\.main-app \.app-main-nav \{[\s\S]*position: fixed/);
+  assert.match(css, /@media \(max-width: 480px\) \{[\s\S]*\.subject-mode-row \.subject-card-controls \{[\s\S]*display: grid/);
   assert.match(bundle, /view\.classList\.add\(['"]view-entering/);
   assert.match(bundle, /beforeinstallprompt/);
   assert.match(bundle, /appinstalled/);
+  assert.match(bundle, /dismissSplash/);
 });

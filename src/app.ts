@@ -34,6 +34,7 @@ function $<T extends HTMLElement>(id: string): T {
   return el as T;
 }
 
+const splashScreen = $<HTMLElement>('splash-screen');
 const viewExam = $<HTMLElement>('view-exam');
 const viewSubject = $<HTMLElement>('view-subject');
 const viewSettings = $<HTMLElement>('view-settings');
@@ -210,6 +211,16 @@ function showView(view: HTMLElement): void {
   else if (view !== viewSettings) setMainNav('library');
   void view.offsetWidth;
   view.classList.add('view-entering');
+}
+
+function dismissSplash(): void {
+  splashScreen.classList.add('is-hiding');
+  const onAnimationEnd = (event: AnimationEvent) => {
+    if (event.target !== splashScreen) return;
+    splashScreen.hidden = true;
+    splashScreen.removeEventListener('animationend', onAnimationEnd);
+  };
+  splashScreen.addEventListener('animationend', onAnimationEnd);
 }
 
 const THEME_STORAGE_KEY = 'quiz-theme';
@@ -1216,6 +1227,7 @@ darkModeToggle.addEventListener('change', () => {
 export function initApp(): void {
   renderExamList();
   showView(viewExam);
+  window.setTimeout(dismissSplash, 520);
   window.setInterval(() => {
     if (!viewDashboard.hidden) renderTestCountdown();
   }, 60 * 1000);
