@@ -738,8 +738,7 @@ function submitChoice(selected: number): void {
   });
 
   finishAnswer(correct, q.choices[q.answer]);
-
-  if (!correct) renderChoiceExplanation(q, selected);
+  renderChoiceExplanation(q, selected);
 }
 
 function addExplanationLine(tag: string, tagClass: string, text: string): void {
@@ -755,8 +754,8 @@ function addExplanationLine(tag: string, tagClass: string, text: string): void {
   quizExplanation.appendChild(p);
 }
 
-// 不正解の選択肢を選んだときに、選んだ選択肢(と、あれば正解の選択肢)の
-// 解説を表示する。解説が1つも登録されていなければ何も表示しない。
+// 回答後に、選んだ選択肢と正解の選択肢の解説を表示する。
+// 解説が1つも登録されていなければ何も表示しない。
 function renderChoiceExplanation(
   q: Extract<Question, { type: 'choice' }>,
   selected: number,
@@ -766,7 +765,7 @@ function renderChoiceExplanation(
   const correctExp = (exps[q.answer] ?? '').trim();
 
   quizExplanation.innerHTML = '';
-  if (yourExp) {
+  if (selected !== q.answer && yourExp) {
     addExplanationLine(`あなたの回答 ${CHOICE_LABELS[selected] ?? selected + 1}`, 'is-wrong', yourExp);
   }
   if (correctExp) {

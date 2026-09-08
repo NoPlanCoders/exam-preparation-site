@@ -24488,7 +24488,7 @@
       if (i2 === selected && !correct) btn.classList.add("incorrect");
     });
     finishAnswer(correct, q.choices[q.answer]);
-    if (!correct) renderChoiceExplanation(q, selected);
+    renderChoiceExplanation(q, selected);
   }
   function addExplanationLine(tag, tagClass, text2) {
     const p = document.createElement("p");
@@ -24507,7 +24507,7 @@
     const yourExp = (exps[selected] ?? "").trim();
     const correctExp = (exps[q.answer] ?? "").trim();
     quizExplanation.innerHTML = "";
-    if (yourExp) {
+    if (selected !== q.answer && yourExp) {
       addExplanationLine(`\u3042\u306A\u305F\u306E\u56DE\u7B54 ${CHOICE_LABELS[selected] ?? selected + 1}`, "is-wrong", yourExp);
     }
     if (correctExp) {

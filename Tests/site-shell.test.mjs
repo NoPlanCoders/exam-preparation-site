@@ -70,3 +70,13 @@ test('アニメーションが通常時と縮小モーション時の両方で�
   assert.match(bundle, /data-lucide/);
   assert.match(await read('public/js/create-icons.js'), /createIcons/);
 });
+
+test('選択問題は正解後にも解説を表示する', async () => {
+  const app = await read('src/app.ts');
+
+  assert.match(
+    app,
+    /finishAnswer\(correct, q\.choices\[q\.answer\]\);\s*renderChoiceExplanation\(q, selected\);/,
+  );
+  assert.doesNotMatch(app, /if\s*\(!correct\)\s*renderChoiceExplanation\(q, selected\)/);
+});
