@@ -18,21 +18,21 @@ const countdown = await import(
   `data:text/javascript;base64,${Buffer.from(countdownBuild.outputFiles[0].text).toString('base64')}`,
 );
 
-test('次回8月19日までの時間と日数を計算する', () => {
-  const result = countdown.getTestCountdown(new Date(2027, 7, 18, 0, 0, 0));
+test('次回9月19日までの時間と日数を計算する', () => {
+  const result = countdown.getTestCountdown(new Date(2027, 8, 18, 0, 0, 0));
 
   assert.equal(result.hours, 24);
   assert.equal(result.days, 1);
   assert.equal(result.target.getFullYear(), 2027);
-  assert.equal(result.target.getMonth(), 7);
+  assert.equal(result.target.getMonth(), 8);
   assert.equal(result.target.getDate(), 19);
 });
 
-test('8月19日を過ぎたら翌年を対象にする', () => {
-  const result = countdown.getTestCountdown(new Date(2027, 7, 20, 0, 0, 0));
+test('9月19日を過ぎたら翌年を対象にする', () => {
+  const result = countdown.getTestCountdown(new Date(2027, 8, 20, 0, 0, 0));
 
   assert.equal(result.target.getFullYear(), 2028);
-  assert.equal(result.target.getMonth(), 7);
+  assert.equal(result.target.getMonth(), 8);
   assert.equal(result.target.getDate(), 19);
   assert.ok(result.hours > 0);
   assert.ok(result.days > 0);

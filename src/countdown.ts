@@ -1,4 +1,4 @@
-const TEST_START_MONTH = 7;
+const TEST_START_MONTH = 8;
 const TEST_START_DAY = 19;
 const HOUR_MS = 60 * 60 * 1000;
 const DAY_MS = 24 * HOUR_MS;

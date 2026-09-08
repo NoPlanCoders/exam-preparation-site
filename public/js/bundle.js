@@ -8289,7 +8289,7 @@
   }
 
   // src/countdown.ts
-  var TEST_START_MONTH = 7;
+  var TEST_START_MONTH = 8;
   var TEST_START_DAY = 19;
   var HOUR_MS = 60 * 60 * 1e3;
   var DAY_MS = 24 * HOUR_MS;
