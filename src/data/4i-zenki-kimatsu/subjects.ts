@@ -119,6 +119,19 @@ const rawSubjects: Subject[] = [
       '有声音化・連音化・濃音化・激音化、かなのハングル表記、漢数詞、位置を表す名詞などを4択で確認',
     icon: 'languages',
   },
+  {
+    id: 'economics-choice',
+    name: '経済学(選択式)',
+    description:
+      '需要供給曲線のシフト・企業の形態・余剰分析・不完全競争と市場の失敗・ゲーム理論などを公務員試験形式(5択)で確認',
+    icon: 'trending-up',
+  },
+  {
+    id: 'economics-handwriting',
+    name: '経済学(計算・手書き)',
+    description: '費用関数(損益分岐点・操業停止価格)、租税負担割合、消費者余剰・生産者余剰の計算問題を手書きで解いて確認',
+    icon: 'calculator',
+  },
 ];
 
 const electiveIds = new Set<string>(subjectTypes['選択科目']);
