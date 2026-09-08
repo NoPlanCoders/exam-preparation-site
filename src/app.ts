@@ -524,9 +524,12 @@ function renderSubjectView(examId: string, examName: string): void {
   subjectViewTitle.textContent = `${examName} - 科目を選んでください`;
   subjectList.innerHTML = '';
 
-  // 通常の科目一覧には履修科目のみを表示する。選択科目はメニューの
-  // 「選択科目を追加」から検索してピン留めしたときだけ個別に表示される。
-  const subjects: Subject[] = getSubjects(examId).filter((s) => s.category !== '選択科目');
+  // 通常の科目一覧には履修科目に加えて、この試験でピン留め(追加)した
+  // 選択科目も表示する。ピン留めしていない選択科目はメニューの
+  // 「選択科目を追加」から検索してピン留めするまでは表示されない。
+  const subjects: Subject[] = getSubjects(examId).filter(
+    (s) => s.category !== '選択科目' || isPinned(examId, s.id),
+  );
   const groups = new Map<string, { name: string; icon?: string; subjects: Subject[] }>();
   for (const subject of subjects) {
     const { groupName } = splitSubjectName(subject.name);
@@ -1051,6 +1054,10 @@ function togglePinned(examId: string, subjectId: string): void {
   savePinned(pinnedSubjects);
   renderPinnedMenu();
   renderSearchResults(menuSearchInput.value);
+  // 今その試験の科目一覧を表示中であれば、ピン留めの追加・解除を即座に反映する。
+  if (!viewSubject.hidden && currentExam && currentExam.id === examId) {
+    renderSubjectView(currentExam.id, currentExam.name);
+  }
 }
 
 async function startPinnedQuiz(entry: FlatSubjectEntry): Promise<void> {
