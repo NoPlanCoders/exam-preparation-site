@@ -24777,7 +24777,9 @@
   }
   function renderSearchResults(query) {
     const normalized = query.trim().toLowerCase();
-    const electives = getAllSubjectsFlat().filter((e) => e.category === "\u9078\u629E\u79D1\u76EE");
+    const allElectives = getAllSubjectsFlat().filter((e) => e.category === "\u9078\u629E\u79D1\u76EE");
+    const activeExamId = currentExam?.id;
+    const electives = activeExamId ? allElectives.filter((e) => e.examId === activeExamId) : allElectives;
     const matches = normalized ? electives.filter(
       (e) => e.subjectName.toLowerCase().includes(normalized) || e.description.toLowerCase().includes(normalized) || e.examName.toLowerCase().includes(normalized)
     ) : electives;
@@ -24785,7 +24787,7 @@
     if (matches.length === 0) {
       const empty = document.createElement("p");
       empty.className = "menu-search-empty";
-      empty.textContent = electives.length === 0 ? "\u9078\u629E\u79D1\u76EE\u306F\u307E\u3060\u767B\u9332\u3055\u308C\u3066\u3044\u307E\u305B\u3093" : "\u898B\u3064\u304B\u308A\u307E\u305B\u3093\u3067\u3057\u305F";
+      empty.textContent = electives.length === 0 ? currentExam ? `${currentExam.name}\u306E\u9078\u629E\u79D1\u76EE\u306F\u307E\u3060\u767B\u9332\u3055\u308C\u3066\u3044\u307E\u305B\u3093` : "\u9078\u629E\u79D1\u76EE\u306F\u307E\u3060\u767B\u9332\u3055\u308C\u3066\u3044\u307E\u305B\u3093" : "\u898B\u3064\u304B\u308A\u307E\u305B\u3093\u3067\u3057\u305F";
       menuSearchResults.appendChild(empty);
       return;
     }

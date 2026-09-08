@@ -1107,7 +1107,13 @@ function renderSearchResults(query: string): void {
   const normalized = query.trim().toLowerCase();
   // 「選択科目を追加」では選択科目のみを検索対象にする(履修科目は通常の
   // 科目一覧からすでに選べるため、ここには表示しない)。
-  const electives = getAllSubjectsFlat().filter((e) => e.category === '選択科目');
+  // 選択科目も試験ごとに分類されているため、現在開いている試験の選択科目だけを
+  // 検索対象にする(試験を開いていない場合は全試験分から検索する)。
+  const allElectives = getAllSubjectsFlat().filter((e) => e.category === '選択科目');
+  const activeExamId = currentExam?.id;
+  const electives = activeExamId
+    ? allElectives.filter((e) => e.examId === activeExamId)
+    : allElectives;
   const matches = normalized
     ? electives.filter(
         (e) =>
@@ -1122,7 +1128,12 @@ function renderSearchResults(query: string): void {
   if (matches.length === 0) {
     const empty = document.createElement('p');
     empty.className = 'menu-search-empty';
-    empty.textContent = electives.length === 0 ? '選択科目はまだ登録されていません' : '見つかりませんでした';
+    empty.textContent =
+      electives.length === 0
+        ? currentExam
+          ? `${currentExam.name}の選択科目はまだ登録されていません`
+          : '選択科目はまだ登録されていません'
+        : '見つかりませんでした';
     menuSearchResults.appendChild(empty);
     return;
   }
