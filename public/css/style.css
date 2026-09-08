@@ -843,6 +843,10 @@ h2 {
   box-shadow: var(--shadow-card);
 }
 
+.settings-card + .settings-card {
+  margin-top: 0.75rem;
+}
+
 .settings-row {
   display: flex;
   align-items: center;

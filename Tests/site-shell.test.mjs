@@ -23,6 +23,7 @@ test('アプリシェルが必要な画面とPWA参照を持つ', async () => {
     'menu-panel',
     'menu-install',
     'dark-mode-toggle',
+    'splash-animation-toggle',
     'dashboard-remaining-hours',
     'dashboard-remaining-days',
   ]) {
@@ -56,4 +57,5 @@ test('アニメーションが通常時と縮小モーション時の両方で�
   assert.match(bundle, /beforeinstallprompt/);
   assert.match(bundle, /appinstalled/);
   assert.match(bundle, /dismissSplash/);
+  assert.match(bundle, /quiz-splash-enabled/);
 });

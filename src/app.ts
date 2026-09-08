@@ -87,6 +87,8 @@ const menuSearchResults = $<HTMLElement>('menu-search-results');
 const btnBackFromSettings = $<HTMLButtonElement>('btn-back-from-settings');
 const darkModeToggle = $<HTMLInputElement>('dark-mode-toggle');
 const themeSettingSummary = $<HTMLElement>('theme-setting-summary');
+const splashAnimationToggle = $<HTMLInputElement>('splash-animation-toggle');
+const splashSettingSummary = $<HTMLElement>('splash-setting-summary');
 const themeColorMeta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
 
 const navLibrary = $<HTMLButtonElement>('nav-library');
@@ -247,6 +249,33 @@ function applyTheme(theme: Theme): void {
   darkModeToggle.checked = theme === 'dark';
   themeSettingSummary.textContent = theme === 'dark' ? 'ダークモードが有効です' : 'ライトモードが有効です';
   themeColorMeta?.setAttribute('content', theme === 'dark' ? '#11162a' : '#6366f1');
+}
+
+const SPLASH_STORAGE_KEY = 'quiz-splash-enabled';
+
+function loadSplashAnimationEnabled(): boolean {
+  try {
+    return localStorage.getItem(SPLASH_STORAGE_KEY) !== 'false';
+  } catch {
+    return true;
+  }
+}
+
+function saveSplashAnimationEnabled(enabled: boolean): void {
+  try {
+    localStorage.setItem(SPLASH_STORAGE_KEY, String(enabled));
+  } catch {
+    // 保存できなくても、現在の画面には反映する。
+  }
+}
+
+function applySplashAnimationSetting(enabled: boolean): void {
+  splashAnimationToggle.checked = enabled;
+  splashSettingSummary.textContent = enabled ? '起動時に表示します' : '起動時に表示しません';
+  if (!enabled) {
+    splashScreen.classList.remove('is-hiding');
+    splashScreen.hidden = true;
+  }
 }
 
 interface LearningProgressEntry {
@@ -1218,16 +1247,23 @@ btnBackFromSettings.addEventListener('click', () => {
 });
 
 applyTheme(loadTheme());
+applySplashAnimationSetting(loadSplashAnimationEnabled());
 darkModeToggle.addEventListener('change', () => {
   const theme: Theme = darkModeToggle.checked ? 'dark' : 'light';
   applyTheme(theme);
   saveTheme(theme);
 });
 
+splashAnimationToggle.addEventListener('change', () => {
+  const enabled = splashAnimationToggle.checked;
+  applySplashAnimationSetting(enabled);
+  saveSplashAnimationEnabled(enabled);
+});
+
 export function initApp(): void {
   renderExamList();
   showView(viewExam);
-  window.setTimeout(dismissSplash, 520);
+  if (splashAnimationToggle.checked) window.setTimeout(dismissSplash, 520);
   window.setInterval(() => {
     if (!viewDashboard.hidden) renderTestCountdown();
   }, 60 * 1000);

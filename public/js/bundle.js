@@ -8361,6 +8361,8 @@
   var btnBackFromSettings = $("btn-back-from-settings");
   var darkModeToggle = $("dark-mode-toggle");
   var themeSettingSummary = $("theme-setting-summary");
+  var splashAnimationToggle = $("splash-animation-toggle");
+  var splashSettingSummary = $("splash-setting-summary");
   var themeColorMeta = document.querySelector('meta[name="theme-color"]');
   var navLibrary = $("nav-library");
   var navDashboard = $("nav-dashboard");
@@ -8496,6 +8498,28 @@
     darkModeToggle.checked = theme === "dark";
     themeSettingSummary.textContent = theme === "dark" ? "\u30C0\u30FC\u30AF\u30E2\u30FC\u30C9\u304C\u6709\u52B9\u3067\u3059" : "\u30E9\u30A4\u30C8\u30E2\u30FC\u30C9\u304C\u6709\u52B9\u3067\u3059";
     themeColorMeta?.setAttribute("content", theme === "dark" ? "#11162a" : "#6366f1");
+  }
+  var SPLASH_STORAGE_KEY = "quiz-splash-enabled";
+  function loadSplashAnimationEnabled() {
+    try {
+      return localStorage.getItem(SPLASH_STORAGE_KEY) !== "false";
+    } catch {
+      return true;
+    }
+  }
+  function saveSplashAnimationEnabled(enabled) {
+    try {
+      localStorage.setItem(SPLASH_STORAGE_KEY, String(enabled));
+    } catch {
+    }
+  }
+  function applySplashAnimationSetting(enabled) {
+    splashAnimationToggle.checked = enabled;
+    splashSettingSummary.textContent = enabled ? "\u8D77\u52D5\u6642\u306B\u8868\u793A\u3057\u307E\u3059" : "\u8D77\u52D5\u6642\u306B\u8868\u793A\u3057\u307E\u305B\u3093";
+    if (!enabled) {
+      splashScreen.classList.remove("is-hiding");
+      splashScreen.hidden = true;
+    }
   }
   var LEARNING_PROGRESS_STORAGE_KEY = "quiz-learning-progress";
   function loadLearningProgress() {
@@ -9259,15 +9283,21 @@
     showView(settingsReturnView);
   });
   applyTheme(loadTheme());
+  applySplashAnimationSetting(loadSplashAnimationEnabled());
   darkModeToggle.addEventListener("change", () => {
     const theme = darkModeToggle.checked ? "dark" : "light";
     applyTheme(theme);
     saveTheme(theme);
   });
+  splashAnimationToggle.addEventListener("change", () => {
+    const enabled = splashAnimationToggle.checked;
+    applySplashAnimationSetting(enabled);
+    saveSplashAnimationEnabled(enabled);
+  });
   function initApp() {
     renderExamList();
     showView(viewExam);
-    window.setTimeout(dismissSplash, 520);
+    if (splashAnimationToggle.checked) window.setTimeout(dismissSplash, 520);
     window.setInterval(() => {
       if (!viewDashboard.hidden) renderTestCountdown();
     }, 60 * 1e3);
