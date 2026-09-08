@@ -90,7 +90,8 @@ const rawSubjects: Subject[] = [
   {
     id: 'numerical-methods-handwriting',
     name: '数値計算法(計算・手書き)',
-    description: '置換の計算・隣接行列の累乗・ベイズの定理・不定方程式などの計算問題を手書きで解いて確認',
+    description:
+      '置換の計算・隣接行列の累乗・ベイズの定理・不定方程式・ダイクストラ法・ユークリッドの互除法などの計算問題を手書きで解いて確認',
     icon: 'matrix',
   },
   {
