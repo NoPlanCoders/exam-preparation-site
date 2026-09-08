@@ -18,6 +18,7 @@ import { questions as zenkiKimatsuNumericalMethodsHandwriting } from './4i-zenki
 import { questions as zenkiKimatsuControlEngineeringChoice } from './4i-zenki-kimatsu/control-engineering-choice.js';
 import { questions as zenkiKimatsuControlEngineeringText } from './4i-zenki-kimatsu/control-engineering-text.js';
 import { questions as zenkiKimatsuControlEngineeringHandwriting } from './4i-zenki-kimatsu/control-engineering-handwriting.js';
+import { questions as zenkiKimatsuKoreanChoice } from './4i-zenki-kimatsu/korean-choice.js';
 
 interface ExamData {
   subjects: Subject[];
@@ -47,6 +48,7 @@ const examData: Record<string, ExamData> = {
       'control-engineering-choice': zenkiKimatsuControlEngineeringChoice,
       'control-engineering-text': zenkiKimatsuControlEngineeringText,
       'control-engineering-handwriting': zenkiKimatsuControlEngineeringHandwriting,
+      'korean-choice': zenkiKimatsuKoreanChoice,
     },
   },
 };

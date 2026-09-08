@@ -112,6 +112,13 @@ const rawSubjects: Subject[] = [
     description: '複素数計算・部分分数分解・ラプラス変換・ラウスの安定判別法などの計算問題を手書きで解いて確認',
     icon: 'target',
   },
+  {
+    id: 'korean-choice',
+    name: '韓国語(選択式)',
+    description:
+      '有声音化・連音化・濃音化・激音化、かなのハングル表記、漢数詞、位置を表す名詞などを4択で確認',
+    icon: 'languages',
+  },
 ];
 
 const electiveIds = new Set<string>(subjectTypes['選択科目']);
