@@ -5,7 +5,7 @@ export interface ChoiceQuestion {
   answer: number;
   /**
    * choices と同じ並びの、各選択肢の解説(任意)。
-   * 不正解の選択肢を選んだときに、その選択肢の解説を表示する。
+   * 回答後に、選んだ選択肢と正解の選択肢の解説を表示する。
    * 未指定・空文字の選択肢は解説なしとして扱う。
    */
   explanations?: string[];
