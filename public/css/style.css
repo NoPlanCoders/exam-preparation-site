@@ -255,6 +255,10 @@ body {
 
 .app-nav-item {
   flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 999px;
   padding: 0.5rem 0.75rem;
@@ -265,6 +269,12 @@ body {
   font-weight: 700;
   cursor: pointer;
   transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.app-nav-item svg {
+  width: 1rem;
+  height: 1rem;
+  flex: none;
 }
 
 .app-nav-item:hover,
@@ -370,6 +380,11 @@ body {
   color: var(--color-incorrect);
 }
 
+.menu-pinned-remove svg {
+  width: 1rem;
+  height: 1rem;
+}
+
 .menu-search {
   display: flex;
   flex-direction: column;
@@ -382,6 +397,9 @@ body {
 }
 
 .menu-search-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
   align-self: flex-start;
   background: none;
   border: none;
@@ -391,6 +409,12 @@ body {
   font-size: 0.88rem;
   padding: 0.2rem 0.3rem;
   cursor: pointer;
+}
+
+.menu-search-back svg {
+  width: 1rem;
+  height: 1rem;
+  flex: none;
 }
 
 .menu-search-input {
@@ -481,7 +505,9 @@ body {
 }
 
 .menu-item {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
   width: 100%;
   text-align: left;
   background: none;
@@ -494,6 +520,19 @@ body {
   color: var(--color-text);
   text-decoration: none;
   cursor: pointer;
+}
+
+.menu-item svg {
+  width: 1rem;
+  height: 1rem;
+  flex: none;
+}
+
+.menu-item span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .menu-item:hover {
@@ -685,6 +724,9 @@ h2 {
 }
 
 .dashboard-library-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
   flex: none;
   border: none;
   border-radius: 999px;
@@ -696,6 +738,12 @@ h2 {
   font-weight: 700;
   cursor: pointer;
   transition: background 0.15s ease, transform 0.12s ease;
+}
+
+.dashboard-library-btn svg {
+  width: 0.95rem;
+  height: 0.95rem;
+  flex: none;
 }
 
 .dashboard-library-btn:hover {
@@ -1098,6 +1146,9 @@ button.card:hover {
 }
 
 .back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
   background: none;
   border: none;
   color: var(--color-primary-dark);
@@ -1106,6 +1157,12 @@ button.card:hover {
   cursor: pointer;
   font: inherit;
   font-weight: 600;
+}
+
+.back-btn svg {
+  width: 1rem;
+  height: 1rem;
+  flex: none;
 }
 
 button {
@@ -1130,6 +1187,21 @@ button:active:not(:disabled) {
   font-weight: 700;
   box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
   transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.start-btn,
+.mastery-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+}
+
+.start-btn svg,
+.mastery-btn svg {
+  width: 0.9rem;
+  height: 0.9rem;
+  flex: none;
 }
 
 .start-btn:hover,

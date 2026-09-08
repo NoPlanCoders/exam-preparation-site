@@ -8259,33 +8259,500 @@
     return examData[examId]?.questions[subjectId] ?? [];
   }
 
-  // src/icons.ts
-  var STROKE = 'fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"';
-  var ICONS = {
-    "graduation-cap": `<svg viewBox="0 0 24 24" ${STROKE}><path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5"/><path d="M22 10v6"/></svg>`,
-    database: `<svg viewBox="0 0 24 24" ${STROKE}><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></svg>`,
-    keyboard: `<svg viewBox="0 0 24 24" ${STROKE}><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M6 14h12"/></svg>`,
-    dice: `<svg viewBox="0 0 24 24" ${STROKE}><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8" cy="8" r="1" fill="currentColor" stroke="none"/><circle cx="16" cy="8" r="1" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="8" cy="16" r="1" fill="currentColor" stroke="none"/><circle cx="16" cy="16" r="1" fill="currentColor" stroke="none"/></svg>`,
-    brain: `<svg viewBox="0 0 24 24" ${STROKE}><path d="M9.5 3a3 3 0 0 0-3 3v1a3 3 0 0 0-2 2.8V11a3 3 0 0 0 1 2.2 3 3 0 0 0 2 4.8h1a3 3 0 0 0 3-3V6a3 3 0 0 0-2-3Z"/><path d="M14.5 3a3 3 0 0 1 3 3v1a3 3 0 0 1 2 2.8V11a3 3 0 0 1-1 2.2 3 3 0 0 1-2 4.8h-1a3 3 0 0 1-3-3V6a3 3 0 0 1 2-3Z"/></svg>`,
-    pencil: `<svg viewBox="0 0 24 24" ${STROKE}><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>`,
-    wrench: `<svg viewBox="0 0 24 24" ${STROKE}><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94Z"/></svg>`,
-    bolt: `<svg viewBox="0 0 24 24" ${STROKE}><path d="m12 2 8.66 5v10L12 22l-8.66-5V7Z"/><circle cx="12" cy="12" r="3"/></svg>`,
-    tree: `<svg viewBox="0 0 24 24" ${STROKE}><path d="M12 2 6 10h3l-4 7h4l-3 5h12l-3-5h4l-4-7h3Z"/><path d="M12 24v-2"/></svg>`,
-    book: `<svg viewBox="0 0 24 24" ${STROKE}><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/></svg>`,
-    save: `<svg viewBox="0 0 24 24" ${STROKE}><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"/><path d="M17 21v-8H7v8"/><path d="M7 3v5h8"/></svg>`,
-    monitor: `<svg viewBox="0 0 24 24" ${STROKE}><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>`,
-    clipboard: `<svg viewBox="0 0 24 24" ${STROKE}><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="m9 14 2 2 4-4"/></svg>`,
-    star: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14l-5-4.87 6.91-1.01L12 2Z"/></svg>`,
-    network: `<svg viewBox="0 0 24 24" ${STROKE}><circle cx="5" cy="6" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="5" cy="18" r="2"/><circle cx="19" cy="18" r="2"/><circle cx="12" cy="12" r="2"/><path d="M6.8 7.2 10.5 10.5M13.5 10.5 17.2 7.2M6.8 16.8 10.5 13.5M13.5 13.5 17.2 16.8"/></svg>`,
-    calculator: `<svg viewBox="0 0 24 24" ${STROKE}><rect x="5" y="2" width="14" height="20" rx="2"/><rect x="7.5" y="4.5" width="9" height="4" rx="0.5"/><circle cx="8" cy="12.5" r="0.8" fill="currentColor" stroke="none"/><circle cx="12" cy="12.5" r="0.8" fill="currentColor" stroke="none"/><circle cx="16" cy="12.5" r="0.8" fill="currentColor" stroke="none"/><circle cx="8" cy="16" r="0.8" fill="currentColor" stroke="none"/><circle cx="12" cy="16" r="0.8" fill="currentColor" stroke="none"/><circle cx="16" cy="16" r="0.8" fill="currentColor" stroke="none"/><circle cx="8" cy="19.5" r="0.8" fill="currentColor" stroke="none"/><circle cx="12" cy="19.5" r="0.8" fill="currentColor" stroke="none"/><circle cx="16" cy="19.5" r="0.8" fill="currentColor" stroke="none"/></svg>`,
-    matrix: `<svg viewBox="0 0 24 24" ${STROKE}><path d="M8 3c-1.5 0-2.5 1-2.5 2.5v13C5.5 20 6.5 21 8 21"/><path d="M16 3c1.5 0 2.5 1 2.5 2.5v13c0 1.5-1 2.5-2.5 2.5"/><circle cx="10" cy="9" r=".7" fill="currentColor" stroke="none"/><circle cx="14" cy="9" r=".7" fill="currentColor" stroke="none"/><circle cx="10" cy="15" r=".7" fill="currentColor" stroke="none"/><circle cx="14" cy="15" r=".7" fill="currentColor" stroke="none"/></svg>`,
-    gauge: `<svg viewBox="0 0 24 24" ${STROKE}><path d="M4 15a8 8 0 1 1 16 0"/><path d="M12 15 16 9"/><circle cx="12" cy="15" r="1" fill="currentColor" stroke="none"/></svg>`,
-    wave: `<svg viewBox="0 0 24 24" ${STROKE}><path d="M2 12c2 0 2-6 4-6s2 6 4 6 2-6 4-6 2 6 4 6 2-6 4-6"/></svg>`,
-    target: `<svg viewBox="0 0 24 24" ${STROKE}><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1" fill="currentColor" stroke="none"/></svg>`
+  // node_modules/lucide/dist/esm/defaultAttributes.mjs
+  var defaultAttributes = {
+    xmlns: "http://www.w3.org/2000/svg",
+    width: 24,
+    height: 24,
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    "stroke-width": 2,
+    "stroke-linecap": "round",
+    "stroke-linejoin": "round"
   };
+
+  // node_modules/lucide/dist/esm/createElement.mjs
+  var createSVGElement = ([tag, attrs, children]) => {
+    const element = document.createElementNS("http://www.w3.org/2000/svg", tag);
+    Object.keys(attrs).forEach((name) => {
+      element.setAttribute(name, String(attrs[name]));
+    });
+    if (children?.length) {
+      children.forEach((child) => {
+        const childElement = createSVGElement(child);
+        element.appendChild(childElement);
+      });
+    }
+    return element;
+  };
+  var createElement = (iconNode, customAttrs = {}) => {
+    const tag = "svg";
+    const attrs = {
+      ...defaultAttributes,
+      ...customAttrs
+    };
+    return createSVGElement([tag, attrs, iconNode]);
+  };
+
+  // node_modules/lucide/dist/esm/shared/src/utils/mergeClasses.mjs
+  var mergeClasses = (...classes) => classes.filter((className, index, array) => {
+    return Boolean(className) && className.trim() !== "" && array.indexOf(className) === index;
+  }).join(" ").trim();
+
+  // node_modules/lucide/dist/esm/shared/src/utils/hasA11yProp.mjs
+  var hasA11yProp = (props) => {
+    for (const prop in props) {
+      if (prop.startsWith("aria-") || prop === "role" || prop === "title") {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  // node_modules/lucide/dist/esm/shared/src/utils/toCamelCase.mjs
+  var toCamelCase = (string) => {
+    let out = "";
+    let upperNext = false;
+    for (const ch of string) {
+      if (ch === "-" || ch === "_" || ch <= " ") {
+        upperNext = out.length > 0;
+        continue;
+      }
+      if (out.length === 0) {
+        out += ch.toLowerCase();
+      } else {
+        out += upperNext ? ch.toUpperCase() : ch;
+      }
+      upperNext = false;
+    }
+    return out;
+  };
+
+  // node_modules/lucide/dist/esm/shared/src/utils/toPascalCase.mjs
+  var toPascalCase = (string) => {
+    const camelCase = toCamelCase(string);
+    return camelCase.charAt(0).toUpperCase() + camelCase.slice(1);
+  };
+
+  // node_modules/lucide/dist/esm/replaceElement.mjs
+  var getAttrs = (element) => Array.from(element.attributes).reduce((attrs, attr) => {
+    attrs[attr.name] = attr.value;
+    return attrs;
+  }, {});
+  var getClassNames = (attrs) => {
+    if (typeof attrs === "string") return attrs;
+    if (!attrs || !attrs.class) return "";
+    if (attrs.class && typeof attrs.class === "string") {
+      return attrs.class.split(" ");
+    }
+    if (attrs.class && Array.isArray(attrs.class)) {
+      return attrs.class;
+    }
+    return "";
+  };
+  var replaceElement = (element, { nameAttr, icons, attrs }) => {
+    const iconName = element.getAttribute(nameAttr);
+    if (iconName == null) return;
+    const ComponentName = toPascalCase(iconName);
+    const iconNode = icons[ComponentName];
+    if (!iconNode) {
+      return console.warn(
+        `${element.outerHTML} icon name was not found in the provided icons object.`
+      );
+    }
+    const elementAttrs = getAttrs(element);
+    const ariaProps = hasA11yProp(elementAttrs) ? {} : { "aria-hidden": "true" };
+    const iconAttrs = {
+      ...defaultAttributes,
+      "data-lucide": iconName,
+      ...ariaProps,
+      ...attrs,
+      ...elementAttrs
+    };
+    const elementClassNames = getClassNames(elementAttrs);
+    const className = getClassNames(attrs);
+    const classNames = mergeClasses(
+      "lucide",
+      `lucide-${iconName}`,
+      ...elementClassNames,
+      ...className
+    );
+    if (classNames) {
+      Object.assign(iconAttrs, {
+        class: classNames
+      });
+    }
+    const svgElement = createElement(iconNode, iconAttrs);
+    return element.parentNode?.replaceChild(svgElement, element);
+  };
+
+  // node_modules/lucide/dist/esm/icons/arrow-left.mjs
+  var ArrowLeft = [
+    ["path", { d: "m12 19-7-7 7-7" }],
+    ["path", { d: "M19 12H5" }]
+  ];
+
+  // node_modules/lucide/dist/esm/icons/brain.mjs
+  var Brain = [
+    ["path", { d: "M12 18V5" }],
+    ["path", { d: "M15 13a4.17 4.17 0 0 1-3-4 4.17 4.17 0 0 1-3 4" }],
+    ["path", { d: "M17.598 6.5A3 3 0 1 0 12 5a3 3 0 1 0-5.598 1.5" }],
+    ["path", { d: "M17.997 5.125a4 4 0 0 1 2.526 5.77" }],
+    ["path", { d: "M18 18a4 4 0 0 0 2-7.464" }],
+    ["path", { d: "M19.967 17.483A4 4 0 1 1 12 18a4 4 0 1 1-7.967-.517" }],
+    ["path", { d: "M6 18a4 4 0 0 1-2-7.464" }],
+    ["path", { d: "M6.003 5.125a4 4 0 0 0-2.526 5.77" }]
+  ];
+
+  // node_modules/lucide/dist/esm/icons/calculator.mjs
+  var Calculator = [
+    ["rect", { width: "16", height: "20", x: "4", y: "2", rx: "2" }],
+    ["line", { x1: "8", x2: "16", y1: "6", y2: "6" }],
+    ["line", { x1: "16", x2: "16", y1: "14", y2: "18" }],
+    ["path", { d: "M16 10h.01" }],
+    ["path", { d: "M12 10h.01" }],
+    ["path", { d: "M8 10h.01" }],
+    ["path", { d: "M12 14h.01" }],
+    ["path", { d: "M8 14h.01" }],
+    ["path", { d: "M12 18h.01" }],
+    ["path", { d: "M8 18h.01" }]
+  ];
+
+  // node_modules/lucide/dist/esm/icons/clipboard-check.mjs
+  var ClipboardCheck = [
+    ["rect", { width: "8", height: "4", x: "8", y: "2", rx: "1", ry: "1" }],
+    ["path", { d: "M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" }],
+    ["path", { d: "m9 14 2 2 4-4" }]
+  ];
+
+  // node_modules/lucide/dist/esm/icons/database.mjs
+  var Database = [
+    ["ellipse", { cx: "12", cy: "5", rx: "9", ry: "3" }],
+    ["path", { d: "M3 5V19A9 3 0 0 0 21 19V5" }],
+    ["path", { d: "M3 12A9 3 0 0 0 21 12" }]
+  ];
+
+  // node_modules/lucide/dist/esm/icons/dice-5.mjs
+  var Dice5 = [
+    ["rect", { width: "18", height: "18", x: "3", y: "3", rx: "2", ry: "2" }],
+    ["path", { d: "M16 8h.01" }],
+    ["path", { d: "M8 8h.01" }],
+    ["path", { d: "M8 16h.01" }],
+    ["path", { d: "M16 16h.01" }],
+    ["path", { d: "M12 12h.01" }]
+  ];
+
+  // node_modules/lucide/dist/esm/icons/download.mjs
+  var Download = [
+    ["path", { d: "M12 15V3" }],
+    ["path", { d: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" }],
+    ["path", { d: "m7 10 5 5 5-5" }]
+  ];
+
+  // node_modules/lucide/dist/esm/icons/gauge.mjs
+  var Gauge = [
+    ["path", { d: "m12 14 4-4" }],
+    ["path", { d: "M3.34 19a10 10 0 1 1 17.32 0" }]
+  ];
+
+  // node_modules/lucide/dist/esm/icons/graduation-cap.mjs
+  var GraduationCap = [
+    [
+      "path",
+      {
+        d: "M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"
+      }
+    ],
+    ["path", { d: "M22 10v6" }],
+    ["path", { d: "M6 12.5V16a6 3 0 0 0 12 0v-3.5" }]
+  ];
+
+  // node_modules/lucide/dist/esm/icons/grid-2x2.mjs
+  var Grid2x2 = [
+    ["path", { d: "M12 3v18" }],
+    ["path", { d: "M3 12h18" }],
+    ["rect", { x: "3", y: "3", width: "18", height: "18", rx: "2" }]
+  ];
+
+  // node_modules/lucide/dist/esm/icons/keyboard.mjs
+  var Keyboard = [
+    ["path", { d: "M10 8h.01" }],
+    ["path", { d: "M12 12h.01" }],
+    ["path", { d: "M14 8h.01" }],
+    ["path", { d: "M16 12h.01" }],
+    ["path", { d: "M18 8h.01" }],
+    ["path", { d: "M6 8h.01" }],
+    ["path", { d: "M7 16h10" }],
+    ["path", { d: "M8 12h.01" }],
+    ["rect", { width: "20", height: "16", x: "2", y: "4", rx: "2" }]
+  ];
+
+  // node_modules/lucide/dist/esm/icons/layout-dashboard.mjs
+  var LayoutDashboard = [
+    ["rect", { width: "7", height: "9", x: "3", y: "3", rx: "1" }],
+    ["rect", { width: "7", height: "5", x: "14", y: "3", rx: "1" }],
+    ["rect", { width: "7", height: "9", x: "14", y: "12", rx: "1" }],
+    ["rect", { width: "7", height: "5", x: "3", y: "16", rx: "1" }]
+  ];
+
+  // node_modules/lucide/dist/esm/icons/library.mjs
+  var Library = [
+    ["path", { d: "m16 6 4 14" }],
+    ["path", { d: "M12 6v14" }],
+    ["path", { d: "M8 8v12" }],
+    ["path", { d: "M4 4v16" }]
+  ];
+
+  // node_modules/lucide/dist/esm/icons/menu.mjs
+  var Menu = [
+    ["path", { d: "M4 5h16" }],
+    ["path", { d: "M4 12h16" }],
+    ["path", { d: "M4 19h16" }]
+  ];
+
+  // node_modules/lucide/dist/esm/icons/monitor.mjs
+  var Monitor = [
+    ["rect", { width: "20", height: "14", x: "2", y: "3", rx: "2" }],
+    ["line", { x1: "8", x2: "16", y1: "21", y2: "21" }],
+    ["line", { x1: "12", x2: "12", y1: "17", y2: "21" }]
+  ];
+
+  // node_modules/lucide/dist/esm/icons/network.mjs
+  var Network = [
+    ["rect", { x: "16", y: "16", width: "6", height: "6", rx: "1" }],
+    ["rect", { x: "2", y: "16", width: "6", height: "6", rx: "1" }],
+    ["rect", { x: "9", y: "2", width: "6", height: "6", rx: "1" }],
+    ["path", { d: "M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3" }],
+    ["path", { d: "M12 12V8" }]
+  ];
+
+  // node_modules/lucide/dist/esm/icons/pencil.mjs
+  var Pencil = [
+    [
+      "path",
+      {
+        d: "M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"
+      }
+    ],
+    ["path", { d: "m15 5 4 4" }]
+  ];
+
+  // node_modules/lucide/dist/esm/icons/play.mjs
+  var Play = [
+    [
+      "path",
+      { d: "M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z" }
+    ]
+  ];
+
+  // node_modules/lucide/dist/esm/icons/plus.mjs
+  var Plus = [
+    ["path", { d: "M5 12h14" }],
+    ["path", { d: "M12 5v14" }]
+  ];
+
+  // node_modules/lucide/dist/esm/icons/save.mjs
+  var Save = [
+    [
+      "path",
+      {
+        d: "M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"
+      }
+    ],
+    ["path", { d: "M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7" }],
+    ["path", { d: "M7 3v4a1 1 0 0 0 1 1h7" }]
+  ];
+
+  // node_modules/lucide/dist/esm/icons/settings.mjs
+  var Settings = [
+    [
+      "path",
+      {
+        d: "M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"
+      }
+    ],
+    ["circle", { cx: "12", cy: "12", r: "3" }]
+  ];
+
+  // node_modules/lucide/dist/esm/icons/star.mjs
+  var Star = [
+    [
+      "path",
+      {
+        d: "M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"
+      }
+    ]
+  ];
+
+  // node_modules/lucide/dist/esm/icons/target.mjs
+  var Target = [
+    ["circle", { cx: "12", cy: "12", r: "10" }],
+    ["circle", { cx: "12", cy: "12", r: "6" }],
+    ["circle", { cx: "12", cy: "12", r: "2" }]
+  ];
+
+  // node_modules/lucide/dist/esm/icons/tree-pine.mjs
+  var TreePine = [
+    [
+      "path",
+      {
+        d: "m17 14 3 3.3a1 1 0 0 1-.7 1.7H4.7a1 1 0 0 1-.7-1.7L7 14h-.3a1 1 0 0 1-.7-1.7L9 9h-.2A1 1 0 0 1 8 7.3L12 3l4 4.3a1 1 0 0 1-.8 1.7H15l3 3.3a1 1 0 0 1-.7 1.7H17Z"
+      }
+    ],
+    ["path", { d: "M12 22v-3" }]
+  ];
+
+  // node_modules/lucide/dist/esm/icons/waves-horizontal.mjs
+  var WavesHorizontal = [
+    ["path", { d: "M2 12q2.5 2 5 0t5 0 5 0 5 0" }],
+    ["path", { d: "M2 19q2.5 2 5 0t5 0 5 0 5 0" }],
+    ["path", { d: "M2 5q2.5 2 5 0t5 0 5 0 5 0" }]
+  ];
+
+  // node_modules/lucide/dist/esm/icons/wrench.mjs
+  var Wrench = [
+    [
+      "path",
+      {
+        d: "M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.106-3.105c.32-.322.863-.22.983.218a6 6 0 0 1-8.259 7.057l-7.91 7.91a1 1 0 0 1-2.999-3l7.91-7.91a6 6 0 0 1 7.057-8.259c.438.12.54.662.219.984z"
+      }
+    ]
+  ];
+
+  // node_modules/lucide/dist/esm/icons/x.mjs
+  var X = [
+    ["path", { d: "M18 6 6 18" }],
+    ["path", { d: "m6 6 12 12" }]
+  ];
+
+  // node_modules/lucide/dist/esm/icons/zap.mjs
+  var Zap = [
+    [
+      "path",
+      {
+        d: "M15.914 4a1.5 1.5 0 00-2.474-1.561l-9 9A1.5 1.5 0 005.5 14h4.002a.5.5 0 01.471.666L8.086 20a1.5 1.5 0 002.475 1.56l9-9A1.5 1.5 0 0018.5 10h-3.997a.5.5 0 01-.472-.667z"
+      }
+    ]
+  ];
+
+  // node_modules/lucide/dist/esm/lucide.mjs
+  var createIcons = ({
+    icons = {},
+    nameAttr = "data-lucide",
+    attrs = {},
+    root = document,
+    inTemplates
+  } = {}) => {
+    if (!Object.values(icons).length) {
+      throw new Error(
+        "Please provide an icons object.\nIf you want to use all the icons you can import it like:\n `import { createIcons, icons } from 'lucide';\nlucide.createIcons({icons});`"
+      );
+    }
+    if (typeof root === "undefined") {
+      throw new Error("`createIcons()` only works in a browser environment.");
+    }
+    const elementsToReplace = Array.from(root.querySelectorAll(`[${nameAttr}]`));
+    elementsToReplace.forEach((element) => replaceElement(element, { nameAttr, icons, attrs }));
+    if (inTemplates) {
+      const templates = Array.from(root.querySelectorAll("template"));
+      templates.forEach(
+        (template) => createIcons({
+          icons,
+          nameAttr,
+          attrs,
+          root: template.content,
+          inTemplates
+        })
+      );
+    }
+    if (nameAttr === "data-lucide") {
+      const deprecatedElements = root.querySelectorAll("[icon-name]");
+      if (deprecatedElements.length > 0) {
+        console.warn(
+          "[Lucide] Some icons were found with the now deprecated icon-name attribute. These will still be replaced for backwards compatibility, but will no longer be supported in v1.0 and you should switch to data-lucide"
+        );
+        Array.from(deprecatedElements).forEach(
+          (element) => replaceElement(element, { nameAttr: "icon-name", icons, attrs })
+        );
+      }
+    }
+  };
+
+  // src/icons.ts
+  var LUCIDE_ICONS = {
+    ArrowLeft,
+    Brain,
+    Calculator,
+    ClipboardCheck,
+    Database,
+    Dice5,
+    Download,
+    Gauge,
+    GraduationCap,
+    Grid2X2: Grid2x2,
+    Keyboard,
+    LayoutDashboard,
+    Library,
+    Menu,
+    Monitor,
+    Network,
+    Pencil,
+    Play,
+    Plus,
+    Save,
+    Settings,
+    Star,
+    Target,
+    TreePine,
+    Waves: WavesHorizontal,
+    Wrench,
+    X,
+    Zap
+  };
+  var ICON_NAMES = {
+    "graduation-cap": "graduation-cap",
+    database: "database",
+    keyboard: "keyboard",
+    dice: "dice-5",
+    brain: "brain",
+    pencil: "pencil",
+    wrench: "wrench",
+    bolt: "zap",
+    tree: "tree-pine",
+    book: "book-open",
+    save: "save",
+    monitor: "monitor",
+    clipboard: "clipboard-check",
+    star: "star",
+    network: "network",
+    calculator: "calculator",
+    matrix: "grid-2x2",
+    gauge: "gauge",
+    wave: "waves",
+    target: "target",
+    "clipboard-check": "clipboard-check",
+    menu: "menu",
+    library: "library",
+    "layout-dashboard": "layout-dashboard",
+    settings: "settings",
+    download: "download",
+    plus: "plus",
+    "arrow-left": "arrow-left",
+    play: "play",
+    x: "x"
+  };
+  function iconMarkup(name) {
+    return `<i data-lucide="${name}" aria-hidden="true"></i>`;
+  }
+  var ICONS = Object.fromEntries(
+    Object.entries(ICON_NAMES).map(([key, name]) => [key, iconMarkup(name)])
+  );
   function getIcon(key, fallback) {
-    if (key && ICONS[key]) return ICONS[key];
-    return ICONS[fallback];
+    return iconMarkup(ICON_NAMES[key ?? ""] ?? ICON_NAMES[fallback] ?? fallback);
+  }
+  function refreshIcons(root = document) {
+    createIcons({ root, icons: LUCIDE_ICONS });
   }
 
   // src/countdown.ts
@@ -8676,6 +9143,7 @@
       card.addEventListener("click", () => renderSubjectView(exam.id, exam.name));
       examList.appendChild(card);
     }
+    refreshIcons(examList);
   }
   function splitSubjectName(name) {
     const match = name.match(/^(.*?)[（(]([^（）()]+)[）)]$/);
@@ -8725,8 +9193,8 @@
               <div class="count-select-wrap">
                 <select class="count-select" aria-label="${group.name} ${modeName}\u306E\u51FA\u984C\u6570">${optionsHtml}</select>
               </div>
-              <button type="button" class="start-btn">\u958B\u59CB</button>
-              <button type="button" class="mastery-btn" title="${masteryLabel === "\u5168\u554F\u78BA\u8A8D\u307E\u3067" ? "\u5168\u3066\u306E\u624B\u66F8\u304D\u554F\u984C\u3092\u78BA\u8A8D\u3059\u308B\u307E\u3067\u7E70\u308A\u8FD4\u3059" : "\u5168\u554F\u6B63\u89E3\u3059\u308B\u307E\u3067\u7E70\u308A\u8FD4\u3059"}">${masteryLabel}</button>
+              <button type="button" class="start-btn"><i data-lucide="play" aria-hidden="true"></i><span>\u958B\u59CB</span></button>
+              <button type="button" class="mastery-btn" title="${masteryLabel === "\u5168\u554F\u78BA\u8A8D\u307E\u3067" ? "\u5168\u3066\u306E\u624B\u66F8\u304D\u554F\u984C\u3092\u78BA\u8A8D\u3059\u308B\u307E\u3067\u7E70\u308A\u8FD4\u3059" : "\u5168\u554F\u6B63\u89E3\u3059\u308B\u307E\u3067\u7E70\u308A\u8FD4\u3059"}"><i data-lucide="target" aria-hidden="true"></i><span>${masteryLabel}</span></button>
             </div>
           </div>
         `;
@@ -8757,6 +9225,7 @@
       });
       subjectList.appendChild(card);
     }
+    refreshIcons(subjectList);
     showView(viewSubject);
   }
   function startQuiz(examId, examName, subjectId, subjectName, count, masteryMode = false) {
@@ -9002,6 +9471,7 @@
         resultWrongList.appendChild(item);
       }
     }
+    refreshIcons(resultWrongList);
   }
   btnNext.addEventListener("click", nextQuestion);
   btnSubmitText.addEventListener("click", submitText);
@@ -9125,18 +9595,22 @@
       const btn = document.createElement("button");
       btn.type = "button";
       btn.className = "menu-item";
-      btn.textContent = entry.subjectName;
+      btn.innerHTML = getIcon(entry.icon, DEFAULT_SUBJECT_ICON);
+      const label = document.createElement("span");
+      label.textContent = entry.subjectName;
+      btn.appendChild(label);
       btn.addEventListener("click", () => startPinnedQuiz(entry));
       const removeBtn = document.createElement("button");
       removeBtn.type = "button";
       removeBtn.className = "menu-pinned-remove";
       removeBtn.setAttribute("aria-label", `${entry.subjectName}\u3092\u304A\u6C17\u306B\u5165\u308A\u304B\u3089\u524A\u9664`);
-      removeBtn.textContent = "\xD7";
+      removeBtn.innerHTML = getIcon("x", "x");
       removeBtn.addEventListener("click", () => togglePinned(entry.examId, entry.subjectId));
       row.appendChild(btn);
       row.appendChild(removeBtn);
       menuPinnedList.appendChild(row);
     }
+    refreshIcons(menuPinnedList);
   }
   function renderSearchResults(query) {
     const normalized = query.trim().toLowerCase();
@@ -9157,14 +9631,12 @@
       row.className = "menu-search-result";
       const pinned = isPinned(entry.examId, entry.subjectId);
       row.innerHTML = `
-      <span class="card-icon"><svg viewBox="0 0 24 24" width="16" height="16"></svg></span>
+      <span class="card-icon">${getIcon(entry.icon, DEFAULT_SUBJECT_ICON)}</span>
       <span class="menu-search-result-body">
         <span class="menu-search-result-name">${entry.subjectName}</span>
         <span class="menu-search-result-exam">${entry.examName}</span>
       </span>
     `;
-      const iconSpan = row.querySelector(".card-icon");
-      iconSpan.innerHTML = getIcon(entry.icon, DEFAULT_SUBJECT_ICON);
       const toggleBtn = document.createElement("button");
       toggleBtn.type = "button";
       toggleBtn.className = "menu-pin-toggle";
@@ -9174,6 +9646,7 @@
       row.appendChild(toggleBtn);
       menuSearchResults.appendChild(row);
     }
+    refreshIcons(menuSearchResults);
   }
   function openSearch() {
     menuMain.hidden = true;
@@ -9295,6 +9768,7 @@
     saveSplashAnimationEnabled(enabled);
   });
   function initApp() {
+    refreshIcons(document);
     renderExamList();
     showView(viewExam);
     if (splashAnimationToggle.checked) window.setTimeout(dismissSplash, 520);
@@ -9310,3 +9784,48 @@
     });
   }
 })();
+/*! Bundled license information:
+
+lucide/dist/esm/defaultAttributes.mjs:
+lucide/dist/esm/createElement.mjs:
+lucide/dist/esm/shared/src/utils/mergeClasses.mjs:
+lucide/dist/esm/shared/src/utils/hasA11yProp.mjs:
+lucide/dist/esm/shared/src/utils/toCamelCase.mjs:
+lucide/dist/esm/shared/src/utils/toPascalCase.mjs:
+lucide/dist/esm/replaceElement.mjs:
+lucide/dist/esm/icons/arrow-left.mjs:
+lucide/dist/esm/icons/brain.mjs:
+lucide/dist/esm/icons/calculator.mjs:
+lucide/dist/esm/icons/clipboard-check.mjs:
+lucide/dist/esm/icons/database.mjs:
+lucide/dist/esm/icons/dice-5.mjs:
+lucide/dist/esm/icons/download.mjs:
+lucide/dist/esm/icons/gauge.mjs:
+lucide/dist/esm/icons/graduation-cap.mjs:
+lucide/dist/esm/icons/grid-2x2.mjs:
+lucide/dist/esm/icons/keyboard.mjs:
+lucide/dist/esm/icons/layout-dashboard.mjs:
+lucide/dist/esm/icons/library.mjs:
+lucide/dist/esm/icons/menu.mjs:
+lucide/dist/esm/icons/monitor.mjs:
+lucide/dist/esm/icons/network.mjs:
+lucide/dist/esm/icons/pencil.mjs:
+lucide/dist/esm/icons/play.mjs:
+lucide/dist/esm/icons/plus.mjs:
+lucide/dist/esm/icons/save.mjs:
+lucide/dist/esm/icons/settings.mjs:
+lucide/dist/esm/icons/star.mjs:
+lucide/dist/esm/icons/target.mjs:
+lucide/dist/esm/icons/tree-pine.mjs:
+lucide/dist/esm/icons/waves-horizontal.mjs:
+lucide/dist/esm/icons/wrench.mjs:
+lucide/dist/esm/icons/x.mjs:
+lucide/dist/esm/icons/zap.mjs:
+lucide/dist/esm/lucide.mjs:
+  (**
+   * @license lucide v1.42.0 - ISC
+   *
+   * This source code is licensed under the ISC license.
+   * See the LICENSE file in the root directory of this source tree.
+   *)
+*/

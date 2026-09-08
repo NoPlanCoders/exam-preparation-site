@@ -1,6 +1,6 @@
 import type { Question, Subject } from './types.js';
 import { getExams, getSubjects, getQuestions } from './data/registry.js';
-import { ICONS, getIcon } from './icons.js';
+import { ICONS, getIcon, refreshIcons } from './icons.js';
 import { getTestCountdown } from './countdown.js';
 
 interface AttemptState {
@@ -479,6 +479,7 @@ function renderExamList(): void {
     card.addEventListener('click', () => renderSubjectView(exam.id, exam.name));
     examList.appendChild(card);
   }
+  refreshIcons(examList);
 }
 
 function splitSubjectName(name: string): { groupName: string; modeName: string } {
@@ -545,8 +546,8 @@ function renderSubjectView(examId: string, examName: string): void {
               <div class="count-select-wrap">
                 <select class="count-select" aria-label="${group.name} ${modeName}の出題数">${optionsHtml}</select>
               </div>
-              <button type="button" class="start-btn">開始</button>
-              <button type="button" class="mastery-btn" title="${masteryLabel === '全問確認まで' ? '全ての手書き問題を確認するまで繰り返す' : '全問正解するまで繰り返す'}">${masteryLabel}</button>
+              <button type="button" class="start-btn"><i data-lucide="play" aria-hidden="true"></i><span>開始</span></button>
+              <button type="button" class="mastery-btn" title="${masteryLabel === '全問確認まで' ? '全ての手書き問題を確認するまで繰り返す' : '全問正解するまで繰り返す'}"><i data-lucide="target" aria-hidden="true"></i><span>${masteryLabel}</span></button>
             </div>
           </div>
         `;
@@ -582,6 +583,7 @@ function renderSubjectView(examId: string, examName: string): void {
     subjectList.appendChild(card);
   }
 
+  refreshIcons(subjectList);
   showView(viewSubject);
 }
 
@@ -886,6 +888,7 @@ function renderResult(): void {
       resultWrongList.appendChild(item);
     }
   }
+  refreshIcons(resultWrongList);
 }
 
 btnNext.addEventListener('click', nextQuestion);
@@ -1051,20 +1054,24 @@ function renderPinnedMenu(): void {
     const btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'menu-item';
-    btn.textContent = entry.subjectName;
+    btn.innerHTML = getIcon(entry.icon, DEFAULT_SUBJECT_ICON);
+    const label = document.createElement('span');
+    label.textContent = entry.subjectName;
+    btn.appendChild(label);
     btn.addEventListener('click', () => startPinnedQuiz(entry));
 
     const removeBtn = document.createElement('button');
     removeBtn.type = 'button';
     removeBtn.className = 'menu-pinned-remove';
     removeBtn.setAttribute('aria-label', `${entry.subjectName}をお気に入りから削除`);
-    removeBtn.textContent = '×';
+    removeBtn.innerHTML = getIcon('x', 'x');
     removeBtn.addEventListener('click', () => togglePinned(entry.examId, entry.subjectId));
 
     row.appendChild(btn);
     row.appendChild(removeBtn);
     menuPinnedList.appendChild(row);
   }
+  refreshIcons(menuPinnedList);
 }
 
 function renderSearchResults(query: string): void {
@@ -1097,14 +1104,12 @@ function renderSearchResults(query: string): void {
 
     const pinned = isPinned(entry.examId, entry.subjectId);
     row.innerHTML = `
-      <span class="card-icon"><svg viewBox="0 0 24 24" width="16" height="16"></svg></span>
+      <span class="card-icon">${getIcon(entry.icon, DEFAULT_SUBJECT_ICON)}</span>
       <span class="menu-search-result-body">
         <span class="menu-search-result-name">${entry.subjectName}</span>
         <span class="menu-search-result-exam">${entry.examName}</span>
       </span>
     `;
-    const iconSpan = row.querySelector<HTMLElement>('.card-icon')!;
-    iconSpan.innerHTML = getIcon(entry.icon, DEFAULT_SUBJECT_ICON);
 
     const toggleBtn = document.createElement('button');
     toggleBtn.type = 'button';
@@ -1116,6 +1121,7 @@ function renderSearchResults(query: string): void {
     row.appendChild(toggleBtn);
     menuSearchResults.appendChild(row);
   }
+  refreshIcons(menuSearchResults);
 }
 
 function openSearch(): void {
@@ -1261,6 +1267,7 @@ splashAnimationToggle.addEventListener('change', () => {
 });
 
 export function initApp(): void {
+  refreshIcons(document);
   renderExamList();
   showView(viewExam);
   if (splashAnimationToggle.checked) window.setTimeout(dismissSplash, 520);

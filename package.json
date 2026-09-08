@@ -5,7 +5,7 @@
   "type": "module",
   "description": "学校のテスト対策用クイズサイト",
   "scripts": {
-    "build": "tsc --noEmit && esbuild src/main.ts --bundle --outfile=public/js/bundle.js --format=iife --target=es2020",
+    "build": "tsc --noEmit && esbuild src/main.ts --bundle --outfile=public/js/bundle.js --format=iife --target=es2020 && esbuild src/create-icons.ts --bundle --outfile=public/js/create-icons.js --format=iife --target=es2020",
     "test": "npm run build && node --test Tests/countdown.test.mjs Tests/registry.test.mjs Tests/site-shell.test.mjs",
     "watch": "esbuild src/main.ts --bundle --outfile=public/js/bundle.js --format=iife --target=es2020 --watch",
     "dev": "esbuild src/main.ts --bundle --outfile=public/js/bundle.js --format=iife --target=es2020 --watch --servedir=public --serve=5173",
@@ -14,5 +14,8 @@
   "devDependencies": {
     "esbuild": "^0.28.1",
     "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "lucide": "^1.42.0"
   }
 }
