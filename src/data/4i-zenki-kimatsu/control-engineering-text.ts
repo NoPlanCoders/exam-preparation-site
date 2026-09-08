@@ -3,105 +3,107 @@ import type { Question } from '../../types.js';
 // 「4I 前期期末試験」> 制御工学(記述式)
 // 出典: 制御工学 前期範囲の講義資料
 // choice.ts と同じ内容を記述式で出題。
+// answerは配列の先頭をLaTeX表示用(正解表示にKaTeXで整形表示される)にし、
+// 以降の要素は採点用の別解(プレーンテキスト入力にマッチする)として残している。
 export const questions: Question[] = [
   {
     type: 'text',
-    question: '直角三角形で、斜辺をM、Mに対する対辺をb、隣辺をaとするとき、tanθをaとbで表す式を答えよ。',
-    answer: ['b/a', 'tanθ=b/a', 'tan θ = b/a'],
+    question: '直角三角形で、斜辺をM、Mに対する対辺をb、隣辺をaとするとき、$\\tan\\theta$をaとbで表す式を答えよ。',
+    answer: ['$\\tan\\theta = b/a$', 'b/a', 'tanθ=b/a', 'tan θ = b/a'],
   },
   {
     type: 'text',
     question: 'オイラーの公式を答えよ。',
-    answer: ['e^(jθ)=cosθ+jsinθ', 'e^jθ=cosθ+jsinθ', 'cosθ+jsinθ'],
+    answer: ['$e^{j\\theta} = \\cos\\theta + j\\sin\\theta$', 'e^(jθ)=cosθ+jsinθ', 'e^jθ=cosθ+jsinθ', 'cosθ+jsinθ'],
   },
   {
     type: 'text',
-    question: '複素数 A = a + bj における虚数単位jが満たす関係式を答えよ。',
-    answer: ['j²=-1', 'j^2=-1', 'j2=-1'],
+    question: '複素数 $A = a + bj$ における虚数単位jが満たす関係式を答えよ。',
+    answer: ['$j^2 = -1$', 'j²=-1', 'j^2=-1', 'j2=-1'],
   },
   {
     type: 'text',
-    question: '複素数 A = a + bj の虚部Im[A]を答えよ(jを含めるかどうかに注意)。',
+    question: '複素数 $A = a + bj$ の虚部$\\mathrm{Im}[A]$を答えよ(jを含めるかどうかに注意)。',
     answer: ['b'],
   },
   {
     type: 'text',
-    question: '複素数 5 − 4j の虚部を答えよ。',
+    question: '複素数 $5 - 4j$ の虚部を答えよ。',
     answer: ['-4', '−4'],
   },
   {
     type: 'text',
-    question: '複素数の極座標形式 A = Me^(jθ) について、Mが表すものを答えよ。',
+    question: '複素数の極座標形式 $A = Me^{j\\theta}$ について、Mが表すものを答えよ。',
     answer: ['大きさ', '複素数の大きさ', '絶対値'],
   },
   {
     type: 'text',
-    question: 'A = a + bj を極座標形式に変換するとき、Mをaとbで表す式を答えよ。',
-    answer: ['√(a²+b²)', 'M=√(a²+b²)', 'sqrt(a^2+b^2)'],
+    question: '$A = a + bj$ を極座標形式に変換するとき、Mをaとbで表す式を答えよ。',
+    answer: ['$M = \\sqrt{a^2 + b^2}$', '√(a²+b²)', 'M=√(a²+b²)', 'sqrt(a^2+b^2)'],
   },
   {
     type: 'text',
-    question: 'A = a + bj を極座標形式に変換するとき、θをaとbで表す式を答えよ。',
-    answer: ['tan⁻¹(b/a)', 'θ=tan⁻¹(b/a)', 'tan^-1(b/a)'],
+    question: '$A = a + bj$ を極座標形式に変換するとき、θをaとbで表す式を答えよ。',
+    answer: ['$\\theta = \\tan^{-1}(b/a)$', 'tan⁻¹(b/a)', 'θ=tan⁻¹(b/a)', 'tan^-1(b/a)'],
   },
   {
     type: 'text',
-    question: '複素数 (3+4j) + (2+5j) を計算せよ。',
-    answer: ['5+9j', '5 + 9j'],
+    question: '複素数 $(3+4j) + (2+5j)$ を計算せよ。',
+    answer: ['$5 + 9j$', '5+9j', '5 + 9j'],
   },
   {
     type: 'text',
-    question: '複素数の掛け算 (3+4j) × (2+5j) を計算せよ。',
-    answer: ['-14+23j', '−14+23j', '-14 + 23j'],
+    question: '複素数の掛け算 $(3+4j) \\times (2+5j)$ を計算せよ。',
+    answer: ['$-14 + 23j$', '-14+23j', '−14+23j', '-14 + 23j'],
   },
   {
     type: 'text',
-    question: '極座標形式の複素数の掛け算 3e^(2j) × 4e^(3j) を計算せよ。',
-    answer: ['12e^(5j)', '12e^5j'],
+    question: '極座標形式の複素数の掛け算 $3e^{2j} \\times 4e^{3j}$ を計算せよ。',
+    answer: ['$12e^{5j}$', '12e^(5j)', '12e^5j'],
   },
   {
     type: 'text',
-    question: '(2+3j)/(3+4j) を実数化するために分子分母に掛けるべき複素数を答えよ。',
-    answer: ['3-4j', '3−4j', '3 - 4j'],
+    question: '$(2+3j)/(3+4j)$ を実数化するために分子分母に掛けるべき複素数を答えよ。',
+    answer: ['$3 - 4j$', '3-4j', '3−4j', '3 - 4j'],
   },
   {
     type: 'text',
-    question: '(2+3j)/(3+4j) を計算せよ。',
-    answer: ['18/25+(1/25)j', '18/25 + j/25', '18/25+j/25'],
+    question: '$(2+3j)/(3+4j)$ を計算せよ。',
+    answer: ['$18/25 + (1/25)j$', '18/25+(1/25)j', '18/25 + j/25', '18/25+j/25'],
   },
   {
     type: 'text',
-    question: '積分 ∫f(x)dx が表しているものを一言で答えよ。',
+    question: '積分 $\\displaystyle\\int f(x)dx$ が表しているものを一言で答えよ。',
     answer: ['面積'],
   },
   {
     type: 'text',
-    question: '単位インパルス関数(デルタ関数)δ(t)の値は、tが0のとき、0でないときそれぞれいくらか答えよ。',
+    question: '単位インパルス関数(デルタ関数)$\\delta(t)$の値は、tが0のとき、0でないときそれぞれいくらか答えよ。',
     answer: ['t=0で∞、それ以外で0', 't=0のとき∞、それ以外0'],
   },
   {
     type: 'text',
-    question: 'デルタ関数δ(t+3)が無限大になるtの値を答えよ。',
-    answer: ['-3', '−3', 't=-3'],
+    question: 'デルタ関数$\\delta(t+3)$が無限大になるtの値を答えよ。',
+    answer: ['$t = -3$', '-3', '−3', 't=-3'],
   },
   {
     type: 'text',
-    question: '∫[−∞,∞] δ(t) dt の値を答えよ。',
+    question: '$\\displaystyle\\int_{-\\infty}^{\\infty} \\delta(t)\\, dt$ の値を答えよ。',
     answer: ['1'],
   },
   {
     type: 'text',
-    question: '∫[2,4] δ(t) dt の値を答えよ。',
+    question: '$\\displaystyle\\int_{2}^{4} \\delta(t)\\, dt$ の値を答えよ。',
     answer: ['0'],
   },
   {
     type: 'text',
-    question: '∫[−∞,∞] f(t)δ(t) dt の値を答えよ。',
+    question: '$\\displaystyle\\int_{-\\infty}^{\\infty} f(t)\\delta(t)\\, dt$ の値を答えよ。',
     answer: ['f(0)'],
   },
   {
     type: 'text',
-    question: '単位ステップ関数u(t)の値は、t≥0、t<0のときそれぞれいくらか答えよ。',
+    question: '単位ステップ関数$u(t)$の値は、$t\\geq0$、$t<0$のときそれぞれいくらか答えよ。',
     answer: ['t≥0で1、t<0で0'],
   },
   {
@@ -116,7 +118,7 @@ export const questions: Question[] = [
   },
   {
     type: 'text',
-    question: '3sin(2t)という波の振幅と周波数をそれぞれ答えよ。',
+    question: '$3\\sin(2t)$という波の振幅と周波数をそれぞれ答えよ。',
     answer: ['振幅3、周波数2'],
   },
   {
@@ -132,7 +134,7 @@ export const questions: Question[] = [
   {
     type: 'text',
     question: 'ある関数f(t)がフーリエ変換できるための条件を式で答えよ。',
-    answer: ['∫|f(t)|dt<∞', '∫[−∞,∞]|f(t)|dt<∞'],
+    answer: ['$\\displaystyle\\int |f(t)|\\, dt < \\infty$', '∫|f(t)|dt<∞', '∫[−∞,∞]|f(t)|dt<∞'],
   },
   {
     type: 'text',
@@ -150,7 +152,7 @@ export const questions: Question[] = [
   {
     type: 'text',
     question: 'ラプラス変換の定義式を答えよ。',
-    answer: ['F(s)=∫[0,∞]f(t)e^(-st)dt', 'F(s)=∫0∞f(t)e^(-st)dt'],
+    answer: ['$F(s) = \\displaystyle\\int_0^\\infty f(t)e^{-st}\\, dt$', 'F(s)=∫[0,∞]f(t)e^(-st)dt', 'F(s)=∫0∞f(t)e^(-st)dt'],
   },
   {
     type: 'text',
@@ -160,32 +162,40 @@ export const questions: Question[] = [
   {
     type: 'text',
     question: 'ラプラス変換の線形性(加法定理)を式で答えよ。',
-    answer: ['L[f1(t)±f2(t)]=L[f1(t)]±L[f2(t)]', 'L[f1±f2]=L[f1]±L[f2]'],
+    answer: [
+      '$L[f_1(t) \\pm f_2(t)] = L[f_1(t)] \\pm L[f_2(t)]$',
+      'L[f1(t)±f2(t)]=L[f1(t)]±L[f2(t)]',
+      'L[f1±f2]=L[f1]±L[f2]',
+    ],
   },
   {
     type: 'text',
     question: 'ラプラス変換の定数倍の性質を式で答えよ。',
-    answer: ['L[kf(t)]=kL[f(t)]'],
+    answer: ['$L[kf(t)] = kL[f(t)]$', 'L[kf(t)]=kL[f(t)]'],
   },
   {
     type: 'text',
     question: '微分のラプラス変換の公式を答えよ。',
-    answer: ['L[df(t)/dt]=sF(s)-f(0)', 'sF(s)-f(0)'],
+    answer: ['$L[df(t)/dt] = sF(s) - f(0)$', 'L[df(t)/dt]=sF(s)-f(0)', 'sF(s)-f(0)'],
   },
   {
     type: 'text',
     question: '積分1回分のラプラス変換の公式を答えよ。',
-    answer: ['L[∫f(t)dt]=F(s)/s', 'F(s)/s'],
+    answer: ['$L[\\int f(t)dt] = F(s)/s$', 'L[∫f(t)dt]=F(s)/s', 'F(s)/s'],
   },
   {
     type: 'text',
-    question: '時間遅れτを持つ関数f(t−τ)のラプラス変換の公式を答えよ。',
-    answer: ['L[f(t-τ)]=e^(-τs)F(s)', 'e^(-τs)F(s)'],
+    question: '時間遅れτを持つ関数$f(t-\\tau)$のラプラス変換の公式を答えよ。',
+    answer: ['$L[f(t-\\tau)] = e^{-\\tau s}F(s)$', 'L[f(t-τ)]=e^(-τs)F(s)', 'e^(-τs)F(s)'],
   },
   {
     type: 'text',
     question: '最終値の定理を式で答えよ。',
-    answer: ['lim(t→∞)f(t)=lim(s→0)sF(s)', 'lim t→∞ f(t) = lim s→0 sF(s)'],
+    answer: [
+      '$\\lim_{t\\to\\infty} f(t) = \\lim_{s\\to0} sF(s)$',
+      'lim(t→∞)f(t)=lim(s→0)sF(s)',
+      'lim t→∞ f(t) = lim s→0 sF(s)',
+    ],
   },
   {
     type: 'text',
@@ -195,27 +205,27 @@ export const questions: Question[] = [
   {
     type: 'text',
     question:
-      '(7x+17)/((x+2)(x+3)) を A/(x+2) + B/(x+3) の形に部分分数分解するとき、Aを求めるために代入するxの値を答えよ。',
-    answer: ['-2', '−2', 'x=-2'],
+      '$\\dfrac{7x+17}{(x+2)(x+3)}$ を $\\dfrac{A}{x+2} + \\dfrac{B}{x+3}$ の形に部分分数分解するとき、Aを求めるために代入するxの値を答えよ。',
+    answer: ['$x = -2$', '-2', '−2', 'x=-2'],
   },
   {
     type: 'text',
-    question: '(7x+17)/((x+2)(x+3)) を A/(x+2) + B/(x+3) の形に部分分数分解したときの、A、Bの値をそれぞれ答えよ。',
-    answer: ['A=3, B=4', 'A=3、B=4'],
+    question: '$\\dfrac{7x+17}{(x+2)(x+3)}$ を $\\dfrac{A}{x+2} + \\dfrac{B}{x+3}$ の形に部分分数分解したときの、A、Bの値をそれぞれ答えよ。',
+    answer: ['$A=3, B=4$', 'A=3, B=4', 'A=3、B=4'],
   },
   {
     type: 'text',
-    question: '円の方程式 x² + y² = r² が表す図形を答えよ。',
+    question: '円の方程式 $x^2 + y^2 = r^2$ が表す図形を答えよ。',
     answer: ['中心(0,0)、半径rの円', '原点中心、半径rの円'],
   },
   {
     type: 'text',
-    question: '関数y=f(x)をx方向にa、y方向にbだけずらした式を答えよ。',
-    answer: ['y-b=f(x-a)', 'y−b=f(x−a)'],
+    question: '関数$y=f(x)$をx方向にa、y方向にbだけずらした式を答えよ。',
+    answer: ['$y - b = f(x - a)$', 'y-b=f(x-a)', 'y−b=f(x−a)'],
   },
   {
     type: 'text',
-    question: '(y−3)² + (x+2)² = 3² が表す円の中心(x,y)と半径をそれぞれ答えよ。',
+    question: '$(y-3)^2 + (x+2)^2 = 3^2$ が表す円の中心(x,y)と半径をそれぞれ答えよ。',
     answer: ['中心(-2,3)、半径3', '中心(−2,3)、半径3'],
   },
   {
@@ -230,13 +240,13 @@ export const questions: Question[] = [
   },
   {
     type: 'text',
-    question: '伝達関数がG(s)=s+3のシステムの周波数伝達関数G(jω)を答えよ。',
-    answer: ['jω+3', 'jω + 3'],
+    question: '伝達関数が$G(s)=s+3$のシステムの周波数伝達関数$G(j\\omega)$を答えよ。',
+    answer: ['$j\\omega + 3$', 'jω+3', 'jω + 3'],
   },
   {
     type: 'text',
-    question: '伝達関数がG(s)=3s²+s+4のシステムの周波数伝達関数G(jω)を答えよ。',
-    answer: ['-3ω²+jω+4', '−3ω²+jω+4'],
+    question: '伝達関数が$G(s)=3s^2+s+4$のシステムの周波数伝達関数$G(j\\omega)$を答えよ。',
+    answer: ['$-3\\omega^2 + j\\omega + 4$', '-3ω²+jω+4', '−3ω²+jω+4'],
   },
   {
     type: 'text',
@@ -246,17 +256,17 @@ export const questions: Question[] = [
   {
     type: 'text',
     question: '微分要素の伝達関数G(s)を答えよ。',
-    answer: ['s', 'G(s)=s'],
+    answer: ['$G(s) = s$', 's', 'G(s)=s'],
   },
   {
     type: 'text',
     question: '積分要素の伝達関数G(s)を答えよ。',
-    answer: ['1/s', 'G(s)=1/s'],
+    answer: ['$G(s) = 1/s$', '1/s', 'G(s)=1/s'],
   },
   {
     type: 'text',
-    question: '微分要素G(s)=sの周波数応答G(jω)を答えよ。',
-    answer: ['jω', 'G(jω)=jω'],
+    question: '微分要素$G(s)=s$の周波数応答$G(j\\omega)$を答えよ。',
+    answer: ['$j\\omega$', 'jω', 'G(jω)=jω'],
   },
   {
     type: 'text',
@@ -265,13 +275,13 @@ export const questions: Question[] = [
   },
   {
     type: 'text',
-    question: '微分要素G(s)=sのステップ応答y(t)を答えよ。',
-    answer: ['δ(t)', 'y(t)=δ(t)'],
+    question: '微分要素$G(s)=s$のステップ応答y(t)を答えよ。',
+    answer: ['$\\delta(t)$', 'δ(t)', 'y(t)=δ(t)'],
   },
   {
     type: 'text',
-    question: '積分要素G(s)=1/sの周波数応答G(jω)を答えよ。',
-    answer: ['1/(jω)', 'G(jω)=1/(jω)'],
+    question: '積分要素$G(s)=1/s$の周波数応答$G(j\\omega)$を答えよ。',
+    answer: ['$1/(j\\omega)$', '1/(jω)', 'G(jω)=1/(jω)'],
   },
   {
     type: 'text',
@@ -280,23 +290,23 @@ export const questions: Question[] = [
   },
   {
     type: 'text',
-    question: '積分要素G(s)=1/sのステップ応答y(t)を答えよ。',
-    answer: ['t·u(t)', 'y(t)=t·u(t)', 'tu(t)'],
+    question: '積分要素$G(s)=1/s$のステップ応答y(t)を答えよ。',
+    answer: ['$t \\cdot u(t)$', 't·u(t)', 'y(t)=t·u(t)', 'tu(t)'],
   },
   {
     type: 'text',
     question: '1次遅れ要素の伝達関数G(s)を答えよ。',
-    answer: ['1/(1+sT)', 'G(s)=1/(1+sT)'],
+    answer: ['$1/(1+sT)$', '1/(1+sT)', 'G(s)=1/(1+sT)'],
   },
   {
     type: 'text',
     question: '1次進み要素の伝達関数G(s)を答えよ。',
-    answer: ['1+sT', 'G(s)=1+sT'],
+    answer: ['$1 + sT$', '1+sT', 'G(s)=1+sT'],
   },
   {
     type: 'text',
-    question: '一般的な閉ループ(フィードバック系)の伝達関数Go(s)を、G(s)とH(s)で表す式を答えよ。',
-    answer: ['G(s)/(1+G(s)H(s))', 'Go(s)=G(s)/(1+G(s)H(s))'],
+    question: '一般的な閉ループ(フィードバック系)の伝達関数$G_o(s)$を、G(s)とH(s)で表す式を答えよ。',
+    answer: ['$G(s)/(1+G(s)H(s))$', 'G(s)/(1+G(s)H(s))', 'Go(s)=G(s)/(1+G(s)H(s))'],
   },
   {
     type: 'text',
@@ -305,13 +315,13 @@ export const questions: Question[] = [
   },
   {
     type: 'text',
-    question: 'Go(s) = 3/(s+2) の極を答えよ。',
-    answer: ['-2', '−2', 's=-2'],
+    question: '$G_o(s) = 3/(s+2)$ の極を答えよ。',
+    answer: ['$s = -2$', '-2', '−2', 's=-2'],
   },
   {
     type: 'text',
-    question: 'Go(s) = 1234/((s+3)(s−5)) の極をすべて答えよ。',
-    answer: ['-3と5', 's=-3, 5', '−3, 5'],
+    question: '$G_o(s) = 1234/((s+3)(s-5))$ の極をすべて答えよ。',
+    answer: ['$s = -3, 5$', '-3と5', 's=-3, 5', '−3, 5'],
   },
   {
     type: 'text',
@@ -326,7 +336,7 @@ export const questions: Question[] = [
   {
     type: 'text',
     question: '特性方程式を式で答えよ。',
-    answer: ['1+G(s)H(s)=0'],
+    answer: ['$1 + G(s)H(s) = 0$', '1+G(s)H(s)=0'],
   },
   {
     type: 'text',
@@ -336,12 +346,12 @@ export const questions: Question[] = [
   {
     type: 'text',
     question: 'G(s)=s、H(s)=0.5のときの特性方程式を答えよ。',
-    answer: ['1+0.5s=0'],
+    answer: ['$1 + 0.5s = 0$', '1+0.5s=0'],
   },
   {
     type: 'text',
     question: 'G(s)=s、H(s)=0.5のときの特性根と、その安定性を答えよ。',
-    answer: ['s=-2で安定', 's=−2、安定'],
+    answer: ['$s = -2$で安定', 's=-2で安定', 's=−2、安定'],
   },
   {
     type: 'text',
@@ -359,17 +369,17 @@ export const questions: Question[] = [
   {
     type: 'text',
     question:
-      '特性方程式2s⁴+s³+3s²+5s+10=0についてラウス配列を作るとき、s⁴行とs³行に入る数値をそれぞれ答えよ。',
+      '特性方程式$2s^4+s^3+3s^2+5s+10=0$についてラウス配列を作るとき、$s^4$行と$s^3$行に入る数値をそれぞれ答えよ。',
     answer: ['s⁴行: 2, 3, 10 / s³行: 1, 5, 0', 's4行2,3,10 s3行1,5,0'],
   },
   {
     type: 'text',
-    question: '上のラウス配列のs⁴行(2,3,10)とs³行(1,5,0)から、s²行の1列目の値を求めよ。',
-    answer: ['-7', '−7'],
+    question: '上のラウス配列の$s^4$行(2,3,10)と$s^3$行(1,5,0)から、$s^2$行の1列目の値を求めよ。',
+    answer: ['$-7$', '-7', '−7'],
   },
   {
     type: 'text',
-    question: '特性方程式2s⁴+s³+3s²+5s+10=0のラウス配列の一番左の列を計算し、この系が安定か不安定かを答えよ。',
+    question: '特性方程式$2s^4+s^3+3s^2+5s+10=0$のラウス配列の一番左の列を計算し、この系が安定か不安定かを答えよ。',
     answer: ['不安定', '2,1,-7,6.43,10で符号が変化するため不安定'],
   },
   {

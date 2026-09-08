@@ -1,7 +1,35 @@
+import katex from 'katex';
 import type { Question, Subject } from './types.js';
 import { getExams, getSubjects, getQuestions } from './data/registry.js';
 import { ICONS, getIcon, refreshIcons } from './icons.js';
 import { getTestCountdown } from './countdown.js';
+
+// 問題文・選択肢・解答・解説の中の数式をKaTeXでレンダリングする。
+// $...$ をインライン数式、$$...$$ をブロック数式として扱う。
+// それ以外の部分はHTMLエスケープしたうえで、改行を保ったまま出力する。
+function escapeHtml(text: string): string {
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+function renderMath(text: string): string {
+  const parts = text.split(/(\${1,2}[^$]+?\${1,2})/g);
+  return parts
+    .map((part) => {
+      const blockMatch = part.match(/^\$\$([^$]+)\$\$$/);
+      const inlineMatch = part.match(/^\$([^$]+)\$$/);
+      const expr = blockMatch?.[1] ?? inlineMatch?.[1];
+      if (expr === undefined) return escapeHtml(part);
+      try {
+        return katex.renderToString(expr, { throwOnError: false, displayMode: !!blockMatch });
+      } catch {
+        return escapeHtml(part);
+      }
+    })
+    .join('');
+}
 
 interface AttemptState {
   examId: string;
@@ -645,7 +673,7 @@ function renderQuestion(): void {
   state.answered = false;
 
   updateQuizProgress();
-  quizQuestion.textContent = q.question;
+  quizQuestion.innerHTML = renderMath(q.question);
 
   quizFeedback.hidden = true;
   quizFeedback.textContent = '';
@@ -673,7 +701,7 @@ function renderQuestion(): void {
       const btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'choice-btn';
-      btn.innerHTML = `<span class="choice-label">${CHOICE_LABELS[i] ?? i + 1}</span><span class="choice-text">${choice}</span>`;
+      btn.innerHTML = `<span class="choice-label">${CHOICE_LABELS[i] ?? i + 1}</span><span class="choice-text">${renderMath(choice)}</span>`;
       btn.addEventListener('click', () => submitChoice(i));
       quizChoices.appendChild(btn);
     });
@@ -721,7 +749,9 @@ function addExplanationLine(tag: string, tagClass: string, text: string): void {
   badge.className = `quiz-explanation-tag ${tagClass}`;
   badge.textContent = tag;
   p.appendChild(badge);
-  p.appendChild(document.createTextNode(text));
+  const body = document.createElement('span');
+  body.innerHTML = renderMath(text);
+  p.appendChild(body);
   quizExplanation.appendChild(p);
 }
 
@@ -766,7 +796,7 @@ function revealHandwritingAnswer(): void {
   state.answered = true;
   state.masteryRemaining?.delete(q);
 
-  handwritingCorrectAnswer.textContent = q.answer;
+  handwritingCorrectAnswer.innerHTML = renderMath(q.answer);
   handwritingAnswerReveal.hidden = false;
   btnCheckHandwriting.hidden = true;
   quizCanvas.style.pointerEvents = 'none';
@@ -796,7 +826,7 @@ function finishAnswer(correct: boolean, correctText: string): void {
     } else {
       state.wrong.push(q);
     }
-    quizFeedback.textContent = `不正解… 正解は「${correctText}」`;
+    quizFeedback.innerHTML = `不正解… 正解は「${renderMath(correctText)}」`;
     quizFeedback.classList.add('incorrect');
   }
   quizFeedback.hidden = false;
@@ -884,7 +914,7 @@ function renderResult(): void {
       item.className = 'wrong-item';
       const answerText =
         q.type === 'choice' ? q.choices[q.answer] : Array.isArray(q.answer) ? q.answer[0] : q.answer;
-      item.innerHTML = `<p class="wrong-question">${q.question}</p><p class="wrong-answer">正解: ${answerText}</p>`;
+      item.innerHTML = `<p class="wrong-question">${renderMath(q.question)}</p><p class="wrong-answer">正解: ${renderMath(answerText)}</p>`;
       resultWrongList.appendChild(item);
     }
   }

@@ -16,6 +16,7 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
+    "katex": "^0.18.7",
     "lucide": "^1.42.0"
   }
 }
