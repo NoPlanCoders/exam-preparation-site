@@ -1,5 +1,6 @@
 import {
   ArrowLeft,
+  Atom,
   Brain,
   Calculator,
   ClipboardCheck,
@@ -16,6 +17,7 @@ import {
   Menu,
   Monitor,
   Network,
+  Orbit,
   Pencil,
   Play,
   Plus,
@@ -34,6 +36,7 @@ import {
 
 const LUCIDE_ICONS = {
   ArrowLeft,
+  Atom,
   Brain,
   Calculator,
   ClipboardCheck,
@@ -50,6 +53,7 @@ const LUCIDE_ICONS = {
   Menu,
   Monitor,
   Network,
+  Orbit,
   Pencil,
   Play,
   Plus,
@@ -88,6 +92,8 @@ const ICON_NAMES: Record<string, string> = {
   wave: 'waves',
   target: 'target',
   'trending-up': 'trending-up',
+  atom: 'atom',
+  orbit: 'orbit',
   'clipboard-check': 'clipboard-check',
   menu: 'menu',
   library: 'library',

@@ -14300,6 +14300,18 @@
       name: "\u7D4C\u6E08\u5B66(\u8A08\u7B97\u30FB\u624B\u66F8\u304D)",
       description: "\u8CBB\u7528\u95A2\u6570(\u640D\u76CA\u5206\u5C90\u70B9\u30FB\u64CD\u696D\u505C\u6B62\u4FA1\u683C)\u3001\u79DF\u7A0E\u8CA0\u62C5\u5272\u5408\u3001\u6D88\u8CBB\u8005\u4F59\u5270\u30FB\u751F\u7523\u8005\u4F59\u5270\u306E\u8A08\u7B97\u554F\u984C\u3092\u624B\u66F8\u304D\u3067\u89E3\u3044\u3066\u78BA\u8A8D",
       icon: "calculator"
+    },
+    {
+      id: "applied-physics-choice",
+      name: "\u5FDC\u7528\u7269\u7406(\u9078\u629E\u5F0F)",
+      description: "\u52A0\u901F\u5EA6\u30FB\u4ED5\u4E8B\u30FB\u4FDD\u5B58\u529B\u30FB\u529B\u306E\u30E2\u30FC\u30E1\u30F3\u30C8\u30FB\u89D2\u904B\u52D5\u91CF\u306E\u57FA\u672C\u516C\u5F0F\u3001\u4F4D\u7F6Ex(t)\u306E\u5FAE\u5206\u3001\u7A7A\u6C17\u62B5\u6297\u3092\u53D7\u3051\u308B\u6295\u3052\u4E0A\u3052\u904B\u52D5\u3001\u7B49\u901F\u5186\u904B\u52D5\u306E\u89D2\u904B\u52D5\u91CF\u30924\u629E\u3067\u78BA\u8A8D",
+      icon: "atom"
+    },
+    {
+      id: "applied-physics-handwriting",
+      name: "\u5FDC\u7528\u7269\u7406(\u8A08\u7B97\u30FB\u624B\u66F8\u304D)",
+      description: "\u52A0\u901F\u5EA6\u30FB\u4ED5\u4E8B\u30FB\u4FDD\u5B58\u529B\u30FB\u529B\u306E\u30E2\u30FC\u30E1\u30F3\u30C8\u30FB\u89D2\u904B\u52D5\u91CF\u306E\u57FA\u672C\u516C\u5F0F\u3001\u4F4D\u7F6Ex(t)\u306E\u5FAE\u5206\u3001\u7A7A\u6C17\u62B5\u6297\u3092\u53D7\u3051\u308B\u6295\u3052\u4E0A\u3052\u904B\u52D5\u3001\u7B49\u901F\u5186\u904B\u52D5\u306E\u89D2\u904B\u52D5\u91CF\u3092\u624B\u66F8\u304D\u3067\u89E3\u3044\u3066\u78BA\u8A8D",
+      icon: "orbit"
     }
   ];
   var electiveIds = new Set(subject_types_default["\u9078\u629E\u79D1\u76EE"]);
@@ -23929,6 +23941,315 @@
     }
   ];
 
+  // src/data/4i-zenki-kimatsu/applied-physics-choice.ts
+  var questions21 = [
+    // --- 【1】基本公式 ---
+    {
+      type: "choice",
+      question: "\u3042\u308B\u7269\u4F53\u306E\u6642\u9593\u3054\u3068\u306E\u4F4D\u7F6E\u304C$x(t)$\u3067\u8868\u3055\u308C\u308B\u3068\u304D\u3001\u305D\u306E\u7269\u4F53\u306E\u52A0\u901F\u5EA6\u306F\u3069\u306E\u3088\u3046\u306B\u8A08\u7B97\u3059\u308B\u3053\u3068\u304C\u3067\u304D\u308B\u304B\u3002",
+      choices: [
+        "$a = \\dfrac{d^2x(t)}{dt^2}$",
+        "$a = \\dfrac{dx(t)}{dt}$",
+        "$a = \\displaystyle\\int x(t)\\, dt$",
+        "$a = x(t)^2$"
+      ],
+      answer: 0,
+      explanations: [
+        "\u6B63\u3057\u3044\u3002\u52A0\u901F\u5EA6\u306F\u4F4D\u7F6E\u3092\u6642\u9593\u30672\u968E\u5FAE\u5206\u3057\u305F\u3082\u306E(\u901F\u5EA6$v=dx/dt$\u3092\u3055\u3089\u306B\u6642\u9593\u3067\u5FAE\u5206\u3057\u305F\u3082\u306E)\u3067\u3042\u308A\u3001$a=d^2x(t)/dt^2$\u3067\u3042\u308B\u3002",
+        "\u3053\u308C\u306F\u901F\u5EA6$v$\u306E\u5B9A\u7FA9\u3067\u3042\u308A\u3001\u52A0\u901F\u5EA6\u3067\u306F\u306A\u3044\u3002",
+        "\u4F4D\u7F6E\u3092\u6642\u9593\u3067\u7A4D\u5206\u3057\u3066\u3082\u52A0\u901F\u5EA6\u306F\u6C42\u307E\u3089\u306A\u3044(\u7A4D\u5206\u306F\u901F\u5EA6\u30FB\u52A0\u901F\u5EA6\u304B\u3089\u4F4D\u7F6E\u3092\u6C42\u3081\u308B\u5411\u304D\u306E\u64CD\u4F5C)\u3002",
+        "\u4F4D\u7F6E\u30922\u4E57\u3057\u3066\u3082\u7269\u7406\u7684\u306B\u52A0\u901F\u5EA6\u306B\u306F\u306A\u3089\u306A\u3044\u3002"
+      ]
+    },
+    {
+      type: "choice",
+      question: "\u4E00\u822C\u306B\u3001\u4F4D\u7F6E$\\vec{r}$[m]\u306B\u3042\u308B\u7269\u4F53\u306B\u50CD\u304F\u529B$\\vec{F}$[N]\u306B\u5BFE\u3057\u3066\u7269\u4F53\u306E\u52D5\u304F\u8ECC\u8DE1\u304C\u66F2\u7DDA\u3067\u3042\u308B\u3068\u304D\u3001\u305D\u306E\u529B\u304C\u7269\u4F53\u306B\u3057\u305F\u4ED5\u4E8B\u306F\u3044\u304F\u3089\u304B\u3002",
+      choices: [
+        "$W = \\displaystyle\\int \\vec{F}\\cdot d\\vec{r}$",
+        "$W = \\vec{F}\\cdot\\vec{r}$",
+        "$W = \\displaystyle\\int |\\vec{F}|\\, dr$",
+        "$W = \\vec{F}\\times\\vec{r}$"
+      ],
+      answer: 0,
+      explanations: [
+        "\u6B63\u3057\u3044\u3002\u8ECC\u8DE1\u304C\u66F2\u7DDA\u306E\u5834\u5408\u3001\u529B\u3068\u5FAE\u5C0F\u5909\u4F4D\u306E\u5185\u7A4D\u3092\u7D4C\u8DEF\u306B\u6CBF\u3063\u3066\u7A4D\u5206\u3057\u305F$W=\\int \\vec{F}\\cdot d\\vec{r}$\u304C\u4ED5\u4E8B\u306B\u306A\u308B\u3002",
+        "\u7A4D\u5206\u3092\u884C\u308F\u306A\u3044\u5358\u7D14\u306A\u5185\u7A4D\u306F\u3001\u529B\u304C\u4E00\u5B9A\u3067\u76F4\u7DDA\u7684\u306B\u52D5\u304F\u7279\u5225\u306A\u5834\u5408\u306B\u3057\u304B\u4F7F\u3048\u305A\u3001\u66F2\u7DDA\u306E\u8ECC\u8DE1\u306B\u306F\u5BFE\u5FDC\u3067\u304D\u306A\u3044\u3002",
+        "\u529B\u306E\u5411\u304D\u3092\u8003\u616E\u305B\u305A\u5927\u304D\u3055\u3060\u3051\u3092\u7A4D\u5206\u3057\u3066\u304A\u308A\u3001\u5185\u7A4D(\u529B\u306E\u5909\u4F4D\u65B9\u5411\u306E\u6210\u5206)\u3092\u53D6\u3063\u3066\u3044\u306A\u3044\u305F\u3081\u8AA4\u308A\u3002",
+        "\u5916\u7A4D\u306F\u4ED5\u4E8B(\u30B9\u30AB\u30E9\u30FC\u91CF)\u3067\u306F\u306A\u304F\u30D9\u30AF\u30C8\u30EB\u91CF\u3092\u4E0E\u3048\u3066\u3057\u307E\u3046\u305F\u3081\u3001\u4ED5\u4E8B\u306E\u5B9A\u7FA9\u3068\u3057\u3066\u8AA4\u308A\u3002"
+      ]
+    },
+    {
+      type: "choice",
+      question: "\u4FDD\u5B58\u529B$\\vec{F}$[N]\u306F\u3001\u4F4D\u7F6E\u30A8\u30CD\u30EB\u30AE\u30FC$U$[J]\u3092\u7528\u3044\u3066\u3001\u3069\u306E\u3088\u3046\u306B\u8868\u3059\u3053\u3068\u304C\u3067\u304D\u308B\u304B\u3002",
+      choices: [
+        "$\\vec{F} = -\\dfrac{\\partial U}{\\partial \\vec{r}}$",
+        "$\\vec{F} = \\dfrac{\\partial U}{\\partial \\vec{r}}$",
+        "$\\vec{F} = -U$",
+        "$\\vec{F} = -\\dfrac{\\partial \\vec{r}}{\\partial U}$"
+      ],
+      answer: 0,
+      explanations: [
+        "\u6B63\u3057\u3044\u3002\u4FDD\u5B58\u529B\u306F\u4F4D\u7F6E\u30A8\u30CD\u30EB\u30AE\u30FC\u306E\u52FE\u914D\u306B\u30DE\u30A4\u30CA\u30B9\u3092\u3064\u3051\u305F\u3082\u306E\u3001$\\vec{F}=-\\partial U/\\partial \\vec{r}$(=$-\\nabla U$)\u3067\u8868\u3055\u308C\u308B\u3002",
+        "\u30DE\u30A4\u30CA\u30B9\u7B26\u53F7\u304C\u629C\u3051\u3066\u3044\u308B\u3002\u7B26\u53F7\u3092\u843D\u3068\u3059\u3068\u3001\u529B\u306F\u4F4D\u7F6E\u30A8\u30CD\u30EB\u30AE\u30FC\u304C\u5897\u3048\u308B\u5411\u304D\u3092\u5411\u3044\u3066\u3057\u307E\u3044\u3001\u7269\u7406\u7684\u306B\u8AA4\u308A\u306B\u306A\u308B\u3002",
+        "\u5FAE\u5206(\u52FE\u914D)\u3092\u53D6\u3089\u305A\u306B\u4F4D\u7F6E\u30A8\u30CD\u30EB\u30AE\u30FC\u305D\u306E\u3082\u306E\u3092\u529B\u3068\u3057\u3066\u304A\u308A\u3001\u6B21\u5143\u7684\u306B\u3082\u5B9A\u7FA9\u7684\u306B\u3082\u8AA4\u308A\u3002",
+        "\u5206\u5B50\u3068\u5206\u6BCD(\u5FAE\u5206\u3059\u308B\u5909\u6570\u3068\u3055\u308C\u308B\u5909\u6570)\u304C\u9006\u306B\u306A\u3063\u3066\u304A\u308A\u3001\u6B63\u3057\u3044\u52FE\u914D\u306E\u5F0F\u3067\u306F\u306A\u3044\u3002"
+      ]
+    },
+    {
+      type: "choice",
+      question: "\u4F4D\u7F6E$\\vec{r}$[m]\u306B\u3042\u308B\u7269\u4F53\u306B\u50CD\u304F\u529B\u304C$\\vec{F}$[N]\u306E\u3068\u304D\u3001\u3053\u306E\u7269\u4F53\u306E\u529B\u306E\u30E2\u30FC\u30E1\u30F3\u30C8$\\vec{N}$\u3092\u6C42\u3081\u306A\u3055\u3044\u3002",
+      choices: [
+        "$\\vec{N} = \\vec{r} \\times \\vec{F}$",
+        "$\\vec{N} = \\vec{F} \\times \\vec{r}$",
+        "$\\vec{N} = \\vec{r} \\cdot \\vec{F}$",
+        "$\\vec{N} = \\vec{r} + \\vec{F}$"
+      ],
+      answer: 0,
+      explanations: [
+        "\u6B63\u3057\u3044\u3002\u529B\u306E\u30E2\u30FC\u30E1\u30F3\u30C8\u306F\u4F4D\u7F6E\u30D9\u30AF\u30C8\u30EB\u3068\u529B\u30D9\u30AF\u30C8\u30EB\u306E\u5916\u7A4D$\\vec{N}=\\vec{r}\\times\\vec{F}$\u3067\u5B9A\u7FA9\u3055\u308C\u308B\u3002",
+        "\u5916\u7A4D\u306E\u9806\u5E8F\u304C\u9006\u306B\u306A\u3063\u3066\u3044\u308B\u3002$\\vec{F}\\times\\vec{r}=-(\\vec{r}\\times\\vec{F})$\u3068\u306A\u308A\u3001\u5411\u304D\u304C\u9006\u306B\u306A\u3063\u3066\u3057\u307E\u3046\u3002",
+        "\u5185\u7A4D\u3092\u53D6\u308B\u3068\u30B9\u30AB\u30E9\u30FC\u91CF\u306B\u306A\u3063\u3066\u3057\u307E\u3044\u3001\u529B\u306E\u30E2\u30FC\u30E1\u30F3\u30C8(\u30D9\u30AF\u30C8\u30EB\u91CF)\u306E\u5B9A\u7FA9\u3068\u3057\u3066\u8AA4\u308A\u3002",
+        "\u5358\u7D14\u306A\u8DB3\u3057\u7B97\u3067\u306F\u529B\u306E\u30E2\u30FC\u30E1\u30F3\u30C8\u306E\u5B9A\u7FA9(\u4F4D\u7F6E\u3068\u529B\u306E\u95A2\u4FC2\u6027)\u3092\u8868\u305B\u306A\u3044\u3002"
+      ]
+    },
+    {
+      type: "choice",
+      question: "\u4F4D\u7F6E$\\vec{r}$[m]\u306B\u3042\u308B\u7269\u4F53\u306E\u904B\u52D5\u91CF\u304C$\\vec{P}$[kg m/s]\u306E\u3068\u304D\u3001\u89D2\u904B\u52D5\u91CF$\\vec{L}$\u3092\u66F8\u304D\u4E0B\u305B\u3002",
+      choices: [
+        "$\\vec{L} = \\vec{r} \\times \\vec{P}$",
+        "$\\vec{L} = \\vec{P} \\times \\vec{r}$",
+        "$\\vec{L} = \\vec{r} \\cdot \\vec{P}$",
+        "$\\vec{L} = \\vec{r}\\,\\vec{P}$"
+      ],
+      answer: 0,
+      explanations: [
+        "\u6B63\u3057\u3044\u3002\u89D2\u904B\u52D5\u91CF\u306F\u4F4D\u7F6E\u30D9\u30AF\u30C8\u30EB\u3068\u904B\u52D5\u91CF\u30D9\u30AF\u30C8\u30EB\u306E\u5916\u7A4D$\\vec{L}=\\vec{r}\\times\\vec{P}$\u3067\u5B9A\u7FA9\u3055\u308C\u308B\u3002",
+        "\u5916\u7A4D\u306E\u9806\u5E8F\u304C\u9006\u306B\u306A\u3063\u3066\u3044\u308B\u3002$\\vec{P}\\times\\vec{r}=-(\\vec{r}\\times\\vec{P})$\u3068\u306A\u308A\u3001\u5411\u304D\u304C\u9006\u306B\u306A\u3063\u3066\u3057\u307E\u3046\u3002",
+        "\u5185\u7A4D\u3092\u53D6\u308B\u3068\u30B9\u30AB\u30E9\u30FC\u91CF\u306B\u306A\u3063\u3066\u3057\u307E\u3044\u3001\u89D2\u904B\u52D5\u91CF(\u30D9\u30AF\u30C8\u30EB\u91CF)\u306E\u5B9A\u7FA9\u3068\u3057\u3066\u8AA4\u308A\u3002",
+        "\u30D9\u30AF\u30C8\u30EB\u540C\u58EB\u306E\u5358\u7D14\u306A\u7A4D\u3068\u3044\u3046\u8868\u73FE\u306F\u5B9A\u7FA9\u3055\u308C\u3066\u304A\u3089\u305A\u3001\u5916\u7A4D\u3092\u7528\u3044\u308B\u6B63\u3057\u3044\u5B9A\u7FA9\u3067\u306F\u306A\u3044\u3002"
+      ]
+    },
+    // --- 【2】位置x(t)から速度・加速度を求める ---
+    {
+      type: "choice",
+      question: "$x = t + 10$ \u306E\u3068\u304D\u3001\u901F\u5EA6$v$\u3068\u52A0\u901F\u5EA6$a$\u306E\u7D44\u307F\u5408\u308F\u305B\u3068\u3057\u3066\u6B63\u3057\u3044\u3082\u306E\u306F\u3069\u308C\u304B\u3002(\u305F\u3060\u3057$t$\u4EE5\u5916\u306F\u5B9A\u6570)",
+      choices: ["$v=1,\\ a=0$", "$v=t,\\ a=1$", "$v=1,\\ a=1$", "$v=0,\\ a=0$"],
+      answer: 0,
+      explanations: [
+        "\u6B63\u3057\u3044\u3002$v=dx/dt=1$\u3001$a=dv/dt=0$(\u5B9A\u65701\u3092\u3055\u3089\u306B\u5FAE\u5206\u3059\u308B\u30680\u306B\u306A\u308B)\u3002",
+        "$x=t+10$\u30921\u56DE\u5FAE\u5206\u3059\u308B\u3068$v=1$(\u5B9A\u6570)\u306B\u306A\u308A\u3001$v=t$\u306B\u306F\u306A\u3089\u306A\u3044\u3002",
+        "$v=1$\u306F\u6B63\u3057\u3044\u304C\u3001\u5B9A\u65701\u3092\u3082\u3046\u4E00\u5EA6\u5FAE\u5206\u3059\u308B\u3068$a=0$\u306B\u306A\u308A\u3001$a=1$\u306F\u8AA4\u308A\u3002",
+        "$x$\u306B\u306F$t$\u306E\u9805\u304C\u3042\u308B\u305F\u3081\u901F\u5EA6\u306F0\u306B\u306A\u3089\u306A\u3044\u3002$v=1$\u3001$a=0$\u304C\u6B63\u3057\u3044\u3002"
+      ]
+    },
+    {
+      type: "choice",
+      question: "$x = -gt^2 + b$ \u306E\u3068\u304D\u3001\u901F\u5EA6$v$\u3068\u52A0\u901F\u5EA6$a$\u306E\u7D44\u307F\u5408\u308F\u305B\u3068\u3057\u3066\u6B63\u3057\u3044\u3082\u306E\u306F\u3069\u308C\u304B\u3002(\u305F\u3060\u3057$t$\u4EE5\u5916\u306F\u5B9A\u6570)",
+      choices: ["$v=-2gt,\\ a=-2g$", "$v=-gt,\\ a=-g$", "$v=2gt,\\ a=2g$", "$v=-2gt+b,\\ a=-2g$"],
+      answer: 0,
+      explanations: [
+        "\u6B63\u3057\u3044\u3002$v=dx/dt=-2gt$\u3001$a=dv/dt=-2g$($b$\u306F\u5B9A\u6570\u306A\u306E\u3067\u5FAE\u5206\u3059\u308B\u3068\u6D88\u3048\u308B)\u3002",
+        "\u3079\u304D\u4E57\u306E\u5FAE\u5206\u3067\u4FC2\u65702\u3092\u639B\u3051\u5FD8\u308C\u3066\u3044\u308B\u3002$d(t^2)/dt=2t$\u306A\u306E\u3067$v=-2gt$\u304C\u6B63\u3057\u304F\u3001$-gt$\u3067\u306F\u306A\u3044\u3002",
+        "\u7B26\u53F7\u304C\u53CD\u8EE2\u3057\u3066\u3044\u308B\u3002\u3082\u3068\u306E\u5F0F\u306E$-gt^2$\u306E\u7B26\u53F7\u3092\u6B63\u3057\u304F\u5F15\u304D\u7D99\u3050\u3068$v=-2gt$\u3001$a=-2g$\u306B\u306A\u308B\u3002",
+        "\u5B9A\u6570$b$\u306F\u5FAE\u5206\u3059\u308B\u3068\u6D88\u3048\u308B\u305F\u3081\u3001\u901F\u5EA6\u306E\u5F0F\u306B$b$\u304C\u6B8B\u308B\u306E\u306F\u8AA4\u308A\u3002"
+      ]
+    },
+    {
+      type: "choice",
+      question: "$x = A\\cos\\omega t$ \u306E\u3068\u304D\u3001\u901F\u5EA6$v$\u3068\u52A0\u901F\u5EA6$a$\u306E\u7D44\u307F\u5408\u308F\u305B\u3068\u3057\u3066\u6B63\u3057\u3044\u3082\u306E\u306F\u3069\u308C\u304B\u3002(\u305F\u3060\u3057$t$\u4EE5\u5916\u306F\u5B9A\u6570)",
+      choices: [
+        "$v=-A\\omega\\sin\\omega t,\\ a=-A\\omega^2\\cos\\omega t$",
+        "$v=A\\omega\\sin\\omega t,\\ a=A\\omega^2\\cos\\omega t$",
+        "$v=-A\\omega\\sin\\omega t,\\ a=A\\omega^2\\sin\\omega t$",
+        "$v=-A\\sin\\omega t,\\ a=-A\\omega\\cos\\omega t$"
+      ],
+      answer: 0,
+      explanations: [
+        "\u6B63\u3057\u3044\u3002$d(\\cos\\omega t)/dt=-\\omega\\sin\\omega t$\u3088\u308A$v=-A\\omega\\sin\\omega t$\u3002\u3055\u3089\u306B\u5FAE\u5206\u3059\u308B\u3068$a=-A\\omega^2\\cos\\omega t$\u306B\u306A\u308B\u3002",
+        "$\\cos$\u3092\u5FAE\u5206\u3059\u308B\u3068$-\\sin$\u306B\u306A\u308B\u306F\u305A\u304C\u7B26\u53F7\u304C\u53CD\u8EE2\u3057\u3066\u304A\u308A\u8AA4\u308A\u3002",
+        "\u52A0\u901F\u5EA6\u3092\u6C42\u3081\u308B\u969B\u306B$\\sin$\u3092\u5FAE\u5206\u3059\u308B\u3068$\\cos$\u306B\u306A\u308B\u306F\u305A\u304C\u3001\u95A2\u6570\u306E\u5F62($\\sin$\u306E\u307E\u307E)\u304C\u8AA4\u3063\u3066\u3044\u308B\u3002",
+        "\u89D2\u901F\u5EA6$\\omega$\u3092\u639B\u3051\u5FD8\u308C\u3066\u3044\u308B(\u305D\u308C\u305E\u308C1\u3064\u305A\u3064$\\omega$\u304C\u4E0D\u8DB3\u3057\u3066\u3044\u308B)\u3002"
+      ]
+    },
+    {
+      type: "choice",
+      question: "$x = a\\exp\\!\\left(-\\dfrac{c}{m}t\\right)$ \u306E\u3068\u304D\u3001\u901F\u5EA6$v$\u3068\u52A0\u901F\u5EA6$a$(\u52A0\u901F\u5EA6\u306F$\\alpha$\u3068\u8868\u3059)\u306E\u7D44\u307F\u5408\u308F\u305B\u3068\u3057\u3066\u6B63\u3057\u3044\u3082\u306E\u306F\u3069\u308C\u304B\u3002(\u305F\u3060\u3057$t$\u4EE5\u5916\u306F\u5B9A\u6570)",
+      choices: [
+        "$v=-\\dfrac{ac}{m}e^{-\\frac{c}{m}t},\\ \\alpha=\\dfrac{ac^2}{m^2}e^{-\\frac{c}{m}t}$",
+        "$v=\\dfrac{ac}{m}e^{-\\frac{c}{m}t},\\ \\alpha=-\\dfrac{ac^2}{m^2}e^{-\\frac{c}{m}t}$",
+        "$v=-\\dfrac{a}{m}e^{-\\frac{c}{m}t},\\ \\alpha=\\dfrac{a}{m^2}e^{-\\frac{c}{m}t}$",
+        "$v=-ac\\, e^{-\\frac{c}{m}t},\\ \\alpha=ac^2 e^{-\\frac{c}{m}t}$"
+      ],
+      answer: 0,
+      explanations: [
+        "\u6B63\u3057\u3044\u3002\u6307\u6570\u95A2\u6570\u306E\u5FAE\u5206\u3088\u308A$v=a\\times\\left(-\\dfrac{c}{m}\\right)e^{-\\frac{c}{m}t}=-\\dfrac{ac}{m}e^{-\\frac{c}{m}t}$\u3001\u3055\u3089\u306B\u5FAE\u5206\u3057\u3066$\\alpha=\\dfrac{ac^2}{m^2}e^{-\\frac{c}{m}t}$\u306B\u306A\u308B\u3002",
+        "$v$\u3068$\\alpha$\u306E\u7B26\u53F7\u304C\u3069\u3061\u3089\u3082\u53CD\u8EE2\u3057\u3066\u3044\u308B\u30021\u56DE\u5FAE\u5206\u3059\u308B\u3054\u3068\u306B$-c/m$\u304C\u639B\u304B\u308B\u305F\u3081\u3001\u7B26\u53F7\u306F\u4EA4\u4E92\u3067\u306F\u306A\u304F$v$\u304C\u8CA0\u30FB$\\alpha$\u304C\u6B63\u306B\u306A\u308B\u3002",
+        "\u5FAE\u5206\u306E\u305F\u3073\u306B\u639B\u304B\u308B\u4FC2\u6570$c/m$\u3092\u639B\u3051\u5FD8\u308C\u3066\u3044\u308B\u3002",
+        "\u5206\u6BCD\u306E$m$\u3001$m^2$\u3092\u639B\u3051\u5FD8\u308C\u3066\u3044\u308B(\u6B21\u5143\u7684\u306B\u3082\u8AA4\u308A)\u3002"
+      ]
+    },
+    // --- 【6】空気抵抗を受ける投げ上げ運動 ---
+    {
+      type: "choice",
+      question: "\u8CEA\u91CF$m$[kg]\u306E\u7269\u4F53\u3092\u901F\u5EA6$V_0$[m/s]\u3067\u6295\u3052\u4E0A\u3052\u308B\u3068\u304D\u3001\u4E0A\u5411\u304D\u306E\u901F\u5EA6$V_y$[m/s]\u306B\u6BD4\u4F8B\u3059\u308B\u7A7A\u6C17\u62B5\u6297$-KV_y$[N]\u304C\u50CD\u304F($K$\u306F\u5B9A\u6570)\u3002\u925B\u76F4\u4E0A\u5411\u304D\u3092$y$\u8EF8\u306E\u6B63\u306E\u5411\u304D\u3068\u3059\u308B\u3068\u304D\u3001\u3053\u306E\u7269\u4F53\u306E\u904B\u52D5\u65B9\u7A0B\u5F0F\u3092\u66F8\u304D\u4E0B\u305B\u3002",
+      choices: [
+        "$m\\dfrac{dV_y}{dt} = -mg - KV_y$",
+        "$m\\dfrac{dV_y}{dt} = -mg + KV_y$",
+        "$m\\dfrac{dV_y}{dt} = mg - KV_y$",
+        "$m\\dfrac{dV_y}{dt} = -KV_y$"
+      ],
+      answer: 0,
+      explanations: [
+        "\u6B63\u3057\u3044\u3002\u91CD\u529B$-mg$\u3068\u7A7A\u6C17\u62B5\u6297$-KV_y$(\u4E0A\u5411\u304D\u306E\u904B\u52D5\u3092\u59A8\u3052\u308B\u5411\u304D=\u4E0B\u5411\u304D)\u306E\u4E21\u65B9\u304C\u50CD\u304F\u305F\u3081\u3001$m\\,dV_y/dt=-mg-KV_y$\u306B\u306A\u308B\u3002",
+        "\u7A7A\u6C17\u62B5\u6297\u306E\u7B26\u53F7\u304C\u8AA4\u308A\u3002\u4E0A\u5411\u304D\u306B\u904B\u52D5\u3057\u3066\u3044\u308B\u3068\u304D\u7A7A\u6C17\u62B5\u6297\u306F\u4E0B\u5411\u304D(\u8CA0\u306E\u5411\u304D)\u306B\u50CD\u304F\u306E\u3067$-KV_y$\u304C\u6B63\u3057\u304F\u3001$+KV_y$\u3067\u306F\u306A\u3044\u3002",
+        "\u91CD\u529B\u306E\u7B26\u53F7\u304C\u8AA4\u308A\u3002\u925B\u76F4\u4E0A\u5411\u304D\u3092\u6B63\u3068\u3057\u3066\u3044\u308B\u306E\u3067\u91CD\u529B\u306F$-mg$\u3067\u3042\u308A\u3001$+mg$\u3067\u306F\u306A\u3044\u3002",
+        "\u91CD\u529B\u306E\u9805\u304C\u629C\u3051\u3066\u3044\u308B\u3002\u7A7A\u6C17\u62B5\u6297\u3060\u3051\u3067\u306A\u304F\u91CD\u529B\u3082\u5E38\u306B\u50CD\u3044\u3066\u3044\u308B\u3002"
+      ]
+    },
+    {
+      type: "choice",
+      question: "\u4E0A\u306E\u904B\u52D5\u65B9\u7A0B\u5F0F\u3092\u89E3\u304F\u3068\u3001\u6642\u523B$t$[s]\u3067\u306E\u7269\u4F53\u306E\u901F\u3055$V_y$\u306F\u3069\u306E\u3088\u3046\u306B\u8868\u3055\u308C\u308B\u304B\u3002(\u7269\u4F53\u306F\u6700\u521D$V_0$[m/s]\u3067\u6295\u3052\u4E0A\u3052\u3089\u308C\u305F\u3082\u306E\u3068\u3059\u308B)",
+      choices: [
+        "$V_y = \\left(V_0+\\dfrac{mg}{K}\\right)e^{-\\frac{K}{m}t} - \\dfrac{mg}{K}$",
+        "$V_y = V_0\\, e^{-\\frac{K}{m}t} - \\dfrac{mg}{K}$",
+        "$V_y = \\left(V_0-\\dfrac{mg}{K}\\right)e^{-\\frac{K}{m}t} + \\dfrac{mg}{K}$",
+        "$V_y = V_0 - gt$"
+      ],
+      answer: 0,
+      explanations: [
+        "\u6B63\u3057\u3044\u3002\u5909\u6570\u5206\u96E2\u3057\u3066\u7A4D\u5206\u3057\u3001$t=0$\u3067$V_y=V_0$\u3068\u306A\u308B\u521D\u671F\u6761\u4EF6\u3092\u4F7F\u3046\u3068\u3001$V_y=\\left(V_0+\\dfrac{mg}{K}\\right)e^{-\\frac{K}{m}t}-\\dfrac{mg}{K}$\u304C\u5F97\u3089\u308C\u308B\u3002",
+        "\u6307\u6570\u95A2\u6570\u306E\u4FC2\u6570\u306B$mg/K$\u3092\u8DB3\u3057\u5FD8\u308C\u3066\u3044\u308B\u3002\u521D\u671F\u6761\u4EF6$t=0,V_y=V_0$\u3092\u4EE3\u5165\u3059\u308B\u3068\u3001\u3053\u306E\u5F0F\u3067\u306F\u6B63\u3057\u304F$V_0$\u306B\u306A\u3089\u306A\u3044\u3002",
+        "$mg/K$\u306E\u7B26\u53F7\u304C\u6B63\u3057\u3044\u5F0F\u3068\u9006\u306B\u306A\u3063\u3066\u3044\u308B\u3002",
+        "\u3053\u308C\u306F\u7A7A\u6C17\u62B5\u6297\u3092\u8003\u3048\u306A\u3044($K=0$)\u5834\u5408\u306E\u901F\u5EA6\u306E\u5F0F\u3067\u3042\u308A\u3001\u7A7A\u6C17\u62B5\u6297\u304C\u3042\u308B\u5834\u5408\u306E\u6B63\u3057\u3044\u89E3\u3067\u306F\u306A\u3044\u3002"
+      ]
+    },
+    {
+      type: "choice",
+      question: "\u4E0A\u306E\u7269\u4F53\u304C\u6700\u9AD8\u70B9\u306B\u9054\u3059\u308B\u307E\u3067\u306E\u6642\u9593\u306F\u3044\u304F\u3089\u304B\u3002",
+      choices: [
+        "$t = \\dfrac{m}{K}\\ln\\!\\left(\\dfrac{KV_0+mg}{mg}\\right)$",
+        "$t = \\dfrac{V_0}{g}$",
+        "$t = \\dfrac{m}{K}\\ln\\!\\left(\\dfrac{mg}{KV_0+mg}\\right)$",
+        "$t = \\dfrac{K}{m}\\ln\\!\\left(\\dfrac{KV_0+mg}{mg}\\right)$"
+      ],
+      answer: 0,
+      explanations: [
+        "\u6B63\u3057\u3044\u3002$V_y=0$\u3068\u304A\u3044\u3066$t$\u306B\u3064\u3044\u3066\u89E3\u304F\u3068\u3001$t=\\dfrac{m}{K}\\ln\\!\\left(\\dfrac{KV_0+mg}{mg}\\right)$\u304C\u5F97\u3089\u308C\u308B\u3002",
+        "\u3053\u308C\u306F\u7A7A\u6C17\u62B5\u6297\u3092\u8003\u3048\u306A\u3044($K=0$)\u5834\u5408\u306E\u6700\u9AD8\u70B9\u5230\u9054\u6642\u523B\u3067\u3042\u308A\u3001\u7A7A\u6C17\u62B5\u6297\u304C\u3042\u308B\u5834\u5408\u306E\u6B63\u3057\u3044\u89E3\u3067\u306F\u306A\u3044\u3002",
+        "\u5BFE\u6570\u306E\u4E2D\u306E\u5206\u6570\u304C\u9006\u306B\u306A\u3063\u3066\u3044\u308B(\u3053\u306E\u5F62\u3060\u3068\u5BFE\u6570\u306E\u4E2D\u8EAB\u304C1\u3088\u308A\u5C0F\u3055\u304F\u306A\u308A\u3001$t$\u304C\u8CA0\u306B\u306A\u3063\u3066\u3057\u307E\u3046)\u3002",
+        "$m/K$\u3068$K/m$\u304C\u5165\u308C\u66FF\u308F\u3063\u3066\u3044\u308B\u3002"
+      ]
+    },
+    // --- 【9】等速円運動の角運動量 ---
+    {
+      type: "choice",
+      question: "\u8CEA\u91CF$m=1.0$kg\u306E\u7C92\u5B50\u304C\u3001\u534A\u5F84$r=1.0$m\u306E\u5186\u5468\u4E0A\u3092\u3001\u901F\u3055$v=2.0$m/s\u3067\u7B49\u901F\u5186\u904B\u52D5\u3057\u3066\u3044\u308B\u3002\u7C92\u5B50\u306E\u89D2\u904B\u52D5\u91CF\u306E\u5927\u304D\u3055\u3092\u6C42\u3081\u3088\u3002",
+      choices: ["$2.0\\ \\text{kg}\\cdot\\text{m}^2/\\text{s}$", "$1.0\\ \\text{kg}\\cdot\\text{m}^2/\\text{s}$", "$4.0\\ \\text{kg}\\cdot\\text{m}^2/\\text{s}$", "$0.5\\ \\text{kg}\\cdot\\text{m}^2/\\text{s}$"],
+      answer: 0,
+      explanations: [
+        "\u6B63\u3057\u3044\u3002\u5186\u904B\u52D5\u3059\u308B\u7C92\u5B50\u306E\u89D2\u904B\u52D5\u91CF\u306E\u5927\u304D\u3055\u306F$L=rmv=1.0\\times1.0\\times2.0=2.0\\ \\text{kg}\\cdot\\text{m}^2/\\text{s}$\u3067\u3042\u308B\u3002",
+        "$r$\u3001$m$\u3001$v$\u306E\u3044\u305A\u308C\u304B1\u3064\u3092\u639B\u3051\u5FD8\u308C\u308B\u8A08\u7B97\u30DF\u30B9\u3092\u3059\u308B\u3068\u3001\u3053\u306E\u5024\u306B\u306A\u3063\u3066\u3057\u307E\u3046\u3002",
+        "\u901F\u3055$v$\u30922\u4E57\u3057\u3066$L=mv^2=1.0\\times(2.0)^2=4.0$\u3068\u8A08\u7B97\u3057\u3066\u3057\u307E\u3046\u3068\u3001\u3053\u306E\u8AA4\u3063\u305F\u5024\u306B\u306A\u308B(\u89D2\u904B\u52D5\u91CF\u306E\u5B9A\u7FA9\u306F$v$\u306E1\u4E57\u3067\u3042\u308A2\u4E57\u3067\u306F\u306A\u3044)\u3002",
+        "$L=rmv$\u306E\u8A08\u7B97\u3092\u8AA4\u3063\u3066\u534A\u5206\u306B\u3057\u3066\u3057\u307E\u3063\u305F\u5024\u3067\u3042\u308A\u3001\u6B63\u3057\u3044\u8A08\u7B97\u7D50\u679C\u3067\u306F\u306A\u3044\u3002"
+      ]
+    },
+    {
+      type: "choice",
+      question: "\u4E0A\u306E\u7C92\u5B50\u306B\u3064\u3044\u3066\u3001\u6163\u6027\u30E2\u30FC\u30E1\u30F3\u30C8$I=mr^2$\u3068\u89D2\u901F\u5EA6$\\omega=v/r$\u3092\u7528\u3044\u3066$I\\omega$\u3092\u8A08\u7B97\u3059\u308B\u3068\u3001\u4E0A\u3067\u6C42\u3081\u305F\u89D2\u904B\u52D5\u91CF$L$\u3068\u3069\u3046\u306A\u308B\u304B\u3002",
+      choices: [
+        "$I\\omega=2.0\\ \\text{kg}\\cdot\\text{m}^2/\\text{s}$\u3068\u306A\u308A\u3001$L$\u3068\u4E00\u81F4\u3059\u308B",
+        "$I\\omega=4.0\\ \\text{kg}\\cdot\\text{m}^2/\\text{s}$\u3068\u306A\u308A\u3001$L$\u3068\u4E00\u81F4\u3057\u306A\u3044",
+        "$I\\omega=1.0\\ \\text{kg}\\cdot\\text{m}^2/\\text{s}$\u3068\u306A\u308A\u3001$L$\u3068\u4E00\u81F4\u3057\u306A\u3044",
+        "$I\\omega$\u306F\u89D2\u904B\u52D5\u91CF\u3068\u306F\u7570\u306A\u308B\u7269\u7406\u91CF\u306A\u306E\u3067\u3001\u305D\u3082\u305D\u3082\u6BD4\u8F03\u3067\u304D\u306A\u3044"
+      ],
+      answer: 0,
+      explanations: [
+        "\u6B63\u3057\u3044\u3002$I=mr^2=1.0\\times(1.0)^2=1.0\\ \\text{kg}\\cdot\\text{m}^2$\u3001$\\omega=v/r=2.0/1.0=2.0\\ \\text{rad/s}$\u3088\u308A$I\\omega=1.0\\times2.0=2.0\\ \\text{kg}\\cdot\\text{m}^2/\\text{s}$\u3068\u306A\u308A\u3001\u89D2\u904B\u52D5\u91CF$L=2.0\\ \\text{kg}\\cdot\\text{m}^2/\\text{s}$\u3068\u4E00\u81F4\u3059\u308B\u3002",
+        "$I$\u3084$\\omega$\u306E\u8A08\u7B97\u3092\u8AA4\u3089\u306A\u3044\u9650\u308A\u3053\u306E\u5024\u306B\u306F\u306A\u3089\u305A\u3001\u6B63\u3057\u304F\u306F2.0\u306B\u306A\u308B\u3002",
+        "$I$\u3084$\\omega$\u306E\u8A08\u7B97\u3092\u8AA4\u3089\u306A\u3044\u9650\u308A\u3053\u306E\u5024\u306B\u306F\u306A\u3089\u305A\u3001\u6B63\u3057\u304F\u306F2.0\u306B\u306A\u308B\u3002",
+        "\u5186\u904B\u52D5\u3059\u308B\u8CEA\u70B9\u306B\u3064\u3044\u3066\u306F$I\\omega=mr^2\\times(v/r)=rmv=L$\u3067\u3042\u308A\u3001$I\\omega$\u306F\u89D2\u904B\u52D5\u91CF\u305D\u306E\u3082\u306E\u3068\u4E00\u81F4\u3059\u308B\u91CF\u3067\u3042\u308B\u3002"
+      ]
+    }
+  ];
+
+  // src/data/4i-zenki-kimatsu/applied-physics-handwriting.ts
+  var questions22 = [
+    // --- 【1】基本公式 ---
+    {
+      type: "handwriting",
+      question: "\u3042\u308B\u7269\u4F53\u306E\u6642\u9593\u3054\u3068\u306E\u4F4D\u7F6E\u304C$x(t)$\u3067\u8868\u3055\u308C\u308B\u3068\u304D\u3001\u305D\u306E\u7269\u4F53\u306E\u52A0\u901F\u5EA6\u306F\u3069\u306E\u3088\u3046\u306B\u8A08\u7B97\u3059\u308B\u3053\u3068\u304C\u3067\u304D\u308B\u304B\u3002",
+      answer: "$a = \\dfrac{d^2x(t)}{dt^2}$ (\u901F\u5EA6$v=dx(t)/dt$\u3092\u3055\u3089\u306B\u6642\u9593\u3067\u5FAE\u5206\u3057\u305F\u3082\u306E)"
+    },
+    {
+      type: "handwriting",
+      question: "\u4E00\u822C\u306B\u3001\u4F4D\u7F6E$\\vec{r}$[m]\u306B\u3042\u308B\u7269\u4F53\u306B\u50CD\u304F\u529B$\\vec{F}$[N]\u306B\u5BFE\u3057\u3066\u7269\u4F53\u306E\u52D5\u304F\u8ECC\u8DE1\u304C\u66F2\u7DDA\u3067\u3042\u308B\u3068\u304D\u3001\u305D\u306E\u529B\u304C\u7269\u4F53\u306B\u3057\u305F\u4ED5\u4E8B\u306F\u3044\u304F\u3089\u304B\u3002",
+      answer: "$W = \\displaystyle\\int \\vec{F}\\cdot d\\vec{r}$ [J]"
+    },
+    {
+      type: "handwriting",
+      question: "\u4FDD\u5B58\u529B$\\vec{F}$[N]\u306F\u3001\u4F4D\u7F6E\u30A8\u30CD\u30EB\u30AE\u30FC$U$[J]\u3092\u7528\u3044\u3066\u3001\u3069\u306E\u3088\u3046\u306B\u8868\u3059\u3053\u3068\u304C\u3067\u304D\u308B\u304B\u3002",
+      answer: "$\\vec{F} = -\\dfrac{\\partial U}{\\partial \\vec{r}}$"
+    },
+    {
+      type: "handwriting",
+      question: "\u4F4D\u7F6E$\\vec{r}$[m]\u306B\u3042\u308B\u7269\u4F53\u306B\u50CD\u304F\u529B\u304C$\\vec{F}$[N]\u306E\u3068\u304D\u3001\u3053\u306E\u7269\u4F53\u306E\u529B\u306E\u30E2\u30FC\u30E1\u30F3\u30C8$\\vec{N}$\u3092\u6C42\u3081\u306A\u3055\u3044\u3002",
+      answer: "$\\vec{N} = \\vec{r} \\times \\vec{F}$ [N\u30FBm]"
+    },
+    {
+      type: "handwriting",
+      question: "\u4F4D\u7F6E$\\vec{r}$[m]\u306B\u3042\u308B\u7269\u4F53\u306E\u904B\u52D5\u91CF\u304C$\\vec{P}$[kg m/s]\u306E\u3068\u304D\u3001\u89D2\u904B\u52D5\u91CF$\\vec{L}$\u3092\u66F8\u304D\u4E0B\u305B\u3002",
+      answer: "$\\vec{L} = \\vec{r} \\times \\vec{P}$ [kg\u30FBm\xB2/s]"
+    },
+    // --- 【2】位置x(t)から速度・加速度を求める ---
+    {
+      type: "handwriting",
+      question: "$x = t + 10$ \u306B\u3064\u3044\u3066\u3001\u901F\u5EA6$v$\u3068\u52A0\u901F\u5EA6$a$\u3092\u6C42\u3081\u306A\u3055\u3044\u3002\u305F\u3060\u3057\u3001$t$\u4EE5\u5916\u306F\u5168\u3066\u5B9A\u6570\u3002",
+      answer: "$v = 1$\u3001$a = 0$"
+    },
+    {
+      type: "handwriting",
+      question: "$x = -gt^2 + b$ \u306B\u3064\u3044\u3066\u3001\u901F\u5EA6$v$\u3068\u52A0\u901F\u5EA6$a$\u3092\u6C42\u3081\u306A\u3055\u3044\u3002\u305F\u3060\u3057\u3001$t$\u4EE5\u5916\u306F\u5168\u3066\u5B9A\u6570\u3002",
+      answer: "$v = -2gt$\u3001$a = -2g$"
+    },
+    {
+      type: "handwriting",
+      question: "$x = A\\cos\\omega t$ \u306B\u3064\u3044\u3066\u3001\u901F\u5EA6$v$\u3068\u52A0\u901F\u5EA6$a$\u3092\u6C42\u3081\u306A\u3055\u3044\u3002\u305F\u3060\u3057\u3001$t$\u4EE5\u5916\u306F\u5168\u3066\u5B9A\u6570\u3002",
+      answer: "$v = -A\\omega\\sin\\omega t$\u3001$a = -A\\omega^2\\cos\\omega t$"
+    },
+    {
+      type: "handwriting",
+      question: "$x = a\\exp\\!\\left(-\\dfrac{c}{m}t\\right)$ \u306B\u3064\u3044\u3066\u3001\u901F\u5EA6$v$\u3068\u52A0\u901F\u5EA6$a$(\u52A0\u901F\u5EA6\u306F$\\alpha$\u3068\u8868\u3059)\u3092\u6C42\u3081\u306A\u3055\u3044\u3002\u305F\u3060\u3057\u3001$t$\u4EE5\u5916\u306F\u5168\u3066\u5B9A\u6570\u3002",
+      answer: "$v = -\\dfrac{ac}{m}e^{-\\frac{c}{m}t}$\u3001$\\alpha = \\dfrac{ac^2}{m^2}e^{-\\frac{c}{m}t}$"
+    },
+    // --- 【6】空気抵抗を受ける投げ上げ運動 ---
+    {
+      type: "handwriting",
+      question: "\u8CEA\u91CF$m$[kg]\u306E\u7269\u4F53\u3092\u901F\u5EA6$V_0$[m/s]\u3067\u6295\u3052\u4E0A\u3052\u308B\u3068\u304D\u3001\u4E0A\u5411\u304D\u306E\u901F\u5EA6$V_y$[m/s]\u306B\u6BD4\u4F8B\u3059\u308B\u7A7A\u6C17\u62B5\u6297$-KV_y$[N]\u304C\u50CD\u304F($K$\u306F\u5B9A\u6570)\u3002\u6295\u3052\u4E0A\u3052\u3066\u304B\u3089$t$\u79D2\u5F8C\u306E\u901F\u5EA6\u3092\u6C42\u3081\u305F\u3044\u3002\u925B\u76F4\u4E0A\u5411\u304D\u3092$y$\u8EF8\u306E\u6B63\u306E\u5411\u304D\u3068\u3057\u3001\u7269\u4F53\u306F\u6700\u521D\u5730\u4E0A$y=0$[m]\u5730\u70B9\u306B\u3042\u3063\u305F\u3082\u306E\u3068\u3059\u308B\u3002\n\n(1) \u7269\u4F53\u306E\u904B\u52D5\u65B9\u7A0B\u5F0F\u3092\u66F8\u304D\u4E0B\u305B\u3002",
+      answer: "$m\\dfrac{dV_y}{dt} = -mg - KV_y$ [N]"
+    },
+    {
+      type: "handwriting",
+      question: "\u4E0A\u306E\u904B\u52D5\u65B9\u7A0B\u5F0F\u306B\u3064\u3044\u3066\u3001\u6642\u523B$t$[s]\u3067\u306E\u7269\u4F53\u306E\u901F\u3055$V_y$\u3092\u6C42\u3081\u3088\u3002",
+      answer: "$V_y = \\left(V_0+\\dfrac{mg}{K}\\right)e^{-\\frac{K}{m}t} - \\dfrac{mg}{K}$ [m/s]\n(\u5909\u6570\u5206\u96E2: $\\dfrac{dV_y}{V_y+mg/K}=-\\dfrac{K}{m}dt$ \u3092\u7A4D\u5206\u3057\u3001$t=0$\u3067$V_y=V_0$\u306E\u521D\u671F\u6761\u4EF6\u304B\u3089\u7A4D\u5206\u5B9A\u6570\u3092\u6C7A\u3081\u308B)"
+    },
+    {
+      type: "handwriting",
+      question: "\u4E0A\u306E\u7269\u4F53\u304C\u6700\u9AD8\u70B9\u306B\u9054\u3059\u308B\u307E\u3067\u306E\u6642\u9593\u306F\u3044\u304F\u3089\u304B\u3002",
+      answer: "$t = \\dfrac{m}{K}\\ln\\!\\left(\\dfrac{KV_0+mg}{mg}\\right)$ [s]\n($V_y=0$\u3068\u304A\u3044\u3066$t$\u306B\u3064\u3044\u3066\u89E3\u304F)"
+    },
+    // --- 【9】等速円運動の角運動量 ---
+    {
+      type: "handwriting",
+      question: "\u8CEA\u91CF$m=1.0$kg\u306E\u7C92\u5B50\u304C\u3001\u534A\u5F84$r=1.0$m\u306E\u5186\u5468\u4E0A\u3092\u3001\u901F\u3055$v=2.0$m/s\u3067\u7B49\u901F\u5186\u904B\u52D5\u3057\u3066\u3044\u308B\u3002\u7C92\u5B50\u306E\u89D2\u904B\u52D5\u91CF\u306E\u5927\u304D\u3055\u3092\u6C42\u3081\u3088\u3002",
+      answer: "$L = rmv = 1.0\\times1.0\\times2.0 = 2.0$ kg\u30FBm\xB2/s"
+    },
+    {
+      type: "handwriting",
+      question: "\u4E0A\u306E\u7C92\u5B50\u306B\u3064\u3044\u3066\u3001\u6163\u6027\u30E2\u30FC\u30E1\u30F3\u30C8$I=mr^2$\u3001\u89D2\u901F\u5EA6$\\omega$\u3088\u308A\u3001$I\\omega$\u304C\u89D2\u904B\u52D5\u91CF\u3068\u4E00\u81F4\u3057\u3066\u3044\u308B\u3053\u3068\u3092\u78BA\u8A8D\u305B\u3088\u3002",
+      answer: "$I=mr^2=1.0\\times(1.0)^2=1.0$ kg\u30FBm\xB2\u3001$\\omega=v/r=2.0/1.0=2.0$ rad/s \u3088\u308A $I\\omega=1.0\\times2.0=2.0$ kg\u30FBm\xB2/s \u3068\u306A\u308A\u3001\u89D2\u904B\u52D5\u91CF$L=2.0$ kg\u30FBm\xB2/s\u3068\u4E00\u81F4\u3059\u308B\u3002"
+    }
+  ];
+
   // src/data/registry.ts
   var examData = {
     "4i-zenki-kimatsu": {
@@ -23953,7 +24274,9 @@
         "control-engineering-handwriting": questions17,
         "korean-choice": questions18,
         "economics-choice": questions19,
-        "economics-handwriting": questions20
+        "economics-handwriting": questions20,
+        "applied-physics-choice": questions21,
+        "applied-physics-handwriting": questions22
       }
     }
   };
@@ -24101,6 +24424,23 @@
     ["path", { d: "M19 12H5" }]
   ];
 
+  // node_modules/lucide/dist/esm/icons/atom.mjs
+  var Atom = [
+    ["circle", { cx: "12", cy: "12", r: "1" }],
+    [
+      "path",
+      {
+        d: "M20.2 20.2c2.04-2.03.02-7.36-4.5-11.9-4.54-4.52-9.87-6.54-11.9-4.5-2.04 2.03-.02 7.36 4.5 11.9 4.54 4.52 9.87 6.54 11.9 4.5Z"
+      }
+    ],
+    [
+      "path",
+      {
+        d: "M15.7 15.7c4.52-4.54 6.54-9.87 4.5-11.9-2.03-2.04-7.36-.02-11.9 4.5-4.52 4.54-6.54 9.87-4.5 11.9 2.03 2.04 7.36.02 11.9-4.5Z"
+      }
+    ]
+  ];
+
   // node_modules/lucide/dist/esm/icons/brain.mjs
   var Brain = [
     ["path", { d: "M12 18V5" }],
@@ -24243,6 +24583,15 @@
     ["rect", { x: "9", y: "2", width: "6", height: "6", rx: "1" }],
     ["path", { d: "M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3" }],
     ["path", { d: "M12 12V8" }]
+  ];
+
+  // node_modules/lucide/dist/esm/icons/orbit.mjs
+  var Orbit = [
+    ["path", { d: "M20.341 6.484A10 10 0 0 1 10.266 21.85" }],
+    ["path", { d: "M3.659 17.516A10 10 0 0 1 13.74 2.152" }],
+    ["circle", { cx: "12", cy: "12", r: "3" }],
+    ["circle", { cx: "19", cy: "5", r: "2" }],
+    ["circle", { cx: "5", cy: "19", r: "2" }]
   ];
 
   // node_modules/lucide/dist/esm/icons/pencil.mjs
@@ -24406,6 +24755,7 @@
   // src/icons.ts
   var LUCIDE_ICONS = {
     ArrowLeft,
+    Atom,
     Brain,
     Calculator,
     ClipboardCheck,
@@ -24422,6 +24772,7 @@
     Menu,
     Monitor,
     Network,
+    Orbit,
     Pencil,
     Play,
     Plus,
@@ -24459,6 +24810,8 @@
     wave: "waves",
     target: "target",
     "trending-up": "trending-up",
+    atom: "atom",
+    orbit: "orbit",
     "clipboard-check": "clipboard-check",
     menu: "menu",
     library: "library",
@@ -24932,9 +25285,9 @@
       card.style.setProperty("--stagger-index", String(index));
       const modesHtml = group.subjects.map((subject) => {
         const { modeName } = splitSubjectName(subject.name);
-        const questions21 = getQuestions(examId, subject.id);
-        const total = questions21.length;
-        const masteryLabel = questions21.some((question) => question.type === "handwriting") ? "\u5168\u554F\u78BA\u8A8D\u307E\u3067" : "\u5168\u554F\u6B63\u89E3\u307E\u3067";
+        const questions23 = getQuestions(examId, subject.id);
+        const total = questions23.length;
+        const masteryLabel = questions23.some((question) => question.type === "handwriting") ? "\u5168\u554F\u78BA\u8A8D\u307E\u3067" : "\u5168\u554F\u6B63\u89E3\u307E\u3067";
         const countOptions = [];
         if (total > 20) countOptions.push(20);
         if (total > 10) countOptions.push(10);
@@ -25558,6 +25911,7 @@ lucide/dist/esm/shared/src/utils/toCamelCase.mjs:
 lucide/dist/esm/shared/src/utils/toPascalCase.mjs:
 lucide/dist/esm/replaceElement.mjs:
 lucide/dist/esm/icons/arrow-left.mjs:
+lucide/dist/esm/icons/atom.mjs:
 lucide/dist/esm/icons/brain.mjs:
 lucide/dist/esm/icons/calculator.mjs:
 lucide/dist/esm/icons/clipboard-check.mjs:
@@ -25574,6 +25928,7 @@ lucide/dist/esm/icons/library.mjs:
 lucide/dist/esm/icons/menu.mjs:
 lucide/dist/esm/icons/monitor.mjs:
 lucide/dist/esm/icons/network.mjs:
+lucide/dist/esm/icons/orbit.mjs:
 lucide/dist/esm/icons/pencil.mjs:
 lucide/dist/esm/icons/play.mjs:
 lucide/dist/esm/icons/plus.mjs:

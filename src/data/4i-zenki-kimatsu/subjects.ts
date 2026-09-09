@@ -132,6 +132,18 @@ const rawSubjects: Subject[] = [
     description: '費用関数(損益分岐点・操業停止価格)、租税負担割合、消費者余剰・生産者余剰の計算問題を手書きで解いて確認',
     icon: 'calculator',
   },
+  {
+    id: 'applied-physics-choice',
+    name: '応用物理(選択式)',
+    description: '加速度・仕事・保存力・力のモーメント・角運動量の基本公式、位置x(t)の微分、空気抵抗を受ける投げ上げ運動、等速円運動の角運動量を4択で確認',
+    icon: 'atom',
+  },
+  {
+    id: 'applied-physics-handwriting',
+    name: '応用物理(計算・手書き)',
+    description: '加速度・仕事・保存力・力のモーメント・角運動量の基本公式、位置x(t)の微分、空気抵抗を受ける投げ上げ運動、等速円運動の角運動量を手書きで解いて確認',
+    icon: 'orbit',
+  },
 ];
 
 const electiveIds = new Set<string>(subjectTypes['選択科目']);
