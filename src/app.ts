@@ -492,6 +492,22 @@ function shuffle<T>(items: T[]): T[] {
   return arr;
 }
 
+// 選択肢の並びをランダム化した設問を返す(choice以外はそのまま)。
+// データ側で正解の位置が特定の選択肢(特にB)に偏っていても、
+// 出題時には毎回ばらけるようにするための処理。
+function withShuffledChoices(q: Question): Question {
+  if (q.type !== 'choice') return q;
+  const order = shuffle(q.choices.map((_, i) => i));
+  return {
+    ...q,
+    choices: order.map((i) => q.choices[i]),
+    answer: order.indexOf(q.answer),
+    ...(q.explanations
+      ? { explanations: order.map((i) => q.explanations?.[i] ?? '') }
+      : {}),
+  };
+}
+
 function renderExamList(): void {
   const exams = getExams();
   examList.innerHTML = '';
@@ -627,7 +643,7 @@ function startQuiz(
   masteryMode = false,
 ): void {
   const all = getQuestions(examId, subjectId);
-  const queue = shuffle(all).slice(0, count);
+  const queue = shuffle(all).slice(0, count).map(withShuffledChoices);
 
   state = {
     examId,

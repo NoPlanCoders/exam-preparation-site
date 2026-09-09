@@ -24873,6 +24873,16 @@
     }
     return arr;
   }
+  function withShuffledChoices(q) {
+    if (q.type !== "choice") return q;
+    const order = shuffle(q.choices.map((_, i2) => i2));
+    return {
+      ...q,
+      choices: order.map((i2) => q.choices[i2]),
+      answer: order.indexOf(q.answer),
+      ...q.explanations ? { explanations: order.map((i2) => q.explanations?.[i2] ?? "") } : {}
+    };
+  }
   function renderExamList() {
     const exams = getExams();
     examList.innerHTML = "";
@@ -24977,7 +24987,7 @@
   }
   function startQuiz(examId, examName, subjectId, subjectName, count, masteryMode = false) {
     const all = getQuestions(examId, subjectId);
-    const queue = shuffle(all).slice(0, count);
+    const queue = shuffle(all).slice(0, count).map(withShuffledChoices);
     state = {
       examId,
       examName,
