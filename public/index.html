@@ -53,6 +53,7 @@
         <button type="button" class="menu-item" id="menu-go-exam"><i data-lucide="library" aria-hidden="true"></i><span>ライブラリ</span></button>
         <button type="button" class="menu-item" id="menu-go-subject" hidden><i data-lucide="arrow-left" aria-hidden="true"></i><span>科目選択に戻る</span></button>
         <button type="button" class="menu-item" id="menu-go-dashboard"><i data-lucide="layout-dashboard" aria-hidden="true"></i><span>ダッシュボード</span></button>
+        <button type="button" class="menu-item" id="menu-schedule"><i data-lucide="calendar-days" aria-hidden="true"></i><span>試験日程</span></button>
         <div class="menu-divider" id="menu-pinned-divider" hidden></div>
         <div id="menu-pinned-list"></div>
         <div class="menu-divider"></div>
@@ -125,6 +126,18 @@
         </div>
       </div>
       <p class="settings-note">設定はこの端末のブラウザに保存されます。</p>
+    </section>
+
+    <section id="view-schedule" class="view settings-view" hidden>
+      <button type="button" class="back-btn" id="btn-back-from-schedule"><i data-lucide="arrow-left" aria-hidden="true"></i><span>戻る</span></button>
+      <div class="settings-heading">
+        <span class="settings-icon" aria-hidden="true"><i data-lucide="calendar-days"></i></span>
+        <div>
+          <h2>試験日程</h2>
+          <p>4I 前期期末試験の時間割です。</p>
+        </div>
+      </div>
+      <div id="schedule-list" class="schedule-list"></div>
     </section>
 
     <section id="view-dashboard" class="view dashboard-view" hidden>

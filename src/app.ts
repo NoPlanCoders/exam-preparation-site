@@ -3,6 +3,7 @@ import type { Question, Subject } from './types.js';
 import { getExams, getSubjects, getQuestions } from './data/registry.js';
 import { ICONS, getIcon, refreshIcons } from './icons.js';
 import { getTestCountdown } from './countdown.js';
+import { getExamSchedule, weekdayLabel } from './schedule.js';
 
 // 問題文・選択肢・解答・解説の中の数式をKaTeXでレンダリングする。
 // $...$ をインライン数式、$$...$$ をブロック数式として扱う。
@@ -66,11 +67,13 @@ const splashScreen = $<HTMLElement>('splash-screen');
 const viewExam = $<HTMLElement>('view-exam');
 const viewSubject = $<HTMLElement>('view-subject');
 const viewSettings = $<HTMLElement>('view-settings');
+const viewSchedule = $<HTMLElement>('view-schedule');
 const viewDashboard = $<HTMLElement>('view-dashboard');
 const viewQuiz = $<HTMLElement>('view-quiz');
 const viewResult = $<HTMLElement>('view-result');
 
 let settingsReturnView: HTMLElement = viewExam;
+let scheduleReturnView: HTMLElement = viewExam;
 
 const examList = $<HTMLElement>('exam-list');
 const subjectList = $<HTMLElement>('subject-list');
@@ -102,6 +105,7 @@ const menuMain = $<HTMLElement>('menu-main');
 const menuGoExam = $<HTMLButtonElement>('menu-go-exam');
 const menuGoSubject = $<HTMLButtonElement>('menu-go-subject');
 const menuGoDashboard = $<HTMLButtonElement>('menu-go-dashboard');
+const menuSchedule = $<HTMLButtonElement>('menu-schedule');
 const menuPinnedDivider = $<HTMLElement>('menu-pinned-divider');
 const menuPinnedList = $<HTMLElement>('menu-pinned-list');
 const menuAddSubject = $<HTMLButtonElement>('menu-add-subject');
@@ -113,6 +117,8 @@ const menuSearchInput = $<HTMLInputElement>('menu-search-input');
 const menuSearchResults = $<HTMLElement>('menu-search-results');
 
 const btnBackFromSettings = $<HTMLButtonElement>('btn-back-from-settings');
+const btnBackFromSchedule = $<HTMLButtonElement>('btn-back-from-schedule');
+const scheduleList = $<HTMLElement>('schedule-list');
 const darkModeToggle = $<HTMLInputElement>('dark-mode-toggle');
 const themeSettingSummary = $<HTMLElement>('theme-setting-summary');
 const splashAnimationToggle = $<HTMLInputElement>('splash-animation-toggle');
@@ -233,12 +239,12 @@ function setMainNav(section: 'library' | 'dashboard'): void {
 }
 
 function showView(view: HTMLElement): void {
-  for (const v of [viewExam, viewSubject, viewSettings, viewDashboard, viewQuiz, viewResult]) {
+  for (const v of [viewExam, viewSubject, viewSettings, viewSchedule, viewDashboard, viewQuiz, viewResult]) {
     v.hidden = v !== view;
     v.classList.remove('view-entering');
   }
   if (view === viewDashboard) setMainNav('dashboard');
-  else if (view !== viewSettings) setMainNav('library');
+  else if (view !== viewSettings && view !== viewSchedule) setMainNav('library');
   void view.offsetWidth;
   view.classList.add('view-entering');
 }
@@ -552,14 +558,19 @@ function renderSubjectView(examId: string, examName: string): void {
     .map((p) => allSubjects.find((s) => s.id === p.subjectId))
     .filter((s): s is Subject => !!s && s.category === '選択科目');
   const subjects: Subject[] = [...required, ...pinnedElectives];
-  const groups = new Map<string, { name: string; icon?: string; subjects: Subject[] }>();
+  const groups = new Map<string, { name: string; icon?: string; isElective: boolean; subjects: Subject[] }>();
   for (const subject of subjects) {
     const { groupName } = splitSubjectName(subject.name);
     const group = groups.get(groupName);
     if (group) {
       group.subjects.push(subject);
     } else {
-      groups.set(groupName, { name: groupName, icon: subject.icon, subjects: [subject] });
+      groups.set(groupName, {
+        name: groupName,
+        icon: subject.icon,
+        isElective: subject.category === '選択科目',
+        subjects: [subject],
+      });
     }
   }
 
@@ -610,7 +621,7 @@ function renderSubjectView(examId: string, examName: string): void {
     card.innerHTML = `
       <span class="card-icon">${getIcon(group.icon, DEFAULT_SUBJECT_ICON)}</span>
       <span class="card-body">
-        <h3>${group.name}</h3>
+        <h3>${group.name}${group.isElective ? ' <span class="elective-badge">選択科目</span>' : ''}</h3>
         <p>全${totalQuestions}問・${group.subjects.length}形式</p>
         <div class="subject-mode-list">${modesHtml}</div>
       </span>
@@ -1280,6 +1291,74 @@ function openSettings(): void {
 }
 
 menuSettings.addEventListener('click', openSettings);
+
+// 「試験日程」画面。現在開いている試験(currentExam)の時間割を表示する。
+// 試験ごとの時間割データはsrc/schedule.tsにexamIdをキーとして登録する。
+// まだ時間割が登録されていない試験(あるいは試験を選ぶ前)の場合は案内文を出す。
+function renderSchedule(): void {
+  scheduleList.innerHTML = '';
+
+  if (!currentExam) {
+    const empty = document.createElement('p');
+    empty.className = 'schedule-empty';
+    empty.textContent = '試験を選んでから確認してください。';
+    scheduleList.appendChild(empty);
+    return;
+  }
+
+  const schedule = getExamSchedule(currentExam.id);
+  if (!schedule) {
+    const empty = document.createElement('p');
+    empty.className = 'schedule-empty';
+    empty.textContent = `${currentExam.name}の時間割はまだ登録されていません。`;
+    scheduleList.appendChild(empty);
+    return;
+  }
+
+  const now = new Date();
+  const isToday = (month: number, day: number) =>
+    now.getFullYear() === schedule.year && now.getMonth() + 1 === month && now.getDate() === day;
+
+  for (const day of schedule.days) {
+    const card = document.createElement('div');
+    card.className = 'schedule-day';
+    if (isToday(day.month, day.day)) card.classList.add('is-today');
+
+    const periodsHtml = day.periods
+      .map(
+        (p) => `
+          <div class="schedule-period">
+            <span class="schedule-period-time">${p.time}</span>
+            <span class="schedule-period-subject">${p.subject}${p.isElective ? ' <span class="elective-badge">選択科目</span>' : ''}</span>
+            ${p.room ? `<span class="schedule-period-room">${p.room}教室</span>` : ''}
+          </div>
+        `,
+      )
+      .join('');
+
+    card.innerHTML = `
+      <div class="schedule-day-header">
+        <span class="schedule-day-date">${schedule.year}年${day.month}月${day.day}日(${weekdayLabel(schedule.year, day.month, day.day)})</span>
+        ${isToday(day.month, day.day) ? '<span class="schedule-today-badge">今日</span>' : ''}
+      </div>
+      <div class="schedule-period-list">${periodsHtml}</div>
+    `;
+    scheduleList.appendChild(card);
+  }
+}
+
+function openSchedule(): void {
+  scheduleReturnView = [viewExam, viewSubject, viewDashboard, viewQuiz, viewResult].find((view) => !view.hidden) ?? viewExam;
+  closeMenu();
+  renderSchedule();
+  showView(viewSchedule);
+}
+
+menuSchedule.addEventListener('click', openSchedule);
+
+btnBackFromSchedule.addEventListener('click', () => {
+  showView(scheduleReturnView);
+});
 
 window.addEventListener('beforeinstallprompt', (event) => {
   event.preventDefault();

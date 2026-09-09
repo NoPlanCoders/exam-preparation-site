@@ -798,6 +798,20 @@ h2 {
   white-space: nowrap;
 }
 
+.elective-badge {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 0.4rem;
+  padding: 0.15rem 0.5rem;
+  border: 1px solid var(--color-primary);
+  border-radius: 999px;
+  background: var(--color-primary-light);
+  color: var(--color-primary-dark);
+  font-size: 0.68rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
 .dashboard-subject-score {
   display: flex;
   align-items: baseline;
@@ -893,6 +907,81 @@ h2 {
 
 .settings-card + .settings-card {
   margin-top: 0.75rem;
+}
+
+.schedule-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.schedule-empty {
+  padding: 0.6rem 0.7rem;
+  color: var(--color-muted);
+  font-size: 0.9rem;
+}
+
+.schedule-day {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 1rem 1.15rem;
+  box-shadow: var(--shadow-card);
+}
+
+.schedule-day.is-today {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.18), var(--shadow-card);
+}
+
+.schedule-day-header {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-bottom: 0.6rem;
+}
+
+.schedule-day-date {
+  font-weight: 700;
+  font-size: 1.02rem;
+}
+
+.schedule-today-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #fff;
+  background: var(--color-primary);
+  border-radius: 999px;
+  padding: 0.1rem 0.55rem;
+}
+
+.schedule-period-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.schedule-period {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  font-size: 0.9rem;
+}
+
+.schedule-period-time {
+  flex: none;
+  width: 8.5rem;
+  color: var(--color-muted);
+  font-size: 0.82rem;
+}
+
+.schedule-period-subject {
+  font-weight: 600;
+}
+
+.schedule-period-room {
+  color: var(--color-muted);
+  font-size: 0.82rem;
 }
 
 .settings-row {

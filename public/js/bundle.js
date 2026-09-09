@@ -24467,6 +24467,20 @@
     ["path", { d: "M8 18h.01" }]
   ];
 
+  // node_modules/lucide/dist/esm/icons/calendar-days.mjs
+  var CalendarDays = [
+    ["path", { d: "M8 2v3" }],
+    ["path", { d: "M16 2v3" }],
+    ["rect", { x: "3", y: "3", width: "18", height: "18", rx: "2" }],
+    ["path", { d: "M3 9h18" }],
+    ["path", { d: "M8 13h.01" }],
+    ["path", { d: "M12 13h.01" }],
+    ["path", { d: "M16 13h.01" }],
+    ["path", { d: "M8 17h.01" }],
+    ["path", { d: "M12 17h.01" }],
+    ["path", { d: "M16 17h.01" }]
+  ];
+
   // node_modules/lucide/dist/esm/icons/clipboard-check.mjs
   var ClipboardCheck = [
     ["rect", { width: "8", height: "4", x: "8", y: "2", rx: "1", ry: "1" }],
@@ -24758,6 +24772,7 @@
     Atom,
     Brain,
     Calculator,
+    CalendarDays,
     ClipboardCheck,
     Database,
     Dice5,
@@ -24805,6 +24820,7 @@
     star: "star",
     network: "network",
     calculator: "calculator",
+    "calendar-days": "calendar-days",
     matrix: "grid-2x2",
     gauge: "gauge",
     wave: "waves",
@@ -24852,6 +24868,75 @@
     };
   }
 
+  // src/schedule.ts
+  var WEEKDAY_LABELS = ["\u65E5", "\u6708", "\u706B", "\u6C34", "\u6728", "\u91D1", "\u571F"];
+  function weekdayLabel(year, month, day) {
+    return WEEKDAY_LABELS[new Date(year, month - 1, day).getDay()];
+  }
+  var EXAM_SCHEDULES = {
+    "4i-zenki-kimatsu": {
+      // 出典: 2026年度 4年生 前期期末 時間割(I組分を抜粋)。
+      // 注意: 配布された時間割PDF自体の日付表記は実際より1日前にずれていたため、
+      // ここでは実際の日付(2026年9月15日(火)〜19日(土))に修正して格納している。
+      year: 2026,
+      days: [
+        {
+          month: 9,
+          day: 15,
+          periods: [
+            { time: "1\u9650 9:30\u301C10:20", subject: "\u7D4C\u6E08\u5B66a", room: "322" },
+            { time: "2\u9650 10:30\u301C11:20", subject: "\u30B2\u30FC\u30E0\u7406\u8AD6a", room: "322" },
+            { time: "3\u9650 11:30\u301C12:20", subject: "\u78BA\u7387\u7D71\u8A08\u2160a", room: "322", isElective: true },
+            { time: "4\u9650 13:30\u301C14:20", subject: "\u56DE\u8DEF\u6F14\u7FD2", room: "022", isElective: true }
+          ]
+        },
+        {
+          month: 9,
+          day: 16,
+          periods: [
+            { time: "1\u9650 9:30\u301C10:20", subject: "\u30C7\u30FC\u30BF\u30D9\u30FC\u30B9", room: "322" },
+            { time: "2\u9650 10:30\u301C11:20", subject: "\u56FD\u8A9E4a", room: "322" },
+            { time: "3\u9650 11:30\u301C12:20", subject: "(\u6388\u696D\u306A\u3057)" },
+            { time: "4\u9650 13:30\u301C14:20", subject: "\u97D3\u56FD\u8A9E\u2160a", room: "022", isElective: true }
+          ]
+        },
+        {
+          month: 9,
+          day: 17,
+          periods: [
+            { time: "1\u9650 9:30\u301C10:20", subject: "\u5236\u5FA1\u5DE5\u5B66", room: "322" },
+            { time: "2\u9650 10:30\u301C11:20", subject: "\u82F1\u8A9E4a", room: "322" },
+            { time: "3\u9650 11:30\u301C12:20", subject: "\u30AA\u30DA\u30EC\u30FC\u30C6\u30A3\u30F3\u30B0\u30B7\u30B9\u30C6\u30E0", room: "322" },
+            { time: "4\u9650 13:30\u301C14:20", subject: "\u82F1\u8A9E\u6F14\u7FD24a", room: "022", isElective: true }
+          ]
+        },
+        {
+          month: 9,
+          day: 18,
+          periods: [
+            { time: "1\u9650 9:30\u301C10:20", subject: "\u5FDC\u7528\u7269\u7406a", room: "322" },
+            { time: "2\u9650 10:30\u301C11:20", subject: "\u30E1\u30AB\u30C8\u30ED\u30CB\u30AF\u30B9a", room: "322" },
+            { time: "3\u9650 11:30\u301C12:20", subject: "\u30C7\u30FC\u30BF\u69CB\u9020\u3068\u30A2\u30EB\u30B4\u30EA\u30BA\u30E0\u2160a", room: "322" },
+            { time: "4\u9650 13:30\u301C14:20", subject: "\u5FDC\u7528\u7269\u7406\u6F14\u7FD24a", room: "022", isElective: true }
+          ]
+        },
+        {
+          month: 9,
+          day: 19,
+          periods: [
+            { time: "1\u9650 9:30\u301C10:20", subject: "\u5FDC\u7528\u6570\u5B66a", room: "322" },
+            { time: "2\u9650 10:30\u301C11:20", subject: "\u6570\u5024\u8A08\u7B97\u6CD5", room: "022" },
+            { time: "3\u9650 11:30\u301C12:20", subject: "\u4E2D\u56FD\u8A9E\u521D\u7D1Aa", room: "022", isElective: true },
+            { time: "4\u9650 13:30\u301C14:20", subject: "(\u6388\u696D\u306A\u3057)" }
+          ]
+        }
+      ]
+    }
+  };
+  function getExamSchedule(examId) {
+    return EXAM_SCHEDULES[examId];
+  }
+
   // src/app.ts
   function escapeHtml(text2) {
     return text2.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -24882,10 +24967,12 @@
   var viewExam = $("view-exam");
   var viewSubject = $("view-subject");
   var viewSettings = $("view-settings");
+  var viewSchedule = $("view-schedule");
   var viewDashboard = $("view-dashboard");
   var viewQuiz = $("view-quiz");
   var viewResult = $("view-result");
   var settingsReturnView = viewExam;
+  var scheduleReturnView = viewExam;
   var examList = $("exam-list");
   var subjectList = $("subject-list");
   var subjectViewTitle = $("subject-view-title");
@@ -24914,6 +25001,7 @@
   var menuGoExam = $("menu-go-exam");
   var menuGoSubject = $("menu-go-subject");
   var menuGoDashboard = $("menu-go-dashboard");
+  var menuSchedule = $("menu-schedule");
   var menuPinnedDivider = $("menu-pinned-divider");
   var menuPinnedList = $("menu-pinned-list");
   var menuAddSubject = $("menu-add-subject");
@@ -24924,6 +25012,8 @@
   var menuSearchInput = $("menu-search-input");
   var menuSearchResults = $("menu-search-results");
   var btnBackFromSettings = $("btn-back-from-settings");
+  var btnBackFromSchedule = $("btn-back-from-schedule");
+  var scheduleList = $("schedule-list");
   var darkModeToggle = $("dark-mode-toggle");
   var themeSettingSummary = $("theme-setting-summary");
   var splashAnimationToggle = $("splash-animation-toggle");
@@ -25026,12 +25116,12 @@
     navDashboard.classList.toggle("is-active", section === "dashboard");
   }
   function showView(view) {
-    for (const v of [viewExam, viewSubject, viewSettings, viewDashboard, viewQuiz, viewResult]) {
+    for (const v of [viewExam, viewSubject, viewSettings, viewSchedule, viewDashboard, viewQuiz, viewResult]) {
       v.hidden = v !== view;
       v.classList.remove("view-entering");
     }
     if (view === viewDashboard) setMainNav("dashboard");
-    else if (view !== viewSettings) setMainNav("library");
+    else if (view !== viewSettings && view !== viewSchedule) setMainNav("library");
     void view.offsetWidth;
     view.classList.add("view-entering");
   }
@@ -25273,7 +25363,12 @@
       if (group) {
         group.subjects.push(subject);
       } else {
-        groups.set(groupName, { name: groupName, icon: subject.icon, subjects: [subject] });
+        groups.set(groupName, {
+          name: groupName,
+          icon: subject.icon,
+          isElective: subject.category === "\u9078\u629E\u79D1\u76EE",
+          subjects: [subject]
+        });
       }
     }
     for (const [index, group] of Array.from(groups.values()).entries()) {
@@ -25313,7 +25408,7 @@
       card.innerHTML = `
       <span class="card-icon">${getIcon(group.icon, DEFAULT_SUBJECT_ICON)}</span>
       <span class="card-body">
-        <h3>${group.name}</h3>
+        <h3>${group.name}${group.isElective ? ' <span class="elective-badge">\u9078\u629E\u79D1\u76EE</span>' : ""}</h3>
         <p>\u5168${totalQuestions}\u554F\u30FB${group.subjects.length}\u5F62\u5F0F</p>
         <div class="subject-mode-list">${modesHtml}</div>
       </span>
@@ -25840,6 +25935,58 @@
     showView(viewSettings);
   }
   menuSettings.addEventListener("click", openSettings);
+  function renderSchedule() {
+    scheduleList.innerHTML = "";
+    if (!currentExam) {
+      const empty = document.createElement("p");
+      empty.className = "schedule-empty";
+      empty.textContent = "\u8A66\u9A13\u3092\u9078\u3093\u3067\u304B\u3089\u78BA\u8A8D\u3057\u3066\u304F\u3060\u3055\u3044\u3002";
+      scheduleList.appendChild(empty);
+      return;
+    }
+    const schedule = getExamSchedule(currentExam.id);
+    if (!schedule) {
+      const empty = document.createElement("p");
+      empty.className = "schedule-empty";
+      empty.textContent = `${currentExam.name}\u306E\u6642\u9593\u5272\u306F\u307E\u3060\u767B\u9332\u3055\u308C\u3066\u3044\u307E\u305B\u3093\u3002`;
+      scheduleList.appendChild(empty);
+      return;
+    }
+    const now = /* @__PURE__ */ new Date();
+    const isToday = (month, day) => now.getFullYear() === schedule.year && now.getMonth() + 1 === month && now.getDate() === day;
+    for (const day of schedule.days) {
+      const card = document.createElement("div");
+      card.className = "schedule-day";
+      if (isToday(day.month, day.day)) card.classList.add("is-today");
+      const periodsHtml = day.periods.map(
+        (p) => `
+          <div class="schedule-period">
+            <span class="schedule-period-time">${p.time}</span>
+            <span class="schedule-period-subject">${p.subject}${p.isElective ? ' <span class="elective-badge">\u9078\u629E\u79D1\u76EE</span>' : ""}</span>
+            ${p.room ? `<span class="schedule-period-room">${p.room}\u6559\u5BA4</span>` : ""}
+          </div>
+        `
+      ).join("");
+      card.innerHTML = `
+      <div class="schedule-day-header">
+        <span class="schedule-day-date">${schedule.year}\u5E74${day.month}\u6708${day.day}\u65E5(${weekdayLabel(schedule.year, day.month, day.day)})</span>
+        ${isToday(day.month, day.day) ? '<span class="schedule-today-badge">\u4ECA\u65E5</span>' : ""}
+      </div>
+      <div class="schedule-period-list">${periodsHtml}</div>
+    `;
+      scheduleList.appendChild(card);
+    }
+  }
+  function openSchedule() {
+    scheduleReturnView = [viewExam, viewSubject, viewDashboard, viewQuiz, viewResult].find((view) => !view.hidden) ?? viewExam;
+    closeMenu();
+    renderSchedule();
+    showView(viewSchedule);
+  }
+  menuSchedule.addEventListener("click", openSchedule);
+  btnBackFromSchedule.addEventListener("click", () => {
+    showView(scheduleReturnView);
+  });
   window.addEventListener("beforeinstallprompt", (event) => {
     event.preventDefault();
     deferredInstallPrompt = event;
@@ -25915,6 +26062,7 @@ lucide/dist/esm/icons/arrow-left.mjs:
 lucide/dist/esm/icons/atom.mjs:
 lucide/dist/esm/icons/brain.mjs:
 lucide/dist/esm/icons/calculator.mjs:
+lucide/dist/esm/icons/calendar-days.mjs:
 lucide/dist/esm/icons/clipboard-check.mjs:
 lucide/dist/esm/icons/database.mjs:
 lucide/dist/esm/icons/dice-5.mjs:

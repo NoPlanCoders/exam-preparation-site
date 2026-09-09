@@ -6,6 +6,10 @@ import type { Exam } from '../types.js';
 // 3. src/data/registry.ts に import と登録を1件追加
 // 4. ここに試験情報を1件追加
 // するだけでOK。既存の試験データには影響しません。
+// (任意) 試験日程をバーガーメニューの「試験日程」に表示したい場合は、
+// src/schedule.ts の EXAM_SCHEDULES に同じ examId で1件追加する。
+// 追加しなければ「試験日程」画面には未登録である旨が表示されるだけで、
+// 他の機能には影響しない。
 export const QUIZ_EXAMS: Exam[] = [
   {
     id: '4i-zenki-kimatsu',
