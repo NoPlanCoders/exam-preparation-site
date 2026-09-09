@@ -25262,9 +25262,10 @@
     menuGoSubject.hidden = false;
     subjectViewTitle.textContent = `${examName} - \u79D1\u76EE\u3092\u9078\u3093\u3067\u304F\u3060\u3055\u3044`;
     subjectList.innerHTML = "";
-    const subjects2 = getSubjects(examId).filter(
-      (s) => s.category !== "\u9078\u629E\u79D1\u76EE" || isPinned(examId, s.id)
-    );
+    const allSubjects = getSubjects(examId);
+    const required = allSubjects.filter((s) => s.category !== "\u9078\u629E\u79D1\u76EE");
+    const pinnedElectives = pinnedSubjects.filter((p) => p.examId === examId).map((p) => allSubjects.find((s) => s.id === p.subjectId)).filter((s) => !!s && s.category === "\u9078\u629E\u79D1\u76EE");
+    const subjects2 = [...required, ...pinnedElectives];
     const groups = /* @__PURE__ */ new Map();
     for (const subject of subjects2) {
       const { groupName } = splitSubjectName(subject.name);

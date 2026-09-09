@@ -543,9 +543,15 @@ function renderSubjectView(examId: string, examName: string): void {
   // 通常の科目一覧には履修科目に加えて、この試験でピン留め(追加)した
   // 選択科目も表示する。ピン留めしていない選択科目はメニューの
   // 「選択科目を追加」から検索してピン留めするまでは表示されない。
-  const subjects: Subject[] = getSubjects(examId).filter(
-    (s) => s.category !== '選択科目' || isPinned(examId, s.id),
-  );
+  // 履修科目は科目一覧(subjects.ts)の定義順、選択科目はピン留めした順(新しく
+  // 追加したものほど一番下)に並べる。
+  const allSubjects = getSubjects(examId);
+  const required = allSubjects.filter((s) => s.category !== '選択科目');
+  const pinnedElectives = pinnedSubjects
+    .filter((p) => p.examId === examId)
+    .map((p) => allSubjects.find((s) => s.id === p.subjectId))
+    .filter((s): s is Subject => !!s && s.category === '選択科目');
+  const subjects: Subject[] = [...required, ...pinnedElectives];
   const groups = new Map<string, { name: string; icon?: string; subjects: Subject[] }>();
   for (const subject of subjects) {
     const { groupName } = splitSubjectName(subject.name);

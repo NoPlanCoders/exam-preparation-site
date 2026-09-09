@@ -1,4 +1,4 @@
-const CACHE_NAME = 'quiz-app-v21';
+const CACHE_NAME = 'quiz-app-v22';
 const APP_SHELL = [
   './',
   './index.html',
