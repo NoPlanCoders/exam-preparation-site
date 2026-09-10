@@ -144,6 +144,12 @@ const rawSubjects: Subject[] = [
     description: '加速度・仕事・保存力・力のモーメント・角運動量の基本公式、位置x(t)の微分、空気抵抗を受ける投げ上げ運動、等速円運動の角運動量を手書きで解いて確認',
     icon: 'orbit',
   },
+  {
+    id: 'applied-math-handwriting',
+    name: '応用数学(計算・手書き)',
+    description: '1変数の微分・偏微分・全微分(接平面)・合成関数の微分法・高次偏導関数・極大極小の計算問題を手書きで解いて確認',
+    icon: 'variable',
+  },
 ];
 
 const electiveIds = new Set<string>(subjectTypes['選択科目']);

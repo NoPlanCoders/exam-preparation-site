@@ -14312,6 +14312,12 @@
       name: "\u5FDC\u7528\u7269\u7406(\u8A08\u7B97\u30FB\u624B\u66F8\u304D)",
       description: "\u52A0\u901F\u5EA6\u30FB\u4ED5\u4E8B\u30FB\u4FDD\u5B58\u529B\u30FB\u529B\u306E\u30E2\u30FC\u30E1\u30F3\u30C8\u30FB\u89D2\u904B\u52D5\u91CF\u306E\u57FA\u672C\u516C\u5F0F\u3001\u4F4D\u7F6Ex(t)\u306E\u5FAE\u5206\u3001\u7A7A\u6C17\u62B5\u6297\u3092\u53D7\u3051\u308B\u6295\u3052\u4E0A\u3052\u904B\u52D5\u3001\u7B49\u901F\u5186\u904B\u52D5\u306E\u89D2\u904B\u52D5\u91CF\u3092\u624B\u66F8\u304D\u3067\u89E3\u3044\u3066\u78BA\u8A8D",
       icon: "orbit"
+    },
+    {
+      id: "applied-math-handwriting",
+      name: "\u5FDC\u7528\u6570\u5B66(\u8A08\u7B97\u30FB\u624B\u66F8\u304D)",
+      description: "1\u5909\u6570\u306E\u5FAE\u5206\u30FB\u504F\u5FAE\u5206\u30FB\u5168\u5FAE\u5206(\u63A5\u5E73\u9762)\u30FB\u5408\u6210\u95A2\u6570\u306E\u5FAE\u5206\u6CD5\u30FB\u9AD8\u6B21\u504F\u5C0E\u95A2\u6570\u30FB\u6975\u5927\u6975\u5C0F\u306E\u8A08\u7B97\u554F\u984C\u3092\u624B\u66F8\u304D\u3067\u89E3\u3044\u3066\u78BA\u8A8D",
+      icon: "variable"
     }
   ];
   var electiveIds = new Set(subject_types_default["\u9078\u629E\u79D1\u76EE"]);
@@ -24250,6 +24256,241 @@
     }
   ];
 
+  // src/data/4i-zenki-kimatsu/applied-math-handwriting.ts
+  var questions23 = [
+    // --- No.2 1変数の微分の計算(2) ---
+    {
+      type: "handwriting",
+      question: "$f(x)=(3x-1)^2$ \u306E\u5C0E\u95A2\u6570 $f'(x)$ \u3092\u6C42\u3081\u3088\u3002",
+      answer: "$f'(x)=2(3x-1)\\cdot3=6(3x-1)$"
+    },
+    {
+      type: "handwriting",
+      question: "$f(x)=\\dfrac{1}{x+5}$ \u306E\u5C0E\u95A2\u6570 $f'(x)$ \u3092\u6C42\u3081\u3088\u3002",
+      answer: "$f'(x)=-\\dfrac{(x+5)'}{(x+5)^2}=-\\dfrac{1}{(x+5)^2}$"
+    },
+    {
+      type: "handwriting",
+      question: "$f(x)=x\\cos x$ \u306E\u5C0E\u95A2\u6570 $f'(x)$ \u3092\u6C42\u3081\u3088\u3002",
+      answer: "$f'(x)=(x)'\\cos x+x(\\cos x)'=\\cos x-x\\sin x$"
+    },
+    {
+      type: "handwriting",
+      question: "$f(x)=\\dfrac{x}{x+1}$ \u306E\u5C0E\u95A2\u6570 $f'(x)$ \u3092\u6C42\u3081\u3088\u3002",
+      answer: "$f'(x)=\\dfrac{(x)'(x+1)-x(x+1)'}{(x+1)^2}=\\dfrac{(x+1)-x}{(x+1)^2}=\\dfrac{1}{(x+1)^2}$"
+    },
+    // --- No.5 偏微分の計算(3) ---
+    {
+      type: "handwriting",
+      question: "$f(x,y)=(2x+y)^3$ \u3092 $x$ \u3067\u504F\u5FAE\u5206\u305B\u3088\u3002",
+      answer: "$f_x=3(2x+y)^2\\cdot2=6(2x+y)^2$"
+    },
+    {
+      type: "handwriting",
+      question: "$f(x,y)=\\cos(x+5y)$ \u3092 $y$ \u3067\u504F\u5FAE\u5206\u305B\u3088\u3002",
+      answer: "$f_y=5\\cdot(-\\sin(x+5y))=-5\\sin(x+5y)$"
+    },
+    {
+      type: "handwriting",
+      question: "$f(x,y)=e^{xy}$ \u3092 $x$ \u3067\u504F\u5FAE\u5206\u305B\u3088\u3002",
+      answer: "$f_x=(xy)_x\\,e^{xy}=ye^{xy}$"
+    },
+    {
+      type: "handwriting",
+      question: "$f(x,y)=\\log(x^2+y)$ \u3092 $x$ \u3067\u504F\u5FAE\u5206\u305B\u3088\u3002",
+      answer: "$f_x=\\dfrac{(x^2+y)_x}{x^2+y}=\\dfrac{2x}{x^2+y}$"
+    },
+    // --- No.6 偏微分の計算(4) ---
+    {
+      type: "handwriting",
+      question: "$f(x,y)=3x^2y^5+x^3y$ \u3092 $x$ \u3067\u504F\u5FAE\u5206\u305B\u3088\u3002",
+      answer: "$f_x=(3x^2y^5)_x+(x^3y)_x=6xy^5+3x^2y$"
+    },
+    {
+      type: "handwriting",
+      question: "$f(x,y)=\\sin(x^3+2xy+3)$ \u3092 $y$ \u3067\u504F\u5FAE\u5206\u305B\u3088\u3002",
+      answer: "$f_y=(x^3+2xy+3)_y\\cos(x^3+2xy+3)=2x\\cos(x^3+2xy+3)$"
+    },
+    {
+      type: "handwriting",
+      question: "$f(x,y)=e^{xy+2x^2}$ \u3092 $x$ \u3067\u504F\u5FAE\u5206\u305B\u3088\u3002",
+      answer: "$f_x=(xy+2x^2)_x\\,e^{xy+2x^2}=(y+4x)e^{xy+2x^2}$"
+    },
+    {
+      type: "handwriting",
+      question: "$f(x,y)=\\dfrac{xy+y+1}{x+y}$ \u3092 $x$ \u3067\u504F\u5FAE\u5206\u305B\u3088\u3002",
+      answer: "$f_x=\\dfrac{(xy+y+1)_x(x+y)-(xy+y+1)(x+y)_x}{(x+y)^2}=\\dfrac{y(x+y)-(xy+y+1)}{(x+y)^2}=\\dfrac{y^2-y-1}{(x+y)^2}$"
+    },
+    // --- No.7 全微分の計算(1) ---
+    {
+      type: "handwriting",
+      question: "$z=4xy+x+y+3$ \u306E\u5168\u5FAE\u5206 $dz$ \u3092\u6C42\u3081\u3088\u3002",
+      answer: "$z_x=4y+1$\u3001$z_y=4x+1$ \u3088\u308A $dz=(4y+1)dx+(4x+1)dy$"
+    },
+    {
+      type: "handwriting",
+      question: "$z=(2x+y+1)^5$ \u306E\u5168\u5FAE\u5206 $dz$ \u3092\u6C42\u3081\u3088\u3002",
+      answer: "$z_x=5(2x+y+1)^4\\cdot2=10(2x+y+1)^4$\u3001$z_y=5(2x+y+1)^4$ \u3088\u308A $dz=10(2x+y+1)^4dx+5(2x+y+1)^4dy$"
+    },
+    {
+      type: "handwriting",
+      question: "$z=x\\log(2y)$ \u306E\u5168\u5FAE\u5206 $dz$ \u3092\u6C42\u3081\u3088\u3002",
+      answer: "$z_x=\\log(2y)$\u3001$z_y=\\dfrac{x}{y}$ \u3088\u308A $dz=\\log(2y)dx+\\dfrac{x}{y}dy$"
+    },
+    {
+      type: "handwriting",
+      question: "$z=\\dfrac{xy}{x^2+1}$ \u306E\u5168\u5FAE\u5206 $dz$ \u3092\u6C42\u3081\u3088\u3002",
+      answer: "$z_x=\\dfrac{y(x^2+1)-xy\\cdot2x}{(x^2+1)^2}=\\dfrac{y(1-x^2)}{(x^2+1)^2}$\u3001$z_y=\\dfrac{x}{x^2+1}$ \u3088\u308A $dz=\\dfrac{y(1-x^2)}{(x^2+1)^2}dx+\\dfrac{x}{x^2+1}dy$"
+    },
+    // --- No.8 全微分の計算(2) ---
+    {
+      type: "handwriting",
+      question: "$z=\\log(xy)$ \u306E\u5168\u5FAE\u5206 $dz$ \u3092\u6C42\u3081\u3088\u3002",
+      answer: "$z_x=\\dfrac{y}{xy}=\\dfrac{1}{x}$\u3001$z_y=\\dfrac{x}{xy}=\\dfrac{1}{y}$ \u3088\u308A $dz=\\dfrac{1}{x}dx+\\dfrac{1}{y}dy$"
+    },
+    {
+      type: "handwriting",
+      question: "$z=e^{2x+3y}$ \u306E\u5168\u5FAE\u5206 $dz$ \u3092\u6C42\u3081\u3088\u3002",
+      answer: "$z_x=2e^{2x+3y}$\u3001$z_y=3e^{2x+3y}$ \u3088\u308A $dz=2e^{2x+3y}dx+3e^{2x+3y}dy$"
+    },
+    {
+      type: "handwriting",
+      question: "$z=\\dfrac{x-1}{x^2+y^2+2}$ \u306E\u5168\u5FAE\u5206 $dz$ \u3092\u6C42\u3081\u3088\u3002",
+      answer: "$z_x=\\dfrac{(x^2+y^2+2)-2x(x-1)}{(x^2+y^2+2)^2}$\u3001$z_y=\\dfrac{-2y(x-1)}{(x^2+y^2+2)^2}$ \u3088\u308A $dz=\\dfrac{(x^2+y^2+2)-2x(x-1)}{(x^2+y^2+2)^2}dx+\\dfrac{-2y(x-1)}{(x^2+y^2+2)^2}dy$"
+    },
+    {
+      type: "handwriting",
+      question: "$z=(x+2y)^2$ \u306E $x=1,\\ y=-1$ \u306B\u5BFE\u5FDC\u3059\u308B\u70B9\u306B\u304A\u3051\u308B\u63A5\u5E73\u9762\u306E\u65B9\u7A0B\u5F0F\u3092\u6C42\u3081\u3088\u3002",
+      answer: "$z(1,-1)=1$\u3002$z_x=2(x+2y)$\u3001$z_y=4(x+2y)$ \u3088\u308A $z_x(1,-1)=-2$\u3001$z_y(1,-1)=-4$\u3002\u63A5\u5E73\u9762\u306F $z=-2(x-1)-4(y+1)+1=-2x-4y-1$"
+    },
+    // --- No.9 合成関数の微分法 ---
+    {
+      type: "handwriting",
+      question: "$z=x^2+y^2$\u3001$x=3t$\u3001$y=2t$ \u306E\u3068\u304D $\\dfrac{dz}{dt}$ \u3092\u6C42\u3081\u3088\u3002",
+      answer: "$\\dfrac{dz}{dt}=2x\\cdot3+2y\\cdot2=6(3t)+4(2t)=26t$"
+    },
+    {
+      type: "handwriting",
+      question: "$z=xy^2+x+y$\u3001$x=t+2$\u3001$y=2t-1$ \u306E\u3068\u304D $\\dfrac{dz}{dt}$ \u3092\u6C42\u3081\u3088\u3002",
+      answer: "$\\dfrac{dz}{dt}=(y^2+1)\\cdot1+(2xy+1)\\cdot2=((2t-1)^2+1)+2(2(t+2)(2t-1)+1)=12t^2+8t-4$"
+    },
+    {
+      type: "handwriting",
+      question: "$z=(x+y)^2$\u3001$x=t^3$\u3001$y=t^2$ \u306E\u3068\u304D $\\dfrac{dz}{dt}$ \u3092\u6C42\u3081\u3088\u3002",
+      answer: "$\\dfrac{dz}{dt}=2(x+y)\\cdot3t^2+2(x+y)\\cdot2t=2(x+y)(3t^2+2t)=2(t^3+t^2)(3t^2+2t)$"
+    },
+    {
+      type: "handwriting",
+      question: "$z=e^{x+y}$\u3001$x=\\log(2t)$\u3001$y=\\log(3t)$ \u306E\u3068\u304D $\\dfrac{dz}{dt}$ \u3092\u6C42\u3081\u3088\u3002",
+      answer: "$x+y=\\log(6t^2)$ \u3088\u308A $e^{x+y}=6t^2$\u3002$\\dfrac{dz}{dt}=e^{x+y}\\cdot\\dfrac{1}{t}+e^{x+y}\\cdot\\dfrac{1}{t}=6t^2\\cdot\\dfrac{2}{t}=12t$"
+    },
+    // --- No.10 高次偏導関数(1) ---
+    {
+      type: "handwriting",
+      question: "$z=x^3y^2$ \u306E $z_{xx}$ \u3092\u6C42\u3081\u3088\u3002",
+      answer: "$z_x=3x^2y^2$ \u3088\u308A $z_{xx}=6xy^2$"
+    },
+    {
+      type: "handwriting",
+      question: "$z=(2x+y)^3$ \u306E $z_{yy}$ \u3092\u6C42\u3081\u3088\u3002",
+      answer: "$z_y=3(2x+y)^2$ \u3088\u308A $z_{yy}=6(2x+y)$"
+    },
+    {
+      type: "handwriting",
+      question: "$z=\\cos(x+y)$ \u306E $z_{xx}$ \u3092\u6C42\u3081\u3088\u3002",
+      answer: "$z_x=-\\sin(x+y)$ \u3088\u308A $z_{xx}=-\\cos(x+y)$"
+    },
+    {
+      type: "handwriting",
+      question: "$z=e^{x^3+y^3}$ \u306E $z_{xy}$ \u3092\u6C42\u3081\u3088\u3002",
+      answer: "$z_x=3x^2e^{x^3+y^3}$ \u3088\u308A $z_{xy}=3x^2\\cdot3y^2\\cdot e^{x^3+y^3}=9x^2y^2e^{x^3+y^3}$"
+    },
+    // --- No.11 高次偏導関数(2) ---
+    {
+      type: "handwriting",
+      question: "$z=x^2y$ \u306E $z_{yy}$ \u3092\u6C42\u3081\u3088\u3002",
+      answer: "$z_y=x^2$ \u3088\u308A $z_{yy}=0$"
+    },
+    {
+      type: "handwriting",
+      question: "$z=(x+3y)^3$ \u306E $z_{xx}$ \u3092\u6C42\u3081\u3088\u3002",
+      answer: "$z_x=3(x+3y)^2$ \u3088\u308A $z_{xx}=6(x+3y)$"
+    },
+    {
+      type: "handwriting",
+      question: "$z=xy+x+y+x^4y^5$ \u306E $z_{xy}$ \u3092\u6C42\u3081\u3088\u3002",
+      answer: "$z_x=y+1+4x^3y^5$ \u3088\u308A $z_{xy}=1+20x^3y^4$"
+    },
+    {
+      type: "handwriting",
+      question: "$z=\\log(xy)$ \u306E $z_{yx}$ \u3092\u6C42\u3081\u3088\u3002",
+      answer: "$z_y=\\dfrac{x}{xy}=\\dfrac{1}{y}$ \u3088\u308A $z_{yx}=0$"
+    },
+    // --- No.12 極大・極小(1) ---
+    {
+      type: "handwriting",
+      question: "$f(x,y)=-x^2+y^2-1$ \u306B\u3064\u3044\u3066\u3001$f_x=0$ \u304B\u3064 $f_y=0$ \u3068\u306A\u308B\u70B9 $(x,y)$ \u3092\u6C42\u3081\u3088\u3002",
+      answer: "$f_x=-2x$\u3001$f_y=2y$ \u3088\u308A\u3001\u6C42\u3081\u308B\u70B9\u306F $(0,0)$"
+    },
+    {
+      type: "handwriting",
+      question: "$f(x,y)=3x^2+y^2+2y$ \u306B\u3064\u3044\u3066\u3001$f_x=0$ \u304B\u3064 $f_y=0$ \u3068\u306A\u308B\u70B9 $(x,y)$ \u3092\u6C42\u3081\u3088\u3002",
+      answer: "$f_x=6x$\u3001$f_y=2y+2$ \u3088\u308A\u3001\u6C42\u3081\u308B\u70B9\u306F $(0,-1)$"
+    },
+    {
+      type: "handwriting",
+      question: "$f(x,y)=x^2-y^2+6x+2y+2$ \u306B\u3064\u3044\u3066\u3001$f_x=0$ \u304B\u3064 $f_y=0$ \u3068\u306A\u308B\u70B9 $(x,y)$ \u3092\u6C42\u3081\u3088\u3002",
+      answer: "$f_x=2x+6$\u3001$f_y=-2y+2$ \u3088\u308A\u3001\u6C42\u3081\u308B\u70B9\u306F $(-3,1)$"
+    },
+    {
+      type: "handwriting",
+      question: "$f(x,y)=x^2-3xy+y^2+x+3y$ \u306B\u3064\u3044\u3066\u3001$f_x=0$ \u304B\u3064 $f_y=0$ \u3068\u306A\u308B\u70B9 $(x,y)$ \u3092\u6C42\u3081\u3088\u3002",
+      answer: "$f_x=2x-3y+1$\u3001$f_y=-3x+2y+3$ \u306E\u9023\u7ACB\u3092\u89E3\u3044\u3066\u3001\u6C42\u3081\u308B\u70B9\u306F $\\left(\\dfrac{11}{5},\\dfrac{9}{5}\\right)$"
+    },
+    // --- No.13 極大・極小(2) ---
+    {
+      type: "handwriting",
+      question: "$f(x,y)=x^2-y^2+2y+2$ \u306B\u3064\u3044\u3066\u3001$f_x=0$ \u304B\u3064 $f_y=0$ \u3068\u306A\u308B\u70B9 $(x,y)$ \u3092\u6C42\u3081\u3088\u3002",
+      answer: "$f_x=2x$\u3001$f_y=-2y+2$ \u3088\u308A\u3001\u6C42\u3081\u308B\u70B9\u306F $(0,1)$"
+    },
+    {
+      type: "handwriting",
+      question: "$f(x,y)=x^2+3y^2+2x-6y$ \u306B\u3064\u3044\u3066\u3001$f_x=0$ \u304B\u3064 $f_y=0$ \u3068\u306A\u308B\u70B9 $(x,y)$ \u3092\u6C42\u3081\u3088\u3002",
+      answer: "$f_x=2x+2$\u3001$f_y=6y-6$ \u3088\u308A\u3001\u6C42\u3081\u308B\u70B9\u306F $(-1,1)$"
+    },
+    {
+      type: "handwriting",
+      question: "$f(x,y)=x^2-y^2+2y+2$ \u306B\u3064\u3044\u3066\u3001$H=f_{xx}f_{yy}-f_{xy}^{\\,2}$ \u3092\u6C42\u3081\u3088\u3002",
+      answer: "$f_{xx}=2$\u3001$f_{yy}=-2$\u3001$f_{xy}=0$ \u3088\u308A $H=2\\cdot(-2)-0^2=-4$"
+    },
+    {
+      type: "handwriting",
+      question: "$f(x,y)=x^2+3y^2+2x-6y$ \u306B\u3064\u3044\u3066\u3001$H=f_{xx}f_{yy}-f_{xy}^{\\,2}$ \u3092\u6C42\u3081\u3088\u3002",
+      answer: "$f_{xx}=2$\u3001$f_{yy}=6$\u3001$f_{xy}=0$ \u3088\u308A $H=2\\cdot6-0^2=12$"
+    },
+    // --- No.14 極大・極小(3) ---
+    {
+      type: "handwriting",
+      question: "$f(x,y)=x^2+y^2-4x+6y$ \u306B\u3064\u3044\u3066\u3001$f_x=0$ \u304B\u3064 $f_y=0$ \u3068\u306A\u308B\u70B9 $(x,y)$ \u3092\u6C42\u3081\u3088\u3002",
+      answer: "$f_x=2x-4$\u3001$f_y=2y+6$ \u3088\u308A\u3001\u6C42\u3081\u308B\u70B9\u306F $(2,-3)$"
+    },
+    {
+      type: "handwriting",
+      question: "$f(x,y)=x^2+y^2-4x+6y$ \u306B\u3064\u3044\u3066\u3001$H=f_{xx}f_{yy}-f_{xy}^{\\,2}$ \u3092\u6C42\u3081\u3088\u3002",
+      answer: "$f_{xx}=2$\u3001$f_{yy}=2$\u3001$f_{xy}=0$ \u3088\u308A $H=2\\cdot2-0^2=4$"
+    },
+    {
+      type: "handwriting",
+      question: "$f(x,y)=x^2+y^2-4x+6y$ \u306E\u6975\u5024\u3092\u6C42\u3081\u3088\u3002",
+      answer: "\u70B9 $(2,-3)$ \u306B\u304A\u3044\u3066 $H=4>0$ \u304B\u3064 $f_{xx}=2>0$ \u3088\u308A\u3001\u6975\u5C0F\u5024 $f(2,-3)=4+9-8-18=-13$"
+    },
+    {
+      type: "handwriting",
+      question: "$f(x,y)=2x^2-y^2+1$ \u306B\u3064\u3044\u3066\u3001$f_x=0$ \u304B\u3064 $f_y=0$ \u3068\u306A\u308B\u70B9\u3092\u3059\u3079\u3066\u6C42\u3081\u3001$H=f_{xx}f_{yy}-f_{xy}^{\\,2}$ \u3092\u8A08\u7B97\u3057\u3066\u3001\u6975\u5024\u3092\u3082\u305F\u306A\u3044\u3053\u3068\u3092\u793A\u305B\u3002",
+      answer: "$f_x=4x$\u3001$f_y=-2y$ \u3088\u308A\u70B9\u306F $(0,0)$\u3002$f_{xx}=4$\u3001$f_{yy}=-2$\u3001$f_{xy}=0$ \u3088\u308A $H=4\\cdot(-2)-0=-8<0$\u3002\u3088\u3063\u3066\u70B9 $(0,0)$ \u3067 $H<0$ \u306A\u306E\u3067\u6975\u5024\u306A\u3057\u3002"
+    }
+  ];
+
   // src/data/registry.ts
   var examData = {
     "4i-zenki-kimatsu": {
@@ -24276,7 +24517,8 @@
         "economics-choice": questions19,
         "economics-handwriting": questions20,
         "applied-physics-choice": questions21,
-        "applied-physics-handwriting": questions22
+        "applied-physics-handwriting": questions22,
+        "applied-math-handwriting": questions23
       }
     }
   };
@@ -24690,6 +24932,14 @@
     ["path", { d: "m22 7-8.5 8.5-5-5L2 17" }]
   ];
 
+  // node_modules/lucide/dist/esm/icons/variable.mjs
+  var Variable = [
+    ["path", { d: "M8 21s-4-3-4-9 4-9 4-9" }],
+    ["path", { d: "M16 3s4 3 4 9-4 9-4 9" }],
+    ["line", { x1: "15", x2: "9", y1: "9", y2: "15" }],
+    ["line", { x1: "9", x2: "15", y1: "9", y2: "15" }]
+  ];
+
   // node_modules/lucide/dist/esm/icons/waves-horizontal.mjs
   var WavesHorizontal = [
     ["path", { d: "M2 12q2.5 2 5 0t5 0 5 0 5 0" }],
@@ -24797,6 +25047,7 @@
     Target,
     TreePine,
     TrendingUp,
+    Variable,
     Waves: WavesHorizontal,
     Wrench,
     X,
@@ -24828,6 +25079,7 @@
     "trending-up": "trending-up",
     atom: "atom",
     orbit: "orbit",
+    variable: "variable",
     "clipboard-check": "clipboard-check",
     menu: "menu",
     library: "library",
@@ -25381,9 +25633,9 @@
       card.style.setProperty("--stagger-index", String(index));
       const modesHtml = group.subjects.map((subject) => {
         const { modeName } = splitSubjectName(subject.name);
-        const questions23 = getQuestions(examId, subject.id);
-        const total = questions23.length;
-        const masteryLabel = questions23.some((question) => question.type === "handwriting") ? "\u5168\u554F\u78BA\u8A8D\u307E\u3067" : "\u5168\u554F\u6B63\u89E3\u307E\u3067";
+        const questions24 = getQuestions(examId, subject.id);
+        const total = questions24.length;
+        const masteryLabel = questions24.some((question) => question.type === "handwriting") ? "\u5168\u554F\u78BA\u8A8D\u307E\u3067" : "\u5168\u554F\u6B63\u89E3\u307E\u3067";
         const countOptions = [];
         if (total > 20) countOptions.push(20);
         if (total > 10) countOptions.push(10);
@@ -26087,6 +26339,7 @@ lucide/dist/esm/icons/star.mjs:
 lucide/dist/esm/icons/target.mjs:
 lucide/dist/esm/icons/tree-pine.mjs:
 lucide/dist/esm/icons/trending-up.mjs:
+lucide/dist/esm/icons/variable.mjs:
 lucide/dist/esm/icons/waves-horizontal.mjs:
 lucide/dist/esm/icons/wrench.mjs:
 lucide/dist/esm/icons/x.mjs:

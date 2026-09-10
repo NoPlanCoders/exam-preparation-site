@@ -23,6 +23,7 @@ import { questions as zenkiKimatsuEconomicsChoice } from './4i-zenki-kimatsu/eco
 import { questions as zenkiKimatsuEconomicsHandwriting } from './4i-zenki-kimatsu/economics-handwriting.js';
 import { questions as zenkiKimatsuAppliedPhysicsChoice } from './4i-zenki-kimatsu/applied-physics-choice.js';
 import { questions as zenkiKimatsuAppliedPhysicsHandwriting } from './4i-zenki-kimatsu/applied-physics-handwriting.js';
+import { questions as zenkiKimatsuAppliedMathHandwriting } from './4i-zenki-kimatsu/applied-math-handwriting.js';
 
 interface ExamData {
   subjects: Subject[];
@@ -57,6 +58,7 @@ const examData: Record<string, ExamData> = {
       'economics-handwriting': zenkiKimatsuEconomicsHandwriting,
       'applied-physics-choice': zenkiKimatsuAppliedPhysicsChoice,
       'applied-physics-handwriting': zenkiKimatsuAppliedPhysicsHandwriting,
+      'applied-math-handwriting': zenkiKimatsuAppliedMathHandwriting,
     },
   },
 };
