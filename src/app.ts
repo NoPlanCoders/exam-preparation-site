@@ -91,6 +91,9 @@ const btnSubmitText = $<HTMLButtonElement>('btn-submit-text');
 const quizHandwritingArea = $<HTMLElement>('quiz-handwriting-area');
 const quizCanvas = $<HTMLCanvasElement>('quiz-canvas');
 const btnClearCanvas = $<HTMLButtonElement>('btn-clear-canvas');
+const btnUndoCanvas = $<HTMLButtonElement>('btn-undo-canvas');
+const btnPenMode = $<HTMLButtonElement>('btn-pen-mode');
+const btnEraserMode = $<HTMLButtonElement>('btn-eraser-mode');
 const btnCheckHandwriting = $<HTMLButtonElement>('btn-check-handwriting');
 const handwritingAnswerReveal = $<HTMLElement>('handwriting-answer-reveal');
 const handwritingCorrectAnswer = $<HTMLElement>('handwriting-correct-answer');
@@ -187,51 +190,260 @@ const DEFAULT_EXAM_ICON = 'graduation-cap';
 const DEFAULT_SUBJECT_ICON = 'book';
 
 const canvasCtx = quizCanvas.getContext('2d')!;
-let isDrawing = false;
+const PEN_WIDTH = 6;
+const ERASER_WIDTH = 28;
+
+// 表示用キャンバス(quizCanvas)は表示窓。実際の描画は一回り大きい
+// オフスクリーンの「ボード」に対して行い、その一部分を表示窓に転写する。
+// 右クリックドラッグ(PC)や2本指ドラッグ(スマホ)で表示位置(viewX,viewY)を
+// 動かすと、書いた内容を残したままスクロールできる。
+const VIEW_W = quizCanvas.width;
+const VIEW_H = quizCanvas.height;
+const BOARD_W = VIEW_W * 2;
+const BOARD_H = VIEW_H * 3;
+
+const board = document.createElement('canvas');
+board.width = BOARD_W;
+board.height = BOARD_H;
+const boardCtx = board.getContext('2d')!;
+
+let viewX = (BOARD_W - VIEW_W) / 2;
+let viewY = 0;
+let toolMode: 'pen' | 'eraser' = 'pen';
+
+interface BoardStroke {
+  tool: 'pen' | 'eraser';
+  width: number;
+  points: { x: number; y: number }[];
+}
+// 「戻す」用に、ストロークを点列(ベクトル)として保持しておく。
+const strokes: BoardStroke[] = [];
+let currentStroke: BoardStroke | null = null;
 let lastX = 0;
 let lastY = 0;
+let midX = 0;
+let midY = 0;
 
-function canvasPoint(e: PointerEvent): { x: number; y: number } {
-  const rect = quizCanvas.getBoundingClientRect();
-  const scaleX = quizCanvas.width / rect.width;
-  const scaleY = quizCanvas.height / rect.height;
-  return { x: (e.clientX - rect.left) * scaleX, y: (e.clientY - rect.top) * scaleY };
+// 描画中/パン中のポインタ管理。
+const activePointers = new Map<number, { x: number; y: number }>();
+let panning = false;
+let panLastX = 0;
+let panLastY = 0;
+
+// インクの色はテーマに追従させる(ダークモードでは明るい色になる)。
+function inkColor(): string {
+  return getComputedStyle(document.documentElement).getPropertyValue('--color-text').trim() || '#1e2433';
+}
+
+function clampView(): void {
+  viewX = Math.max(0, Math.min(BOARD_W - VIEW_W, viewX));
+  viewY = Math.max(0, Math.min(BOARD_H - VIEW_H, viewY));
+}
+
+// ボードの現在の表示範囲を表示用キャンバスへ転写する。
+function blitBoard(): void {
+  canvasCtx.clearRect(0, 0, VIEW_W, VIEW_H);
+  canvasCtx.drawImage(board, viewX, viewY, VIEW_W, VIEW_H, 0, 0, VIEW_W, VIEW_H);
+}
+
+function beginBoardPath(stroke: BoardStroke): void {
+  boardCtx.lineCap = 'round';
+  boardCtx.lineJoin = 'round';
+  boardCtx.lineWidth = stroke.width;
+  if (stroke.tool === 'eraser') {
+    boardCtx.globalCompositeOperation = 'destination-out';
+  } else {
+    boardCtx.globalCompositeOperation = 'source-over';
+    boardCtx.strokeStyle = inkColor();
+    boardCtx.fillStyle = inkColor();
+  }
+}
+
+// 1本のストローク全体をボードに描く(「戻す」後の再描画で使う)。
+function drawStrokeToBoard(stroke: BoardStroke): void {
+  const p = stroke.points;
+  if (p.length === 0) return;
+  beginBoardPath(stroke);
+  boardCtx.beginPath();
+  boardCtx.arc(p[0].x, p[0].y, stroke.width / 2, 0, Math.PI * 2);
+  boardCtx.fill();
+  boardCtx.beginPath();
+  boardCtx.moveTo(p[0].x, p[0].y);
+  for (let i = 1; i < p.length - 1; i++) {
+    const mx = (p[i].x + p[i + 1].x) / 2;
+    const my = (p[i].y + p[i + 1].y) / 2;
+    boardCtx.quadraticCurveTo(p[i].x, p[i].y, mx, my);
+  }
+  if (p.length > 1) boardCtx.lineTo(p[p.length - 1].x, p[p.length - 1].y);
+  boardCtx.stroke();
+  boardCtx.globalCompositeOperation = 'source-over';
+}
+
+function redrawBoard(): void {
+  boardCtx.clearRect(0, 0, BOARD_W, BOARD_H);
+  for (const stroke of strokes) drawStrokeToBoard(stroke);
+  blitBoard();
 }
 
 function clearCanvas(): void {
-  canvasCtx.clearRect(0, 0, quizCanvas.width, quizCanvas.height);
+  strokes.length = 0;
+  currentStroke = null;
+  panning = false;
+  viewX = (BOARD_W - VIEW_W) / 2;
+  viewY = 0;
+  boardCtx.clearRect(0, 0, BOARD_W, BOARD_H);
+  blitBoard();
+  btnUndoCanvas.disabled = true;
 }
 
+function undoStroke(): void {
+  if (strokes.length === 0) return;
+  strokes.pop();
+  redrawBoard();
+  btnUndoCanvas.disabled = strokes.length === 0;
+}
+
+function finishCurrentStroke(): void {
+  if (currentStroke && currentStroke.points.length > 0) {
+    strokes.push(currentStroke);
+    btnUndoCanvas.disabled = false;
+  }
+  currentStroke = null;
+}
+
+function setToolMode(mode: 'pen' | 'eraser'): void {
+  toolMode = mode;
+  btnPenMode.classList.toggle('is-active', mode === 'pen');
+  btnPenMode.setAttribute('aria-pressed', String(mode === 'pen'));
+  btnEraserMode.classList.toggle('is-active', mode === 'eraser');
+  btnEraserMode.setAttribute('aria-pressed', String(mode === 'eraser'));
+  quizCanvas.classList.toggle('is-erasing', mode === 'eraser');
+}
+
+// 表示窓のクライアント座標 → 表示窓内キャンバス座標。
+function viewPoint(e: PointerEvent): { x: number; y: number } {
+  const rect = quizCanvas.getBoundingClientRect();
+  return {
+    x: ((e.clientX - rect.left) * VIEW_W) / rect.width,
+    y: ((e.clientY - rect.top) * VIEW_H) / rect.height,
+  };
+}
+// 表示窓座標 → ボード座標。
+function boardPoint(e: PointerEvent): { x: number; y: number } {
+  const p = viewPoint(e);
+  return { x: p.x + viewX, y: p.y + viewY };
+}
+function pointerCentroid(): { x: number; y: number } {
+  let sx = 0;
+  let sy = 0;
+  for (const p of activePointers.values()) {
+    sx += p.x;
+    sy += p.y;
+  }
+  const n = activePointers.size || 1;
+  return { x: sx / n, y: sy / n };
+}
+function startPan(): void {
+  finishCurrentStroke();
+  panning = true;
+  const c = pointerCentroid();
+  panLastX = c.x;
+  panLastY = c.y;
+}
+
+quizCanvas.addEventListener('contextmenu', (e) => e.preventDefault());
+
 quizCanvas.addEventListener('pointerdown', (e) => {
-  isDrawing = true;
-  quizCanvas.setPointerCapture(e.pointerId);
-  const p = canvasPoint(e);
-  lastX = p.x;
-  lastY = p.y;
+  try {
+    quizCanvas.setPointerCapture(e.pointerId);
+  } catch {
+    // 一部の環境ではキャプチャに失敗することがあるが、描画自体は続行する。
+  }
+  activePointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+
+  // 右クリック、または2本以上のポインタでパン(スクロール)。
+  if (e.button === 2 || activePointers.size >= 2) {
+    startPan();
+    return;
+  }
+
+  const bp = boardPoint(e);
+  currentStroke = {
+    tool: toolMode,
+    width: toolMode === 'eraser' ? ERASER_WIDTH : PEN_WIDTH,
+    points: [bp],
+  };
+  lastX = bp.x;
+  lastY = bp.y;
+  midX = bp.x;
+  midY = bp.y;
+  // タップ(点)でも「.」や小数点が書けるように、押した瞬間に小さな丸を打つ。
+  beginBoardPath(currentStroke);
+  boardCtx.beginPath();
+  boardCtx.arc(bp.x, bp.y, currentStroke.width / 2, 0, Math.PI * 2);
+  boardCtx.fill();
+  boardCtx.globalCompositeOperation = 'source-over';
+  blitBoard();
 });
 
 quizCanvas.addEventListener('pointermove', (e) => {
-  if (!isDrawing) return;
-  const p = canvasPoint(e);
-  canvasCtx.strokeStyle = '#1e2433';
-  canvasCtx.lineWidth = 6;
-  canvasCtx.lineCap = 'round';
-  canvasCtx.beginPath();
-  canvasCtx.moveTo(lastX, lastY);
-  canvasCtx.lineTo(p.x, p.y);
-  canvasCtx.stroke();
-  lastX = p.x;
-  lastY = p.y;
+  if (activePointers.has(e.pointerId)) activePointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+
+  if (!panning && activePointers.size >= 2) startPan();
+
+  if (panning) {
+    const c = pointerCentroid();
+    const rect = quizCanvas.getBoundingClientRect();
+    viewX -= ((c.x - panLastX) * VIEW_W) / rect.width;
+    viewY -= ((c.y - panLastY) * VIEW_H) / rect.height;
+    clampView();
+    panLastX = c.x;
+    panLastY = c.y;
+    blitBoard();
+    return;
+  }
+
+  if (!currentStroke) return;
+  const bp = boardPoint(e);
+  currentStroke.points.push(bp);
+  // 直前の点を制御点、中点を通過点にして曲線でつなぎ、なめらかな線にする。
+  const newMidX = (lastX + bp.x) / 2;
+  const newMidY = (lastY + bp.y) / 2;
+  beginBoardPath(currentStroke);
+  boardCtx.beginPath();
+  boardCtx.moveTo(midX, midY);
+  boardCtx.quadraticCurveTo(lastX, lastY, newMidX, newMidY);
+  boardCtx.stroke();
+  boardCtx.globalCompositeOperation = 'source-over';
+  lastX = bp.x;
+  lastY = bp.y;
+  midX = newMidX;
+  midY = newMidY;
+  blitBoard();
 });
 
-function stopDrawing(): void {
-  isDrawing = false;
+function endPointer(e: PointerEvent): void {
+  activePointers.delete(e.pointerId);
+  if (panning) {
+    if (activePointers.size >= 2) {
+      const c = pointerCentroid();
+      panLastX = c.x;
+      panLastY = c.y;
+    } else {
+      panning = false;
+    }
+    return;
+  }
+  finishCurrentStroke();
 }
-quizCanvas.addEventListener('pointerup', stopDrawing);
-quizCanvas.addEventListener('pointerleave', stopDrawing);
-quizCanvas.addEventListener('pointercancel', stopDrawing);
+quizCanvas.addEventListener('pointerup', endPointer);
+quizCanvas.addEventListener('pointerleave', endPointer);
+quizCanvas.addEventListener('pointercancel', endPointer);
 
 btnClearCanvas.addEventListener('click', clearCanvas);
+btnUndoCanvas.addEventListener('click', undoStroke);
+btnPenMode.addEventListener('click', () => setToolMode('pen'));
+btnEraserMode.addEventListener('click', () => setToolMode('eraser'));
 
 function setMainNav(section: 'library' | 'dashboard'): void {
   navLibrary.classList.toggle('is-active', section === 'library');
@@ -729,6 +941,7 @@ function renderQuestion(): void {
   handwritingCorrectAnswer.textContent = '';
   btnCheckHandwriting.hidden = false;
   clearCanvas();
+  setToolMode('pen');
   quizCanvas.style.pointerEvents = 'auto';
 
   if (q.type === 'choice') {

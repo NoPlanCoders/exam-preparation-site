@@ -24754,6 +24754,17 @@
     ["path", { d: "m7 10 5 5 5-5" }]
   ];
 
+  // node_modules/lucide/dist/esm/icons/eraser.mjs
+  var Eraser = [
+    [
+      "path",
+      {
+        d: "M21 21H8a2 2 0 0 1-1.42-.587l-3.994-3.999a2 2 0 0 1 0-2.828l10-10a2 2 0 0 1 2.829 0l5.999 6a2 2 0 0 1 0 2.828L12.834 21"
+      }
+    ],
+    ["path", { d: "m5.082 11.09 8.828 8.828" }]
+  ];
+
   // node_modules/lucide/dist/esm/icons/gauge.mjs
   var Gauge = [
     ["path", { d: "m12 14 4-4" }],
@@ -24915,6 +24926,15 @@
     ["circle", { cx: "12", cy: "12", r: "2" }]
   ];
 
+  // node_modules/lucide/dist/esm/icons/trash.mjs
+  var Trash = [
+    ["path", { d: "M10 11v6" }],
+    ["path", { d: "M14 11v6" }],
+    ["path", { d: "M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" }],
+    ["path", { d: "M3 6h18" }],
+    ["path", { d: "M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" }]
+  ];
+
   // node_modules/lucide/dist/esm/icons/tree-pine.mjs
   var TreePine = [
     [
@@ -24930,6 +24950,12 @@
   var TrendingUp = [
     ["path", { d: "M16 7h6v6" }],
     ["path", { d: "m22 7-8.5 8.5-5-5L2 17" }]
+  ];
+
+  // node_modules/lucide/dist/esm/icons/undo-2.mjs
+  var Undo2 = [
+    ["path", { d: "M9 14 4 9l5-5" }],
+    ["path", { d: "M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5a5.5 5.5 0 0 1-5.5 5.5H11" }]
   ];
 
   // node_modules/lucide/dist/esm/icons/variable.mjs
@@ -25027,6 +25053,7 @@
     Database,
     Dice5,
     Download,
+    Eraser,
     Gauge,
     GraduationCap,
     Grid2X2: Grid2x2,
@@ -25045,8 +25072,10 @@
     Settings: Settings2,
     Star,
     Target,
+    Trash,
     TreePine,
     TrendingUp,
+    Undo2,
     Variable,
     Waves: WavesHorizontal,
     Wrench,
@@ -25058,6 +25087,9 @@
     database: "database",
     keyboard: "keyboard",
     languages: "languages",
+    eraser: "eraser",
+    "undo-2": "undo-2",
+    trash: "trash",
     dice: "dice-5",
     brain: "brain",
     pencil: "pencil",
@@ -25240,6 +25272,9 @@
   var quizHandwritingArea = $("quiz-handwriting-area");
   var quizCanvas = $("quiz-canvas");
   var btnClearCanvas = $("btn-clear-canvas");
+  var btnUndoCanvas = $("btn-undo-canvas");
+  var btnPenMode = $("btn-pen-mode");
+  var btnEraserMode = $("btn-eraser-mode");
   var btnCheckHandwriting = $("btn-check-handwriting");
   var handwritingAnswerReveal = $("handwriting-answer-reveal");
   var handwritingCorrectAnswer = $("handwriting-correct-answer");
@@ -25324,45 +25359,214 @@
   var DEFAULT_EXAM_ICON = "graduation-cap";
   var DEFAULT_SUBJECT_ICON = "book";
   var canvasCtx = quizCanvas.getContext("2d");
-  var isDrawing = false;
+  var PEN_WIDTH = 6;
+  var ERASER_WIDTH = 28;
+  var VIEW_W = quizCanvas.width;
+  var VIEW_H = quizCanvas.height;
+  var BOARD_W = VIEW_W * 2;
+  var BOARD_H = VIEW_H * 3;
+  var board = document.createElement("canvas");
+  board.width = BOARD_W;
+  board.height = BOARD_H;
+  var boardCtx = board.getContext("2d");
+  var viewX = (BOARD_W - VIEW_W) / 2;
+  var viewY = 0;
+  var toolMode = "pen";
+  var strokes = [];
+  var currentStroke = null;
   var lastX = 0;
   var lastY = 0;
-  function canvasPoint(e) {
-    const rect = quizCanvas.getBoundingClientRect();
-    const scaleX = quizCanvas.width / rect.width;
-    const scaleY = quizCanvas.height / rect.height;
-    return { x: (e.clientX - rect.left) * scaleX, y: (e.clientY - rect.top) * scaleY };
+  var midX = 0;
+  var midY = 0;
+  var activePointers = /* @__PURE__ */ new Map();
+  var panning = false;
+  var panLastX = 0;
+  var panLastY = 0;
+  function inkColor() {
+    return getComputedStyle(document.documentElement).getPropertyValue("--color-text").trim() || "#1e2433";
+  }
+  function clampView() {
+    viewX = Math.max(0, Math.min(BOARD_W - VIEW_W, viewX));
+    viewY = Math.max(0, Math.min(BOARD_H - VIEW_H, viewY));
+  }
+  function blitBoard() {
+    canvasCtx.clearRect(0, 0, VIEW_W, VIEW_H);
+    canvasCtx.drawImage(board, viewX, viewY, VIEW_W, VIEW_H, 0, 0, VIEW_W, VIEW_H);
+  }
+  function beginBoardPath(stroke) {
+    boardCtx.lineCap = "round";
+    boardCtx.lineJoin = "round";
+    boardCtx.lineWidth = stroke.width;
+    if (stroke.tool === "eraser") {
+      boardCtx.globalCompositeOperation = "destination-out";
+    } else {
+      boardCtx.globalCompositeOperation = "source-over";
+      boardCtx.strokeStyle = inkColor();
+      boardCtx.fillStyle = inkColor();
+    }
+  }
+  function drawStrokeToBoard(stroke) {
+    const p = stroke.points;
+    if (p.length === 0) return;
+    beginBoardPath(stroke);
+    boardCtx.beginPath();
+    boardCtx.arc(p[0].x, p[0].y, stroke.width / 2, 0, Math.PI * 2);
+    boardCtx.fill();
+    boardCtx.beginPath();
+    boardCtx.moveTo(p[0].x, p[0].y);
+    for (let i2 = 1; i2 < p.length - 1; i2++) {
+      const mx = (p[i2].x + p[i2 + 1].x) / 2;
+      const my = (p[i2].y + p[i2 + 1].y) / 2;
+      boardCtx.quadraticCurveTo(p[i2].x, p[i2].y, mx, my);
+    }
+    if (p.length > 1) boardCtx.lineTo(p[p.length - 1].x, p[p.length - 1].y);
+    boardCtx.stroke();
+    boardCtx.globalCompositeOperation = "source-over";
+  }
+  function redrawBoard() {
+    boardCtx.clearRect(0, 0, BOARD_W, BOARD_H);
+    for (const stroke of strokes) drawStrokeToBoard(stroke);
+    blitBoard();
   }
   function clearCanvas() {
-    canvasCtx.clearRect(0, 0, quizCanvas.width, quizCanvas.height);
+    strokes.length = 0;
+    currentStroke = null;
+    panning = false;
+    viewX = (BOARD_W - VIEW_W) / 2;
+    viewY = 0;
+    boardCtx.clearRect(0, 0, BOARD_W, BOARD_H);
+    blitBoard();
+    btnUndoCanvas.disabled = true;
   }
+  function undoStroke() {
+    if (strokes.length === 0) return;
+    strokes.pop();
+    redrawBoard();
+    btnUndoCanvas.disabled = strokes.length === 0;
+  }
+  function finishCurrentStroke() {
+    if (currentStroke && currentStroke.points.length > 0) {
+      strokes.push(currentStroke);
+      btnUndoCanvas.disabled = false;
+    }
+    currentStroke = null;
+  }
+  function setToolMode(mode) {
+    toolMode = mode;
+    btnPenMode.classList.toggle("is-active", mode === "pen");
+    btnPenMode.setAttribute("aria-pressed", String(mode === "pen"));
+    btnEraserMode.classList.toggle("is-active", mode === "eraser");
+    btnEraserMode.setAttribute("aria-pressed", String(mode === "eraser"));
+    quizCanvas.classList.toggle("is-erasing", mode === "eraser");
+  }
+  function viewPoint(e) {
+    const rect = quizCanvas.getBoundingClientRect();
+    return {
+      x: (e.clientX - rect.left) * VIEW_W / rect.width,
+      y: (e.clientY - rect.top) * VIEW_H / rect.height
+    };
+  }
+  function boardPoint(e) {
+    const p = viewPoint(e);
+    return { x: p.x + viewX, y: p.y + viewY };
+  }
+  function pointerCentroid() {
+    let sx = 0;
+    let sy = 0;
+    for (const p of activePointers.values()) {
+      sx += p.x;
+      sy += p.y;
+    }
+    const n = activePointers.size || 1;
+    return { x: sx / n, y: sy / n };
+  }
+  function startPan() {
+    finishCurrentStroke();
+    panning = true;
+    const c = pointerCentroid();
+    panLastX = c.x;
+    panLastY = c.y;
+  }
+  quizCanvas.addEventListener("contextmenu", (e) => e.preventDefault());
   quizCanvas.addEventListener("pointerdown", (e) => {
-    isDrawing = true;
-    quizCanvas.setPointerCapture(e.pointerId);
-    const p = canvasPoint(e);
-    lastX = p.x;
-    lastY = p.y;
+    try {
+      quizCanvas.setPointerCapture(e.pointerId);
+    } catch {
+    }
+    activePointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (e.button === 2 || activePointers.size >= 2) {
+      startPan();
+      return;
+    }
+    const bp = boardPoint(e);
+    currentStroke = {
+      tool: toolMode,
+      width: toolMode === "eraser" ? ERASER_WIDTH : PEN_WIDTH,
+      points: [bp]
+    };
+    lastX = bp.x;
+    lastY = bp.y;
+    midX = bp.x;
+    midY = bp.y;
+    beginBoardPath(currentStroke);
+    boardCtx.beginPath();
+    boardCtx.arc(bp.x, bp.y, currentStroke.width / 2, 0, Math.PI * 2);
+    boardCtx.fill();
+    boardCtx.globalCompositeOperation = "source-over";
+    blitBoard();
   });
   quizCanvas.addEventListener("pointermove", (e) => {
-    if (!isDrawing) return;
-    const p = canvasPoint(e);
-    canvasCtx.strokeStyle = "#1e2433";
-    canvasCtx.lineWidth = 6;
-    canvasCtx.lineCap = "round";
-    canvasCtx.beginPath();
-    canvasCtx.moveTo(lastX, lastY);
-    canvasCtx.lineTo(p.x, p.y);
-    canvasCtx.stroke();
-    lastX = p.x;
-    lastY = p.y;
+    if (activePointers.has(e.pointerId)) activePointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (!panning && activePointers.size >= 2) startPan();
+    if (panning) {
+      const c = pointerCentroid();
+      const rect = quizCanvas.getBoundingClientRect();
+      viewX -= (c.x - panLastX) * VIEW_W / rect.width;
+      viewY -= (c.y - panLastY) * VIEW_H / rect.height;
+      clampView();
+      panLastX = c.x;
+      panLastY = c.y;
+      blitBoard();
+      return;
+    }
+    if (!currentStroke) return;
+    const bp = boardPoint(e);
+    currentStroke.points.push(bp);
+    const newMidX = (lastX + bp.x) / 2;
+    const newMidY = (lastY + bp.y) / 2;
+    beginBoardPath(currentStroke);
+    boardCtx.beginPath();
+    boardCtx.moveTo(midX, midY);
+    boardCtx.quadraticCurveTo(lastX, lastY, newMidX, newMidY);
+    boardCtx.stroke();
+    boardCtx.globalCompositeOperation = "source-over";
+    lastX = bp.x;
+    lastY = bp.y;
+    midX = newMidX;
+    midY = newMidY;
+    blitBoard();
   });
-  function stopDrawing() {
-    isDrawing = false;
+  function endPointer(e) {
+    activePointers.delete(e.pointerId);
+    if (panning) {
+      if (activePointers.size >= 2) {
+        const c = pointerCentroid();
+        panLastX = c.x;
+        panLastY = c.y;
+      } else {
+        panning = false;
+      }
+      return;
+    }
+    finishCurrentStroke();
   }
-  quizCanvas.addEventListener("pointerup", stopDrawing);
-  quizCanvas.addEventListener("pointerleave", stopDrawing);
-  quizCanvas.addEventListener("pointercancel", stopDrawing);
+  quizCanvas.addEventListener("pointerup", endPointer);
+  quizCanvas.addEventListener("pointerleave", endPointer);
+  quizCanvas.addEventListener("pointercancel", endPointer);
   btnClearCanvas.addEventListener("click", clearCanvas);
+  btnUndoCanvas.addEventListener("click", undoStroke);
+  btnPenMode.addEventListener("click", () => setToolMode("pen"));
+  btnEraserMode.addEventListener("click", () => setToolMode("eraser"));
   function setMainNav(section) {
     navLibrary.classList.toggle("is-active", section === "library");
     navDashboard.classList.toggle("is-active", section === "dashboard");
@@ -25746,6 +25950,7 @@
     handwritingCorrectAnswer.textContent = "";
     btnCheckHandwriting.hidden = false;
     clearCanvas();
+    setToolMode("pen");
     quizCanvas.style.pointerEvents = "auto";
     if (q.type === "choice") {
       quizChoices.hidden = false;
@@ -26319,6 +26524,7 @@ lucide/dist/esm/icons/clipboard-check.mjs:
 lucide/dist/esm/icons/database.mjs:
 lucide/dist/esm/icons/dice-5.mjs:
 lucide/dist/esm/icons/download.mjs:
+lucide/dist/esm/icons/eraser.mjs:
 lucide/dist/esm/icons/gauge.mjs:
 lucide/dist/esm/icons/graduation-cap.mjs:
 lucide/dist/esm/icons/grid-2x2.mjs:
@@ -26337,8 +26543,10 @@ lucide/dist/esm/icons/save.mjs:
 lucide/dist/esm/icons/settings.mjs:
 lucide/dist/esm/icons/star.mjs:
 lucide/dist/esm/icons/target.mjs:
+lucide/dist/esm/icons/trash.mjs:
 lucide/dist/esm/icons/tree-pine.mjs:
 lucide/dist/esm/icons/trending-up.mjs:
+lucide/dist/esm/icons/undo-2.mjs:
 lucide/dist/esm/icons/variable.mjs:
 lucide/dist/esm/icons/waves-horizontal.mjs:
 lucide/dist/esm/icons/wrench.mjs:

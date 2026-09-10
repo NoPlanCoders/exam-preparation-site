@@ -208,9 +208,15 @@
         <div id="quiz-handwriting-area" class="quiz-handwriting-area" hidden>
           <canvas id="quiz-canvas" class="quiz-canvas" width="840" height="330"></canvas>
           <div class="handwriting-controls">
-            <button type="button" id="btn-clear-canvas" class="btn-clear-canvas">消す</button>
+            <div class="handwriting-tools" role="group" aria-label="筆記ツール">
+              <button type="button" id="btn-pen-mode" class="btn-tool is-active" aria-pressed="true"><i data-lucide="pencil" aria-hidden="true"></i><span>ペン</span></button>
+              <button type="button" id="btn-eraser-mode" class="btn-tool" aria-pressed="false"><i data-lucide="eraser" aria-hidden="true"></i><span>消しゴム</span></button>
+              <button type="button" id="btn-undo-canvas" class="btn-tool"><i data-lucide="undo-2" aria-hidden="true"></i><span>戻す</span></button>
+              <button type="button" id="btn-clear-canvas" class="btn-tool"><i data-lucide="trash" aria-hidden="true"></i><span>全消し</span></button>
+            </div>
             <button type="button" id="btn-check-handwriting">答えを確認</button>
           </div>
+          <p class="handwriting-hint">右クリックドラッグ / 2本指ドラッグでスクロールできます</p>
           <div id="handwriting-answer-reveal" class="handwriting-answer-reveal" hidden>
             <p>正解: <span id="handwriting-correct-answer"></span></p>
           </div>
