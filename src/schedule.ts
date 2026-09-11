@@ -46,16 +46,6 @@ const EXAM_SCHEDULES: Record<string, ExamSchedule> = {
         month: 9,
         day: 15,
         periods: [
-          { time: '1限 9:30〜10:20', subject: '経済学a', room: '322' },
-          { time: '2限 10:30〜11:20', subject: 'ゲーム理論a', room: '322' },
-          { time: '3限 11:30〜12:20', subject: '確率統計Ⅰa', room: '322', isElective: true },
-          { time: '4限 13:30〜14:20', subject: '回路演習', room: '022', isElective: true },
-        ],
-      },
-      {
-        month: 9,
-        day: 16,
-        periods: [
           { time: '1限 9:30〜10:20', subject: 'データベース', room: '322' },
           { time: '2限 10:30〜11:20', subject: '国語4a', room: '322' },
           { time: '3限 11:30〜12:20', subject: '(授業なし)' },
@@ -64,7 +54,7 @@ const EXAM_SCHEDULES: Record<string, ExamSchedule> = {
       },
       {
         month: 9,
-        day: 17,
+        day: 16,
         periods: [
           { time: '1限 9:30〜10:20', subject: '制御工学', room: '322' },
           { time: '2限 10:30〜11:20', subject: '英語4a', room: '322' },
@@ -74,7 +64,7 @@ const EXAM_SCHEDULES: Record<string, ExamSchedule> = {
       },
       {
         month: 9,
-        day: 18,
+        day: 17,
         periods: [
           { time: '1限 9:30〜10:20', subject: '応用物理a', room: '322' },
           { time: '2限 10:30〜11:20', subject: 'メカトロニクスa', room: '322' },
@@ -84,12 +74,22 @@ const EXAM_SCHEDULES: Record<string, ExamSchedule> = {
       },
       {
         month: 9,
-        day: 19,
+        day: 18,
         periods: [
           { time: '1限 9:30〜10:20', subject: '応用数学a', room: '322' },
           { time: '2限 10:30〜11:20', subject: '数値計算法', room: '022' },
           { time: '3限 11:30〜12:20', subject: '中国語初級a', room: '022', isElective: true },
           { time: '4限 13:30〜14:20', subject: '(授業なし)' },
+        ],
+      },
+      {
+        month: 9,
+        day: 15,
+        periods: [
+          { time: '1限 9:30〜10:20', subject: '経済学a', room: '322' },
+          { time: '2限 10:30〜11:20', subject: 'ゲーム理論a', room: '322' },
+          { time: '3限 11:30〜12:20', subject: '確率統計Ⅰa', room: '322', isElective: true },
+          { time: '4限 13:30〜14:20', subject: '回路演習', room: '022', isElective: true },
         ],
       },
     ],
