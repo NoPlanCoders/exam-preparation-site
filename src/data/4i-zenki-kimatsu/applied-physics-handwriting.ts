@@ -62,13 +62,15 @@ export const questions: Question[] = [
   },
   {
     type: 'handwriting',
-    question: '上の運動方程式について、時刻$t$[s]での物体の速さ$V_y$を求めよ。',
+    question:
+      '質量$m$[kg]の物体を速度$V_0$[m/s]で投げ上げるとき、空気抵抗$-KV_y$[N]により運動方程式$m\\dfrac{dV_y}{dt} = -mg - KV_y$が成り立つ。時刻$t$[s]での物体の速さ$V_y$を求めよ。',
     answer:
       '$V_y = \\left(V_0+\\dfrac{mg}{K}\\right)e^{-\\frac{K}{m}t} - \\dfrac{mg}{K}$ [m/s]\n(変数分離: $\\dfrac{dV_y}{V_y+mg/K}=-\\dfrac{K}{m}dt$ を積分し、$t=0$で$V_y=V_0$の初期条件から積分定数を決める)',
   },
   {
     type: 'handwriting',
-    question: '上の物体が最高点に達するまでの時間はいくらか。',
+    question:
+      '質量$m$[kg]の物体を速度$V_0$[m/s]で投げ上げるとき、上向きの速度$V_y$[m/s]に比例する空気抵抗$-KV_y$[N]が働く($K$は定数)。この物体が最高点に達するまでの時間はいくらか。',
     answer:
       '$t = \\dfrac{m}{K}\\ln\\!\\left(\\dfrac{KV_0+mg}{mg}\\right)$ [s]\n($V_y=0$とおいて$t$について解く)',
   },
@@ -82,7 +84,7 @@ export const questions: Question[] = [
   {
     type: 'handwriting',
     question:
-      '上の粒子について、慣性モーメント$I=mr^2$、角速度$\\omega$より、$I\\omega$が角運動量と一致していることを確認せよ。',
+      '質量$m=1.0$kgの粒子が、半径$r=1.0$mの円周上を、速さ$v=2.0$m/sで等速円運動している。慣性モーメント$I=mr^2$、角速度$\\omega$より、$I\\omega$が角運動量と一致していることを確認せよ。',
     answer:
       '$I=mr^2=1.0\\times(1.0)^2=1.0$ kg・m²、$\\omega=v/r=2.0/1.0=2.0$ rad/s より $I\\omega=1.0\\times2.0=2.0$ kg・m²/s となり、角運動量$L=2.0$ kg・m²/sと一致する。',
   },

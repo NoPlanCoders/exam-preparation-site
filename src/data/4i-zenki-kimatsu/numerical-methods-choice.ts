@@ -16,7 +16,8 @@ export const questions: Question[] = [
   },
   {
     type: 'choice',
-    question: '上のσについて、σ²を巡回置換で表すとどれか。',
+    question:
+      '集合X={1,2,3,4,5,6}上の置換 σ=(1→2, 2→3, 3→1, 4→5, 5→6, 6→4) について、σ²を巡回置換で表すとどれか。',
     choices: ['(1,2,3)(4,5,6)', '(1,3,2)(4,6,5)', 'e(恒等置換)', '(1,2)(4,5)'],
     answer: 1,
     explanations: [
@@ -28,7 +29,8 @@ export const questions: Question[] = [
   },
   {
     type: 'choice',
-    question: '上のσについて、σ³はどうなるか。',
+    question:
+      '集合X={1,2,3,4,5,6}上の置換 σ=(1→2, 2→3, 3→1, 4→5, 5→6, 6→4) について、σ³はどうなるか。',
     choices: ['σ自身と同じ', 'e(恒等置換)', 'σ²と同じ', '定義されない'],
     answer: 1,
     explanations: [
@@ -40,7 +42,8 @@ export const questions: Question[] = [
   },
   {
     type: 'choice',
-    question: '上のσについて、σ^k=e(恒等変換)となる最小の自然数kはいくらか。',
+    question:
+      '集合X={1,2,3,4,5,6}上の置換 σ=(1→2, 2→3, 3→1, 4→5, 5→6, 6→4) について、σ^k=e(恒等変換)となる最小の自然数kはいくらか。',
     choices: ['2', '3', '6', '9'],
     answer: 1,
     explanations: [
@@ -148,7 +151,8 @@ export const questions: Question[] = [
   },
   {
     type: 'choice',
-    question: '上の問題で、S={1,2,3}の近傍N(S)(希望する女子集合)はどれか。',
+    question:
+      '集合A={1,2,3,4}とB={a,b,c,d}について、1:{a,b}、2:{a,b}、3:{a,b}、4:{c,d}という希望関係がある。S={1,2,3}の近傍N(S)(希望する女子集合)はどれか。',
     choices: ['{a,b,c}', '{a,b}', '{a,b,c,d}', '{c,d}'],
     answer: 1,
     explanations: [
@@ -160,7 +164,8 @@ export const questions: Question[] = [
   },
   {
     type: 'choice',
-    question: '上の問題(|N(S)|=2 < |S|=3)から、AからBへの完全マッチングについて何が言えるか。',
+    question:
+      '集合A={1,2,3,4}とB={a,b,c,d}について、1:{a,b}、2:{a,b}、3:{a,b}、4:{c,d}という希望関係がある。S={1,2,3}のときN(S)={a,b}で|N(S)|=2<|S|=3であることから、AからBへの完全マッチングについて何が言えるか。',
     choices: ['必ず存在する', '存在しない', '2通りだけ存在する', '情報不足で判定できない'],
     answer: 1,
     explanations: [
@@ -273,7 +278,8 @@ export const questions: Question[] = [
   },
   {
     type: 'choice',
-    question: '上のSの非対角成分S_ij(i≠j)がすべて0より大きいとき、グラフGについて何が言えるか。',
+    question:
+      'n個の頂点からなる有向グラフの隣接行列をAとし、S=A+A²+…+A^(n−1)とする。Sの非対角成分S_ij(i≠j)がすべて0より大きいとき、グラフGについて何が言えるか。',
     choices: ['連結でない', '強連結である', '木構造である', '完全グラフである'],
     answer: 1,
     explanations: [
@@ -315,7 +321,8 @@ export const questions: Question[] = [
   },
   {
     type: 'choice',
-    question: '上のAについて、A³はどうなるか。',
+    question:
+      '隣接行列A=[[0,1,0],[0,0,1],[1,0,0]](頂点1→2→3→1のサイクル)について、A³はどうなるか。',
     choices: ['ゼロ行列', '単位行列I', 'A自身と同じ', 'A²と同じ'],
     answer: 1,
     explanations: [
@@ -327,7 +334,8 @@ export const questions: Question[] = [
   },
   {
     type: 'choice',
-    question: '上のAについて、頂点2から頂点3への長さ3の経路数はいくつか(A³=Iであることを利用せよ)。',
+    question:
+      '隣接行列A=[[0,1,0],[0,0,1],[1,0,0]](頂点1→2→3→1のサイクル、A³=Iであることが分かっている)について、頂点2から頂点3への長さ3の経路数はいくつか。',
     choices: ['0', '1', '2', '3'],
     answer: 0,
     explanations: [
@@ -628,7 +636,8 @@ export const questions: Question[] = [
   },
   {
     type: 'choice',
-    question: '上の問題で、「1」を受信したとき、それが正しく送信された信号(実際に「1」が送られていた)である確率はどれか。',
+    question:
+      '送信側が「1」を0.6、「0」を0.4の確率で送り、「1」送信時は0.9、「0」送信時は0.05の確率で「1」と受信されるとする(このとき「1」を受信する確率は0.56)。「1」を受信したとき、それが正しく送信された信号(実際に「1」が送られていた)である確率はどれか。',
     choices: ['9/10', '27/28', '1/2', '6/7'],
     answer: 1,
     explanations: [
@@ -653,7 +662,8 @@ export const questions: Question[] = [
   },
   {
     type: 'choice',
-    question: '上の問題で、「陽性」と2回連続で診断されたとき、実際にはかかっていない確率はおよそいくらか。',
+    question:
+      '罹患率1%の病気があり、検査キットは罹患者を95%の確率で陽性と判定し、健康な人を2%の確率で誤って陽性と判定する。「陽性」と2回連続で診断されたとき、実際にはかかっていない確率はおよそいくらか。',
     choices: ['約68%', '約32%', '約4%', '約0.4%'],
     answer: 2,
     explanations: [

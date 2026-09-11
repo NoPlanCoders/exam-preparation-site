@@ -176,7 +176,7 @@ export const questions: Question[] = [
   {
     type: 'choice',
     question:
-      '上の運動方程式を解くと、時刻$t$[s]での物体の速さ$V_y$はどのように表されるか。(物体は最初$V_0$[m/s]で投げ上げられたものとする)',
+      '質量$m$[kg]の物体を速度$V_0$[m/s]で投げ上げるとき、空気抵抗$-KV_y$[N]により運動方程式$m\\dfrac{dV_y}{dt} = -mg - KV_y$が成り立つ。これを解くと、時刻$t$[s]での物体の速さ$V_y$はどのように表されるか。',
     choices: [
       '$V_y = \\left(V_0+\\dfrac{mg}{K}\\right)e^{-\\frac{K}{m}t} - \\dfrac{mg}{K}$',
       '$V_y = V_0\\, e^{-\\frac{K}{m}t} - \\dfrac{mg}{K}$',
@@ -193,7 +193,8 @@ export const questions: Question[] = [
   },
   {
     type: 'choice',
-    question: '上の物体が最高点に達するまでの時間はいくらか。',
+    question:
+      '質量$m$[kg]の物体を速度$V_0$[m/s]で投げ上げるとき、上向きの速度$V_y$[m/s]に比例する空気抵抗$-KV_y$[N]が働く($K$は定数)。この物体が最高点に達するまでの時間はいくらか。',
     choices: [
       '$t = \\dfrac{m}{K}\\ln\\!\\left(\\dfrac{KV_0+mg}{mg}\\right)$',
       '$t = \\dfrac{V_0}{g}$',
@@ -225,7 +226,7 @@ export const questions: Question[] = [
   {
     type: 'choice',
     question:
-      '上の粒子について、慣性モーメント$I=mr^2$と角速度$\\omega=v/r$を用いて$I\\omega$を計算すると、上で求めた角運動量$L$とどうなるか。',
+      '質量$m=1.0$kgの粒子が、半径$r=1.0$mの円周上を、速さ$v=2.0$m/sで等速円運動している(このときの角運動量は$L=2.0\\ \\text{kg}\\cdot\\text{m}^2/\\text{s}$)。慣性モーメント$I=mr^2$と角速度$\\omega=v/r$を用いて$I\\omega$を計算すると、角運動量$L$とどうなるか。',
     choices: [
       '$I\\omega=2.0\\ \\text{kg}\\cdot\\text{m}^2/\\text{s}$となり、$L$と一致する',
       '$I\\omega=4.0\\ \\text{kg}\\cdot\\text{m}^2/\\text{s}$となり、$L$と一致しない',

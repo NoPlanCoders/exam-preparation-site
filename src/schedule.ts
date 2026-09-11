@@ -77,7 +77,7 @@ const EXAM_SCHEDULES: Record<string, ExamSchedule> = {
         day: 18,
         periods: [
           { time: '1限 9:30〜10:20', subject: '応用数学a', room: '322' },
-          { time: '2限 10:30〜11:20', subject: '数値計算法', room: '022' },
+          { time: '2限 10:30〜11:20', subject: '数値計算法', room: '322' },
           { time: '3限 11:30〜12:20', subject: '中国語初級a', room: '022', isElective: true },
           { time: '4限 13:30〜14:20', subject: '(授業なし)' },
         ],

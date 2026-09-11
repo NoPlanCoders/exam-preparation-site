@@ -614,7 +614,8 @@ export const questions: Question[] = [
   },
   {
     type: 'choice',
-    question: '前問(a=120, c=30)の均衡生産量のとき、均衡市場価格p*はいくらか。',
+    question:
+      '対称クールノー競争で市場価格p=a−(q1+q2)、限界費用c、a=120、c=30のとき、均衡生産量はq1=q2=30である。このときの均衡市場価格p*はいくらか。',
     choices: ['30', '60', '90', '120'],
     answer: 1,
     explanations: [
@@ -626,7 +627,8 @@ export const questions: Question[] = [
   },
   {
     type: 'choice',
-    question: '前問(a=120, c=30)の均衡のとき、各企業の均衡利益はいくらか。',
+    question:
+      '対称クールノー競争で市場価格p=a−(q1+q2)、限界費用c、a=120、c=30のとき、均衡生産量q*=30、均衡市場価格p*=60である。このとき各企業の均衡利益はいくらか。',
     choices: ['600', '900', '1200', '1800'],
     answer: 1,
     explanations: [
@@ -664,7 +666,8 @@ export const questions: Question[] = [
   },
   {
     type: 'choice',
-    question: '前問(U=(6,1,4), M=(3,3,3), D=(0,8,2))の利得行列で、マキシマックス基準ではどの戦略を選ぶか。',
+    question:
+      'プレーヤー1の利得が行U=(6,1,4)、行M=(3,3,3)、行D=(0,8,2)(列L,C,R)であるとき、マキシマックス基準ではどの戦略を選ぶか。',
     choices: ['U', 'M', 'D', 'どれでもよい'],
     answer: 2,
     explanations: [
@@ -701,7 +704,8 @@ export const questions: Question[] = [
   },
   {
     type: 'choice',
-    question: '前問と同じ費用のもと、一方がA・他方がBを選んだ場合の費用ポテンシャルΦ(A,B)はいくらか。',
+    question:
+      '混雑ゲームで道路の費用がcA(1)=2, cA(2)=6, cB(1)=4, cB(2)=5であるとき、一方がA・他方がBを選んだ場合の費用ポテンシャルΦ(A,B)はいくらか。',
     choices: ['9', '6', '8', '5'],
     answer: 1,
     explanations: [
