@@ -14176,7 +14176,7 @@
       "control-engineering-text",
       "control-engineering-handwriting"
     ],
-    \u9078\u629E\u79D1\u76EE: ["korean-choice"]
+    \u9078\u629E\u79D1\u76EE: ["korean-choice", "korean-vocab-text"]
   };
 
   // src/data/4i-zenki-kimatsu/subjects.ts
@@ -14288,6 +14288,12 @@
       name: "\u97D3\u56FD\u8A9E(\u9078\u629E\u5F0F)",
       description: "\u6709\u58F0\u97F3\u5316\u30FB\u9023\u97F3\u5316\u30FB\u6FC3\u97F3\u5316\u30FB\u6FC0\u97F3\u5316\u3001\u304B\u306A\u306E\u30CF\u30F3\u30B0\u30EB\u8868\u8A18\u3001\u6F22\u6570\u8A5E\u3001\u4F4D\u7F6E\u3092\u8868\u3059\u540D\u8A5E\u306A\u3069\u30924\u629E\u3067\u78BA\u8A8D",
       icon: "languages"
+    },
+    {
+      id: "korean-vocab-text",
+      name: "\u97D3\u56FD\u8A9E(\u5358\u8A9E\u30FB\u8A18\u8FF0\u5F0F)",
+      description: "\u5404\u8AB2\u306E\u5358\u8A9E\u306E\u610F\u5473\u3092\u3001\u97D3\u56FD\u8A9E\u2192\u65E5\u672C\u8A9E\u3067\u5165\u529B\u3057\u3066\u78BA\u8A8D",
+      icon: "keyboard"
     },
     {
       id: "economics-choice",
@@ -14867,6 +14873,206 @@
         "\u7B2C3\u6B63\u898F\u5F62\u306F\u63A8\u79FB\u7684\u95A2\u6570\u5F93\u5C5E\u306E\u6392\u9664\u3092\u6C42\u3081\u308B\u6761\u4EF6\u3067\u3042\u308A\u3001\u3053\u306E\u8A2D\u554F\u3067\u6307\u6458\u3055\u308C\u3066\u3044\u308B\u306E\u306F\u7B2C2\u6B63\u898F\u5F62\u306E\u6761\u4EF6(\u5B8C\u5168\u95A2\u6570\u5F93\u5C5E)\u9055\u53CD\u3067\u3042\u308B\u3002",
         "\u7B2C4\u6B63\u898F\u5F62\u306F\u591A\u5024\u5F93\u5C5E\u6027\u306B\u95A2\u3059\u308B\u6761\u4EF6\u3067\u3042\u308A\u3001\u3053\u306E\u8A2D\u554F\u306E\u90E8\u5206\u95A2\u6570\u5F93\u5C5E\u306E\u8A71\u3068\u306F\u7570\u306A\u308B\u89B3\u70B9\u3002"
       ]
+    },
+    {
+      type: "choice",
+      question: "\u30C7\u30FC\u30BF\u30D9\u30FC\u30B9\u306E\u4E2D\u306B\u5B9F\u969B\u306B\u30C7\u30FC\u30BF\u3092\u683C\u7D0D\u3059\u308B\u57FA\u5E95\u8868\u3092\u65B0\u3057\u304F\u5B9A\u7FA9\u3059\u308BSQL\u6587\u306F\u3069\u308C\u304B\u3002",
+      choices: ["CREATE VIEW", "CREATE TABLE", "ALTER TABLE", "INSERT INTO"],
+      answer: 1,
+      explanations: [
+        "CREATE VIEW\u306F\u95A2\u4FC2\u6F14\u7B97\u306E\u5F0F\u304B\u3089\u8996\u91CE\u8868(\u30D3\u30E5\u30FC)\u3092\u5B9A\u7FA9\u3059\u308B\u6587\u3067\u3001\u5B9F\u30C7\u30FC\u30BF\u3092\u683C\u7D0D\u3059\u308B\u57FA\u5E95\u8868\u3092\u65B0\u898F\u4F5C\u6210\u3059\u308B\u6587\u3067\u306F\u306A\u3044\u3002",
+        "\u6B63\u3057\u3044\u3002\u5B9F\u969B\u306B\u30C7\u30FC\u30BF\u3092\u683C\u7D0D\u3059\u308B\u57FA\u5E95\u8868\u3092\u65B0\u3057\u304F\u5B9A\u7FA9\u3059\u308B\u306B\u306FCREATE TABLE\u6587\u3092\u4F7F\u3046\u3002",
+        "ALTER TABLE\u306F\u65E2\u306B\u5B58\u5728\u3059\u308B\u8868\u306B\u5217\u3092\u8FFD\u52A0\u30FB\u524A\u9664\u3059\u308B\u306A\u3069\u5B9A\u7FA9\u3092\u5909\u66F4\u3059\u308B\u6587\u3067\u3001\u8868\u3092\u65B0\u898F\u306B\u4F5C\u308B\u6587\u3067\u306F\u306A\u3044\u3002",
+        "INSERT INTO\u306F\u65E2\u5B58\u306E\u8868\u306B\u884C(\u30C7\u30FC\u30BF)\u3092\u8FFD\u52A0\u3059\u308B\u6587\u3067\u3001\u8868\u305D\u306E\u3082\u306E\u3092\u5B9A\u7FA9\u3059\u308B\u6587\u3067\u306F\u306A\u3044\u3002"
+      ]
+    },
+    {
+      type: "choice",
+      question: "CREATE TABLE\u6587\u3067\u3001\u305D\u306E\u5217\u306B\u5024\u304C\u5FC5\u305A\u5165\u529B\u3055\u308C\u3066\u3044\u308B\u3053\u3068(NULL\u3092\u8A31\u3055\u306A\u3044\u3053\u3068)\u3092\u6307\u5B9A\u3059\u308B\u5236\u7D04\u306F\u3069\u308C\u304B\u3002",
+      choices: ["PRIMARY KEY", "UNIQUE", "NOT NULL", "DEFAULT"],
+      answer: 2,
+      explanations: [
+        "PRIMARY KEY\u306F\u8868\u306E\u884C\u3092\u4E00\u610F\u306B\u8B58\u5225\u3059\u308B\u4E3B\u30AD\u30FC\u3092\u6307\u5B9A\u3059\u308B\u5236\u7D04\u3067\u3001\u7D50\u679C\u3068\u3057\u3066NULL\u3082\u8A31\u3055\u306A\u304F\u306A\u308B\u304C\u3001\u3053\u306E\u5236\u7D04\u81EA\u4F53\u306E\u540D\u79F0\u3067\u306F\u306A\u3044\u3002",
+        "UNIQUE\u306F\u5024\u306E\u91CD\u8907\u3092\u7981\u6B62\u3059\u308B\u5236\u7D04\u3067\u3001NULL\u306E\u5165\u529B\u3092\u7981\u6B62\u3059\u308B\u5236\u7D04\u3068\u306F\u5225\u306E\u3082\u306E\u3002",
+        "\u6B63\u3057\u3044\u3002\u5217\u306E\u5024\u304C\u5FC5\u305A\u5165\u529B\u3055\u308C\u3066\u3044\u308B\u3053\u3068(NULL\u3092\u8A31\u3055\u306A\u3044\u3053\u3068)\u3092\u6307\u5B9A\u3059\u308B\u5236\u7D04\u306FNOT NULL\u3067\u3042\u308B\u3002",
+        "DEFAULT\u306F\u5024\u304C\u6307\u5B9A\u3055\u308C\u306A\u304B\u3063\u305F\u3068\u304D\u306B\u4F7F\u308F\u308C\u308B\u521D\u671F\u5024\u3092\u8A2D\u5B9A\u3059\u308B\u3082\u306E\u3067\u3001NULL\u3092\u7981\u6B62\u3059\u308B\u5236\u7D04\u3067\u306F\u306A\u3044\u3002"
+      ]
+    },
+    {
+      type: "choice",
+      question: "CREATE TABLE\u6587\u3067\u3001\u8868\u306E\u884C\u3092\u4E00\u610F\u306B\u8B58\u5225\u3059\u308B\u4E3B\u30AD\u30FC\u3068\u306A\u308B\u5217\u3092\u6307\u5B9A\u3059\u308B\u53E5\u306F\u3069\u308C\u304B\u3002",
+      choices: ["FOREIGN KEY", "PRIMARY KEY", "NOT NULL", "UNIQUE"],
+      answer: 1,
+      explanations: [
+        "FOREIGN KEY\u306F\u4ED6\u306E\u8868\u306E\u4E3B\u30AD\u30FC\u3092\u53C2\u7167\u3059\u308B\u5916\u90E8\u30AD\u30FC\u3092\u6307\u5B9A\u3059\u308B\u53E5\u3067\u3001\u81EA\u5206\u306E\u8868\u306E\u4E3B\u30AD\u30FC\u3092\u6307\u5B9A\u3059\u308B\u53E5\u3067\u306F\u306A\u3044\u3002",
+        "\u6B63\u3057\u3044\u3002\u8868\u306E\u884C\u3092\u4E00\u610F\u306B\u8B58\u5225\u3059\u308B\u4E3B\u30AD\u30FC\u3068\u306A\u308B\u5217\u306F\u3001PRIMARY KEY\u53E5\u3067\u6307\u5B9A\u3059\u308B\u3002",
+        "NOT NULL\u306F\u5024\u304CNULL\u3067\u306A\u3044\u3053\u3068\u3092\u6307\u5B9A\u3059\u308B\u5236\u7D04\u3067\u3001\u4E3B\u30AD\u30FC\u306E\u6307\u5B9A\u305D\u306E\u3082\u306E\u3067\u306F\u306A\u3044(\u4E3B\u30AD\u30FC\u5217\u306F\u7D50\u679C\u7684\u306BNOT NULL\u306B\u3082\u306A\u308B)\u3002",
+        "UNIQUE\u306F\u5024\u306E\u91CD\u8907\u3092\u7981\u6B62\u3059\u308B\u3060\u3051\u306E\u5236\u7D04\u3067\u3001\u4E3B\u30AD\u30FC\u3092\u6307\u5B9A\u3059\u308B\u5C02\u7528\u306E\u53E5\u3067\u306F\u306A\u3044\u3002"
+      ]
+    },
+    {
+      type: "choice",
+      question: "\u6574\u6570\u306E\u5024\u3092\u683C\u7D0D\u3059\u308B\u305F\u3081\u306B\u4F7F\u3046\u30C7\u30FC\u30BF\u578B\u306F\u3069\u308C\u304B\u3002",
+      choices: ["CHAR", "VARCHAR", "INTEGER", "DATE"],
+      answer: 2,
+      explanations: [
+        "CHAR\u306F\u6841\u6570\u304C\u56FA\u5B9A\u3055\u308C\u305F\u6587\u5B57\u5217\u3092\u683C\u7D0D\u3059\u308B\u30C7\u30FC\u30BF\u578B\u3067\u3001\u6574\u6570\u7528\u306E\u30C7\u30FC\u30BF\u578B\u3067\u306F\u306A\u3044\u3002",
+        "VARCHAR\u306F\u6841\u6570\u304C\u53EF\u5909\u306E\u6587\u5B57\u5217\u3092\u683C\u7D0D\u3059\u308B\u30C7\u30FC\u30BF\u578B\u3067\u3001\u6574\u6570\u7528\u306E\u30C7\u30FC\u30BF\u578B\u3067\u306F\u306A\u3044\u3002",
+        "\u6B63\u3057\u3044\u3002\u6574\u6570\u306E\u5024\u3092\u683C\u7D0D\u3059\u308B\u30C7\u30FC\u30BF\u578B\u306FINTEGER(\u6574\u6570\u578B)\u3067\u3042\u308B\u3002",
+        "DATE\u306F\u65E5\u4ED8\u3092\u683C\u7D0D\u3059\u308B\u30C7\u30FC\u30BF\u578B\u3067\u3001\u6574\u6570\u7528\u306E\u30C7\u30FC\u30BF\u578B\u3067\u306F\u306A\u3044\u3002"
+      ]
+    },
+    {
+      type: "choice",
+      question: "\u6841\u6570\u304C\u3042\u3089\u304B\u3058\u3081\u56FA\u5B9A\u3055\u308C\u305F\u6587\u5B57\u5217\u3092\u683C\u7D0D\u3059\u308B\u305F\u3081\u306B\u4F7F\u3046\u30C7\u30FC\u30BF\u578B\u306F\u3069\u308C\u304B\u3002",
+      choices: ["CHAR", "VARCHAR", "INTEGER", "DATE"],
+      answer: 0,
+      explanations: [
+        "\u6B63\u3057\u3044\u3002\u6841\u6570\u304C\u56FA\u5B9A\u3055\u308C\u305F\u6587\u5B57\u5217\u3092\u683C\u7D0D\u3059\u308B\u30C7\u30FC\u30BF\u578B\u306FCHAR(\u56FA\u5B9A\u9577\u6587\u5B57\u5217)\u3067\u3042\u308B\u3002",
+        "VARCHAR\u306F\u6841\u6570\u304C\u53EF\u5909\u306E\u6587\u5B57\u5217\u3092\u683C\u7D0D\u3059\u308B\u30C7\u30FC\u30BF\u578B\u3067\u3001\u56FA\u5B9A\u9577\u6587\u5B57\u5217\u7528\u306E\u30C7\u30FC\u30BF\u578B\u3067\u306F\u306A\u3044\u3002",
+        "INTEGER\u306F\u6574\u6570\u3092\u683C\u7D0D\u3059\u308B\u30C7\u30FC\u30BF\u578B\u3067\u3001\u6587\u5B57\u5217\u7528\u306E\u30C7\u30FC\u30BF\u578B\u3067\u306F\u306A\u3044\u3002",
+        "DATE\u306F\u65E5\u4ED8\u3092\u683C\u7D0D\u3059\u308B\u30C7\u30FC\u30BF\u578B\u3067\u3001\u6587\u5B57\u5217\u7528\u306E\u30C7\u30FC\u30BF\u578B\u3067\u306F\u306A\u3044\u3002"
+      ]
+    },
+    {
+      type: "choice",
+      question: "\u6841\u6570\u304C\u53EF\u5909(\u5024\u306B\u3088\u3063\u3066\u9577\u3055\u304C\u5909\u308F\u308B)\u306E\u6587\u5B57\u5217\u3092\u683C\u7D0D\u3059\u308B\u305F\u3081\u306B\u4F7F\u3046\u30C7\u30FC\u30BF\u578B\u306F\u3069\u308C\u304B\u3002",
+      choices: ["CHAR", "VARCHAR", "INTEGER", "DATE"],
+      answer: 1,
+      explanations: [
+        "CHAR\u306F\u6841\u6570\u304C\u56FA\u5B9A\u3055\u308C\u305F\u6587\u5B57\u5217\u3092\u683C\u7D0D\u3059\u308B\u30C7\u30FC\u30BF\u578B\u3067\u3001\u53EF\u5909\u9577\u6587\u5B57\u5217\u7528\u306E\u30C7\u30FC\u30BF\u578B\u3067\u306F\u306A\u3044\u3002",
+        "\u6B63\u3057\u3044\u3002\u6841\u6570\u304C\u53EF\u5909\u306E\u6587\u5B57\u5217\u3092\u683C\u7D0D\u3059\u308B\u30C7\u30FC\u30BF\u578B\u306FVARCHAR(\u53EF\u5909\u9577\u6587\u5B57\u5217)\u3067\u3042\u308B\u3002",
+        "INTEGER\u306F\u6574\u6570\u3092\u683C\u7D0D\u3059\u308B\u30C7\u30FC\u30BF\u578B\u3067\u3001\u6587\u5B57\u5217\u7528\u306E\u30C7\u30FC\u30BF\u578B\u3067\u306F\u306A\u3044\u3002",
+        "DATE\u306F\u65E5\u4ED8\u3092\u683C\u7D0D\u3059\u308B\u30C7\u30FC\u30BF\u578B\u3067\u3001\u6587\u5B57\u5217\u7528\u306E\u30C7\u30FC\u30BF\u578B\u3067\u306F\u306A\u3044\u3002"
+      ]
+    },
+    {
+      type: "choice",
+      question: "\u5E74\u6708\u65E5\u306A\u3069\u306E\u65E5\u4ED8\u3092\u683C\u7D0D\u3059\u308B\u305F\u3081\u306B\u4F7F\u3046\u30C7\u30FC\u30BF\u578B\u306F\u3069\u308C\u304B\u3002",
+      choices: ["CHAR", "VARCHAR", "INTEGER", "DATE"],
+      answer: 3,
+      explanations: [
+        "CHAR\u306F\u56FA\u5B9A\u9577\u306E\u6587\u5B57\u5217\u3092\u683C\u7D0D\u3059\u308B\u30C7\u30FC\u30BF\u578B\u3067\u3001\u65E5\u4ED8\u5C02\u7528\u306E\u30C7\u30FC\u30BF\u578B\u3067\u306F\u306A\u3044\u3002",
+        "VARCHAR\u306F\u53EF\u5909\u9577\u306E\u6587\u5B57\u5217\u3092\u683C\u7D0D\u3059\u308B\u30C7\u30FC\u30BF\u578B\u3067\u3001\u65E5\u4ED8\u5C02\u7528\u306E\u30C7\u30FC\u30BF\u578B\u3067\u306F\u306A\u3044\u3002",
+        "INTEGER\u306F\u6574\u6570\u3092\u683C\u7D0D\u3059\u308B\u30C7\u30FC\u30BF\u578B\u3067\u3001\u65E5\u4ED8\u5C02\u7528\u306E\u30C7\u30FC\u30BF\u578B\u3067\u306F\u306A\u3044\u3002",
+        "\u6B63\u3057\u3044\u3002\u5E74\u6708\u65E5\u306A\u3069\u306E\u65E5\u4ED8\u3092\u683C\u7D0D\u3059\u308B\u30C7\u30FC\u30BF\u578B\u306FDATE\u3067\u3042\u308B\u3002"
+      ]
+    },
+    {
+      type: "choice",
+      question: "\u65E2\u306B\u5B58\u5728\u3059\u308B\u8868\u306B\u65B0\u3057\u3044\u5217\u3092\u8FFD\u52A0\u3059\u308BSQL\u6587\u306F\u3069\u308C\u304B\u3002",
+      choices: [
+        "ALTER TABLE \u8868\u540D ADD COLUMN \u5217\u306E\u5B9A\u7FA9;",
+        "ALTER TABLE \u8868\u540D DROP COLUMN \u5217\u540D;",
+        "CREATE TABLE \u8868\u540D ADD COLUMN \u5217\u306E\u5B9A\u7FA9;",
+        "DROP TABLE \u8868\u540D;"
+      ],
+      answer: 0,
+      explanations: [
+        "\u6B63\u3057\u3044\u3002\u65E2\u5B58\u306E\u8868\u306B\u65B0\u3057\u3044\u5217\u3092\u8FFD\u52A0\u3059\u308B\u306B\u306FALTER TABLE \u8868\u540D ADD COLUMN \u5217\u306E\u5B9A\u7FA9; \u3092\u4F7F\u3046\u3002",
+        "ALTER TABLE ... DROP COLUMN ...\u306F\u9006\u306B\u65E2\u5B58\u306E\u5217\u3092\u524A\u9664\u3059\u308B\u6587\u3067\u3001\u5217\u3092\u8FFD\u52A0\u3059\u308B\u6587\u3067\u306F\u306A\u3044\u3002",
+        "CREATE TABLE\u306F\u65B0\u3057\u3044\u8868\u305D\u306E\u3082\u306E\u3092\u5B9A\u7FA9\u3059\u308B\u6587\u3067\u3001\u65E2\u5B58\u306E\u8868\u306B\u5217\u3092\u8FFD\u52A0\u3059\u308B\u3068\u304D\u306B\u4F7F\u3046\u6587\u3067\u306F\u306A\u3044\u3002",
+        "DROP TABLE\u306F\u8868\u305D\u306E\u3082\u306E\u3092\u524A\u9664\u3059\u308B\u6587\u3067\u3001\u5217\u3092\u8FFD\u52A0\u3059\u308B\u6587\u3067\u306F\u306A\u3044\u3002"
+      ]
+    },
+    {
+      type: "choice",
+      question: "\u65E2\u306B\u5B58\u5728\u3059\u308B\u8868\u304B\u3089\u3042\u308B\u5217\u3092\u524A\u9664\u3059\u308BSQL\u6587\u306F\u3069\u308C\u304B\u3002",
+      choices: [
+        "DROP TABLE \u8868\u540D;",
+        "ALTER TABLE \u8868\u540D DROP COLUMN \u5217\u540D;",
+        "ALTER TABLE \u8868\u540D ADD COLUMN \u5217\u306E\u5B9A\u7FA9;",
+        "DELETE FROM \u8868\u540D;"
+      ],
+      answer: 1,
+      explanations: [
+        "DROP TABLE\u306F\u8868\u305D\u306E\u3082\u306E\u3092\u4E38\u3054\u3068\u524A\u9664\u3059\u308B\u6587\u3067\u3001\u7279\u5B9A\u306E\u5217\u3060\u3051\u3092\u524A\u9664\u3059\u308B\u6587\u3067\u306F\u306A\u3044\u3002",
+        "\u6B63\u3057\u3044\u3002\u65E2\u5B58\u306E\u8868\u304B\u3089\u7279\u5B9A\u306E\u5217\u3092\u524A\u9664\u3059\u308B\u306B\u306FALTER TABLE \u8868\u540D DROP COLUMN \u5217\u540D; \u3092\u4F7F\u3046\u3002",
+        "ALTER TABLE ... ADD COLUMN ...\u306F\u9006\u306B\u65B0\u3057\u3044\u5217\u3092\u8FFD\u52A0\u3059\u308B\u6587\u3067\u3001\u5217\u3092\u524A\u9664\u3059\u308B\u6587\u3067\u306F\u306A\u3044\u3002",
+        "DELETE FROM\u306F\u8868\u306E\u4E2D\u306E\u884C(\u30C7\u30FC\u30BF)\u3092\u524A\u9664\u3059\u308B\u6587\u3067\u3001\u5217\u305D\u306E\u3082\u306E\u3092\u524A\u9664\u3059\u308B\u6587\u3067\u306F\u306A\u3044\u3002"
+      ]
+    },
+    {
+      type: "choice",
+      question: "\u8868\u305D\u306E\u3082\u306E\u3092\u524A\u9664\u3059\u308BSQL\u6587\u306F\u3069\u308C\u304B\u3002",
+      choices: [
+        "ALTER TABLE \u8868\u540D DROP COLUMN \u5217\u540D;",
+        "DELETE FROM \u8868\u540D;",
+        "DROP TABLE \u8868\u540D;",
+        "CREATE TABLE \u8868\u540D(...);"
+      ],
+      answer: 2,
+      explanations: [
+        "ALTER TABLE ... DROP COLUMN ...\u306F\u8868\u306E\u4E2D\u306E\u7279\u5B9A\u306E\u5217\u3060\u3051\u3092\u524A\u9664\u3059\u308B\u6587\u3067\u3001\u8868\u5168\u4F53\u3092\u524A\u9664\u3059\u308B\u6587\u3067\u306F\u306A\u3044\u3002",
+        "DELETE FROM\u306F\u8868\u306E\u4E2D\u306E\u884C(\u30C7\u30FC\u30BF)\u3060\u3051\u3092\u524A\u9664\u3059\u308B\u6587\u3067\u3001\u8868\u305D\u306E\u3082\u306E\u306F\u6B8B\u308B\u3002",
+        "\u6B63\u3057\u3044\u3002\u8868\u305D\u306E\u3082\u306E\u3092\u524A\u9664\u3059\u308B\u306B\u306FDROP TABLE \u8868\u540D; \u3092\u4F7F\u3046\u3002",
+        "CREATE TABLE\u306F\u65B0\u3057\u304F\u8868\u3092\u5B9A\u7FA9\u3059\u308B\u6587\u3067\u3001\u524A\u9664\u3068\u306F\u9006\u306E\u64CD\u4F5C\u3067\u3042\u308B\u3002"
+      ]
+    },
+    {
+      type: "choice",
+      question: "\u65E2\u5B58\u306E\u8868\u306B\u65B0\u3057\u30441\u884C\u306E\u30C7\u30FC\u30BF\u3092\u8FFD\u52A0\u3059\u308BSQL\u6587\u306F\u3069\u308C\u304B\u3002",
+      choices: [
+        "CREATE TABLE \u8868\u540D(...);",
+        "INSERT INTO \u8868\u540D VALUES (...);",
+        "ALTER TABLE \u8868\u540D ADD COLUMN \u5217\u306E\u5B9A\u7FA9;",
+        "SELECT * FROM \u8868\u540D;"
+      ],
+      answer: 1,
+      explanations: [
+        "CREATE TABLE\u306F\u8868\u305D\u306E\u3082\u306E\u3092\u65B0\u3057\u304F\u5B9A\u7FA9\u3059\u308B\u6587\u3067\u3001\u884C\u30C7\u30FC\u30BF\u3092\u8FFD\u52A0\u3059\u308B\u6587\u3067\u306F\u306A\u3044\u3002",
+        "\u6B63\u3057\u3044\u3002\u65E2\u5B58\u306E\u8868\u306B\u65B0\u3057\u3044\u884C\u306E\u30C7\u30FC\u30BF\u3092\u8FFD\u52A0\u3059\u308B\u306B\u306FINSERT INTO \u8868\u540D VALUES (...); \u3092\u4F7F\u3046\u3002",
+        "ALTER TABLE ... ADD COLUMN ...\u306F\u8868\u306B\u65B0\u3057\u3044\u5217\u3092\u8FFD\u52A0\u3059\u308B\u6587\u3067\u3001\u884C\u30C7\u30FC\u30BF\u3092\u8FFD\u52A0\u3059\u308B\u6587\u3067\u306F\u306A\u3044\u3002",
+        "SELECT * FROM\u306F\u8868\u306E\u4E2D\u306E\u30C7\u30FC\u30BF\u3092\u691C\u7D22\u3057\u3066\u8868\u793A\u3059\u308B\u6587\u3067\u3001\u30C7\u30FC\u30BF\u3092\u8FFD\u52A0\u3059\u308B\u6587\u3067\u306F\u306A\u3044\u3002"
+      ]
+    },
+    {
+      type: "choice",
+      question: "SELECT\u6587\u3067\u8868\u306E\u5168\u3066\u306E\u5217\u3092\u8868\u793A\u3057\u305F\u3044\u3068\u304D\u3001\u5217\u540D\u306E\u4EE3\u308F\u308A\u306B\u66F8\u304F\u8A18\u53F7\u306F\u3069\u308C\u304B\u3002",
+      choices: ["%", "*", "?", "#"],
+      answer: 1,
+      explanations: [
+        "\u300C%\u300D\u306FLIKE\u6F14\u7B97\u5B50\u306A\u3069\u3067\u4EFB\u610F\u306E\u6587\u5B57\u5217\u3092\u8868\u3059\u8A18\u53F7\u3067\u3001\u5168\u3066\u306E\u5217\u3092\u8868\u3059\u8A18\u53F7\u3067\u306F\u306A\u3044\u3002",
+        "\u6B63\u3057\u3044\u3002SELECT * FROM \u8868\u540D; \u306E\u3088\u3046\u306B\u300C*\u300D\u3092\u66F8\u304F\u3068\u3001\u305D\u306E\u8868\u306E\u5168\u3066\u306E\u5217\u3092\u8868\u793A\u3067\u304D\u308B\u3002",
+        "\u300C?\u300D\u306FSQL\u306E\u5217\u6307\u5B9A\u306E\u8A18\u53F7\u3068\u3057\u3066\u306F\u4F7F\u308F\u308C\u306A\u3044\u3002",
+        "\u300C#\u300D\u306FSQL\u306E\u5217\u6307\u5B9A\u306E\u8A18\u53F7\u3068\u3057\u3066\u306F\u4F7F\u308F\u308C\u306A\u3044\u3002"
+      ]
+    },
+    {
+      type: "choice",
+      question: "SELECT\u6587\u3067\u53D6\u5F97\u3057\u305F\u5217\u306B\u5225\u540D\u3092\u3064\u3051\u308B\u3068\u304D\u306B\u4F7F\u3046\u30AD\u30FC\u30EF\u30FC\u30C9\u306F\u3069\u308C\u304B\u3002",
+      choices: ["AS", "IN", "ON", "BY"],
+      answer: 0,
+      explanations: [
+        '\u6B63\u3057\u3044\u3002SELECT \u5217\u540D AS "\u5225\u540D" FROM \u8868\u540D; \u306E\u3088\u3046\u306B\u3001AS\u3092\u4F7F\u3046\u3068\u5217\u306B\u5225\u540D\u3092\u3064\u3051\u3089\u308C\u308B\u3002',
+        "IN\u306F\u5024\u304C\u5019\u88DC\u306E\u4E2D\u306B\u542B\u307E\u308C\u308B\u304B\u3092\u5224\u5B9A\u3059\u308B\u6F14\u7B97\u5B50\u3067\u3001\u5225\u540D\u3092\u3064\u3051\u308B\u30AD\u30FC\u30EF\u30FC\u30C9\u3067\u306F\u306A\u3044\u3002",
+        "ON\u306F\u7D50\u5408(JOIN)\u306E\u6761\u4EF6\u3092\u6307\u5B9A\u3059\u308B\u3068\u304D\u306B\u4F7F\u3046\u30AD\u30FC\u30EF\u30FC\u30C9\u3067\u3001\u5225\u540D\u3092\u3064\u3051\u308B\u3082\u306E\u3067\u306F\u306A\u3044\u3002",
+        "BY\u306FORDER BY\u3084GROUP BY\u306E\u4E00\u90E8\u3068\u3057\u3066\u4F7F\u3046\u30AD\u30FC\u30EF\u30FC\u30C9\u3067\u3001\u5358\u72EC\u3067\u5225\u540D\u3092\u3064\u3051\u308B\u3082\u306E\u3067\u306F\u306A\u3044\u3002"
+      ]
+    },
+    {
+      type: "choice",
+      question: "SELECT\u6587\u306E\u691C\u7D22\u7D50\u679C\u304B\u3089\u3001\u5024\u304C\u91CD\u8907\u3059\u308B\u884C\u3092\u53D6\u308A\u9664\u3044\u3066\u8868\u793A\u3059\u308B\u305F\u3081\u306B\u4F7F\u3046\u30AD\u30FC\u30EF\u30FC\u30C9\u306F\u3069\u308C\u304B\u3002",
+      choices: ["DISTINCT", "WHERE", "ORDER BY", "GROUP BY"],
+      answer: 0,
+      explanations: [
+        "\u6B63\u3057\u3044\u3002SELECT DISTINCT \u5217\u540D FROM \u8868\u540D; \u306E\u3088\u3046\u306B\u66F8\u304F\u3068\u3001\u91CD\u8907\u3059\u308B\u5024\u3092\u307E\u3068\u3081\u30661\u56DE\u3060\u3051\u8868\u793A\u3067\u304D\u308B\u3002",
+        "WHERE\u306F\u884C\u3092\u6761\u4EF6\u3067\u7D5E\u308A\u8FBC\u3080\u53E5\u3067\u3001\u91CD\u8907\u3092\u53D6\u308A\u9664\u304F\u53E5\u3067\u306F\u306A\u3044\u3002",
+        "ORDER BY\u306F\u691C\u7D22\u7D50\u679C\u3092\u4E26\u3079\u66FF\u3048\u308B\u53E5\u3067\u3001\u91CD\u8907\u3092\u53D6\u308A\u9664\u304F\u53E5\u3067\u306F\u306A\u3044\u3002",
+        "GROUP BY\u306F\u884C\u3092\u30B0\u30EB\u30FC\u30D7\u5316\u3057\u3066\u96C6\u8A08\u3059\u308B\u53E5\u3067\u3001\u5358\u7D14\u306B\u91CD\u8907\u884C\u3092\u53D6\u308A\u9664\u3044\u3066\u4E00\u89A7\u8868\u793A\u3059\u308BDISTINCT\u3068\u306F\u50CD\u304D\u304C\u7570\u306A\u308B\u3002"
+      ]
+    },
+    {
+      type: "choice",
+      question: "SELECT\u6587\u3067\u691C\u7D22\u7D50\u679C\u3092\u7279\u5B9A\u306E\u6761\u4EF6\u3092\u6E80\u305F\u3059\u884C\u3060\u3051\u306B\u7D5E\u308A\u8FBC\u3080\u305F\u3081\u306B\u4F7F\u3046\u53E5\u306F\u3069\u308C\u304B\u3002",
+      choices: ["DISTINCT", "WHERE", "AS", "FROM"],
+      answer: 1,
+      explanations: [
+        "DISTINCT\u306F\u691C\u7D22\u7D50\u679C\u304B\u3089\u91CD\u8907\u3059\u308B\u884C\u3092\u53D6\u308A\u9664\u304F\u50CD\u304D\u3092\u3059\u308B\u53E5\u3067\u3001\u6761\u4EF6\u3067\u884C\u3092\u7D5E\u308A\u8FBC\u3080\u53E5\u3067\u306F\u306A\u3044\u3002",
+        "\u6B63\u3057\u3044\u3002SELECT ... FROM \u8868\u540D WHERE \u6761\u4EF6; \u306E\u3088\u3046\u306B\u3001WHERE\u306E\u5F8C\u306B\u6761\u4EF6\u3092\u66F8\u304F\u3068\u3001\u305D\u306E\u6761\u4EF6\u3092\u6E80\u305F\u3059\u884C\u3060\u3051\u306B\u7D5E\u308A\u8FBC\u3081\u308B\u3002",
+        "AS\u306F\u5217\u3084\u8868\u306B\u5225\u540D\u3092\u3064\u3051\u308B\u305F\u3081\u306E\u30AD\u30FC\u30EF\u30FC\u30C9\u3067\u3001\u884C\u3092\u7D5E\u308A\u8FBC\u3080\u53E5\u3067\u306F\u306A\u3044\u3002",
+        "FROM\u306F\u3069\u306E\u8868\u304B\u3089\u30C7\u30FC\u30BF\u3092\u53D6\u5F97\u3059\u308B\u304B\u3092\u6307\u5B9A\u3059\u308B\u53E5\u3067\u3001\u884C\u3092\u7D5E\u308A\u8FBC\u3080\u6761\u4EF6\u3092\u66F8\u304F\u53E5\u3067\u306F\u306A\u3044\u3002"
+      ]
     }
   ];
 
@@ -15096,6 +15302,81 @@
       type: "text",
       question: "\u5C0F\u58F2\u5E97\u4E00\u89A7\u8868\u3067\u300C\u5546\u54C1\u540D\u2192\u5358\u4FA1\u300D\u3068\u3044\u3046\u95A2\u6570\u5F93\u5C5E\u6027\u306F\u3042\u308B\u304C\u300C{\u5C0F\u58F2\u5E97\u540D\uFF0C\u5546\u54C1\u540D}\u2192\u5358\u4FA1\u300D\u304C\u5B8C\u5168\u95A2\u6570\u5F93\u5C5E\u306B\u306A\u3063\u3066\u3044\u306A\u3044\u3002\u3053\u306E\u95A2\u4FC2\u8868\u306F\u7B2C\u4F55\u6B63\u898F\u5F62\u3067\u306A\u3044\u304B\u3002",
       answer: ["\u7B2C2\u6B63\u898F\u5F62", "\u7B2C\u4E8C\u6B63\u898F\u5F62"]
+    },
+    {
+      type: "text",
+      question: "\u30C7\u30FC\u30BF\u30D9\u30FC\u30B9\u306E\u4E2D\u306B\u5B9F\u969B\u306B\u30C7\u30FC\u30BF\u3092\u683C\u7D0D\u3059\u308B\u57FA\u5E95\u8868\u3092\u65B0\u3057\u304F\u5B9A\u7FA9\u3059\u308BSQL\u6587\u306F\u4F55\u304B\u3002",
+      answer: "CREATE TABLE"
+    },
+    {
+      type: "text",
+      question: "CREATE TABLE\u6587\u3067\u3001\u305D\u306E\u5217\u306B\u5024\u304C\u5FC5\u305A\u5165\u529B\u3055\u308C\u3066\u3044\u308B\u3053\u3068(NULL\u3092\u8A31\u3055\u306A\u3044\u3053\u3068)\u3092\u6307\u5B9A\u3059\u308B\u5236\u7D04\u306F\u4F55\u304B\u3002",
+      answer: "NOT NULL"
+    },
+    {
+      type: "text",
+      question: "CREATE TABLE\u6587\u3067\u3001\u8868\u306E\u884C\u3092\u4E00\u610F\u306B\u8B58\u5225\u3059\u308B\u4E3B\u30AD\u30FC\u3068\u306A\u308B\u5217\u3092\u6307\u5B9A\u3059\u308B\u53E5\u306F\u4F55\u304B\u3002",
+      answer: "PRIMARY KEY"
+    },
+    {
+      type: "text",
+      question: "\u6574\u6570\u306E\u5024\u3092\u683C\u7D0D\u3059\u308B\u305F\u3081\u306B\u4F7F\u3046\u30C7\u30FC\u30BF\u578B\u306F\u4F55\u304B\u3002",
+      answer: "INTEGER"
+    },
+    {
+      type: "text",
+      question: "\u6841\u6570\u304C\u3042\u3089\u304B\u3058\u3081\u56FA\u5B9A\u3055\u308C\u305F\u6587\u5B57\u5217\u3092\u683C\u7D0D\u3059\u308B\u305F\u3081\u306B\u4F7F\u3046\u30C7\u30FC\u30BF\u578B\u306F\u4F55\u304B\u3002",
+      answer: "CHAR"
+    },
+    {
+      type: "text",
+      question: "\u6841\u6570\u304C\u53EF\u5909(\u5024\u306B\u3088\u3063\u3066\u9577\u3055\u304C\u5909\u308F\u308B)\u306E\u6587\u5B57\u5217\u3092\u683C\u7D0D\u3059\u308B\u305F\u3081\u306B\u4F7F\u3046\u30C7\u30FC\u30BF\u578B\u306F\u4F55\u304B\u3002",
+      answer: "VARCHAR"
+    },
+    {
+      type: "text",
+      question: "\u5E74\u6708\u65E5\u306A\u3069\u306E\u65E5\u4ED8\u3092\u683C\u7D0D\u3059\u308B\u305F\u3081\u306B\u4F7F\u3046\u30C7\u30FC\u30BF\u578B\u306F\u4F55\u304B\u3002",
+      answer: "DATE"
+    },
+    {
+      type: "text",
+      question: "\u65E2\u306B\u5B58\u5728\u3059\u308B\u8868\u306B\u65B0\u3057\u3044\u5217\u3092\u8FFD\u52A0\u3059\u308BSQL\u6587\u3067\u4F7F\u3046\u30AD\u30FC\u30EF\u30FC\u30C9\u306F\u4F55\u304B\u3002",
+      answer: ["ADD COLUMN", "ALTER TABLE ADD COLUMN"]
+    },
+    {
+      type: "text",
+      question: "\u65E2\u306B\u5B58\u5728\u3059\u308B\u8868\u304B\u3089\u3042\u308B\u5217\u3092\u524A\u9664\u3059\u308BSQL\u6587\u3067\u4F7F\u3046\u30AD\u30FC\u30EF\u30FC\u30C9\u306F\u4F55\u304B\u3002",
+      answer: ["DROP COLUMN", "ALTER TABLE DROP COLUMN"]
+    },
+    {
+      type: "text",
+      question: "\u8868\u305D\u306E\u3082\u306E\u3092\u524A\u9664\u3059\u308BSQL\u6587\u306F\u4F55\u304B\u3002",
+      answer: "DROP TABLE"
+    },
+    {
+      type: "text",
+      question: "\u65E2\u5B58\u306E\u8868\u306B\u65B0\u3057\u30441\u884C\u306E\u30C7\u30FC\u30BF\u3092\u8FFD\u52A0\u3059\u308BSQL\u6587\u306F\u4F55\u304B\u3002",
+      answer: ["INSERT INTO", "INSERT"]
+    },
+    {
+      type: "text",
+      question: "SELECT\u6587\u3067\u8868\u306E\u5168\u3066\u306E\u5217\u3092\u8868\u793A\u3057\u305F\u3044\u3068\u304D\u3001\u5217\u540D\u306E\u4EE3\u308F\u308A\u306B\u66F8\u304F\u8A18\u53F7\u306F\u4F55\u304B\u3002",
+      answer: "*"
+    },
+    {
+      type: "text",
+      question: "SELECT\u6587\u3067\u53D6\u5F97\u3057\u305F\u5217\u306B\u5225\u540D\u3092\u3064\u3051\u308B\u3068\u304D\u306B\u4F7F\u3046\u30AD\u30FC\u30EF\u30FC\u30C9\u306F\u4F55\u304B\u3002",
+      answer: "AS"
+    },
+    {
+      type: "text",
+      question: "SELECT\u6587\u306E\u691C\u7D22\u7D50\u679C\u304B\u3089\u3001\u5024\u304C\u91CD\u8907\u3059\u308B\u884C\u3092\u53D6\u308A\u9664\u3044\u3066\u8868\u793A\u3059\u308B\u305F\u3081\u306B\u4F7F\u3046\u30AD\u30FC\u30EF\u30FC\u30C9\u306F\u4F55\u304B\u3002",
+      answer: "DISTINCT"
+    },
+    {
+      type: "text",
+      question: "SELECT\u6587\u3067\u691C\u7D22\u7D50\u679C\u3092\u7279\u5B9A\u306E\u6761\u4EF6\u3092\u6E80\u305F\u3059\u884C\u3060\u3051\u306B\u7D5E\u308A\u8FBC\u3080\u305F\u3081\u306B\u4F7F\u3046\u53E5\u306F\u4F55\u304B\u3002",
+      answer: "WHERE"
     }
   ];
 
@@ -23385,8 +23666,93 @@
     }
   ];
 
-  // src/data/4i-zenki-kimatsu/economics-choice.ts
+  // src/data/4i-zenki-kimatsu/korean-vocab-text.ts
   var questions19 = [
+    // --- 第1課 単語 ---
+    { type: "text", question: "\u300C\uC544\u300D\u306E\u610F\u5473\u306F\u4F55\u304B\u3002", answer: "\u3042\u3042" },
+    { type: "text", question: "\u300C\uC544\uC774\u300D\u306E\u610F\u5473\u306F\u4F55\u304B\u3002", answer: "\u5B50\u3069\u3082" },
+    { type: "text", question: "\u300C\uC560\u300D\u306E\u610F\u5473\u306F\u4F55\u304B\u3002", answer: "\u5B50\u3069\u3082" },
+    { type: "text", question: "\u300C\uC624\uC774\u300D\u306E\u610F\u5473\u306F\u4F55\u304B\u3002", answer: "\u304D\u3085\u3046\u308A" },
+    { type: "text", question: "\u300C\uC6B0\uC560\u300D\u306E\u610F\u5473\u306F\u4F55\u304B\u3002", answer: "\u53CB\u611B" },
+    { type: "text", question: "\u300C\uC774\u300D\u306E\u610F\u5473\u306F\u4F55\u304B\u3002", answer: ["\u3053\u306E", "2", "\u4E8C"] },
+    { type: "text", question: "\u300C\uC544\uC6B0\u300D\u306E\u610F\u5473\u306F\u4F55\u304B\u3002", answer: ["\u5F1F", "\u59B9", "\u5F1F\u30FB\u59B9"] },
+    { type: "text", question: "\u300C\uC6B0\uC544\u300D\u306E\u610F\u5473\u306F\u4F55\u304B\u3002", answer: "\u512A\u96C5" },
+    { type: "text", question: "\u300C\uB098\u300D\u306E\u610F\u5473\u306F\u4F55\u304B\u3002", answer: "\u79C1" },
+    { type: "text", question: "\u300C\uB124\u300D\u306E\u610F\u5473\u306F\u4F55\u304B\u3002", answer: "\u306F\u3044" },
+    { type: "text", question: "\u300C\uB098\uB77C\u300D\u306E\u610F\u5473\u306F\u4F55\u304B\u3002", answer: "\u56FD" },
+    { type: "text", question: "\u300C\uBA38\uB9AC\u300D\u306E\u610F\u5473\u306F\u4F55\u304B\u3002", answer: "\u982D" },
+    { type: "text", question: "\u300C\uB108\uBB34\u300D\u306E\u610F\u5473\u306F\u4F55\u304B\u3002", answer: ["\u3042\u307E\u308A\u306B", "\u3042\u307E\u308A\u306B\u3082"] },
+    { type: "text", question: "\u300C\uC5B4\uBA38\uB2C8\u300D\u306E\u610F\u5473\u306F\u4F55\u304B\u3002", answer: "\u6BCD" },
+    { type: "text", question: "\u300C\uB178\uB798\u300D\u306E\u610F\u5473\u306F\u4F55\u304B\u3002", answer: "\u6B4C" },
+    { type: "text", question: "\u300C\uC5D0\uB7EC\u300D\u306E\u610F\u5473\u306F\u4F55\u304B\u3002", answer: "\u30A8\u30E9\u30FC" },
+    { type: "text", question: "\u300C\uC6B0\uB9AC\u300D\u306E\u610F\u5473\u306F\u4F55\u304B\u3002", answer: ["\u308F\u305F\u3057\u305F\u3061", "\u79C1\u305F\u3061"] },
+    {
+      type: "text",
+      question: "\u300C\uB204\uB098\u300D\u306E\u610F\u5473\u306F\u4F55\u304B\u3002",
+      answer: ["(\u5E74\u4E0B\u306E\u7537\u6027\u304B\u3089\u307F\u305F)\u304A\u59C9\u3055\u3093", "\u5E74\u4E0B\u306E\u7537\u6027\u304B\u3089\u307F\u305F\u304A\u59C9\u3055\u3093", "\u304A\u59C9\u3055\u3093"]
+    },
+    { type: "text", question: "\u300C\uC5B4\uB290\u300D\u306E\u610F\u5473\u306F\u4F55\u304B\u3002", answer: "\u3069\u306E" },
+    { type: "text", question: "\u300C\uC6B0\uC720\u300D\u306E\u610F\u5473\u306F\u4F55\u304B\u3002", answer: "\u725B\u4E73" },
+    { type: "text", question: "\u300C\uC608\u300D\u306E\u610F\u5473\u306F\u4F55\u304B\u3002", answer: "\u306F\u3044" },
+    { type: "text", question: "\u300C\uC6B0\uB824\u300D\u306E\u610F\u5473\u306F\u4F55\u304B\u3002", answer: "\u6182\u616E" },
+    { type: "text", question: "\u300C\uC544\uB1E8\u300D\u306E\u610F\u5473\u306F\u4F55\u304B\u3002", answer: "\u3044\u3044\u3048" },
+    { type: "text", question: "\u300C\uC694\uB9AC\u300D\u306E\u610F\u5473\u306F\u4F55\u304B\u3002", answer: "\u6599\u7406" },
+    { type: "text", question: "\u300C\uC774\uC720\u300D\u306E\u610F\u5473\u306F\u4F55\u304B\u3002", answer: "\u7406\u7531" },
+    { type: "text", question: "\u300C\uC5EC\uC57C\u300D\u306E\u610F\u5473\u306F\u4F55\u304B\u3002", answer: "\u4E0E\u91CE" },
+    { type: "text", question: "\u300C\uC560\uC57C\u300D\u306E\u610F\u5473\u306F\u4F55\u304B\u3002", answer: "\u574A\u3084" },
+    { type: "text", question: "\u300C\uBB34\uB8CC\u300D\u306E\u610F\u5473\u306F\u4F55\u304B\u3002", answer: "\u7121\u6599" },
+    { type: "text", question: "\u300C\uC624\uB298\u300D\u306E\u610F\u5473\u306F\u4F55\u304B\u3002", answer: "\u4ECA\u65E5" },
+    { type: "text", question: "\u300C\uB9C8\uC74C\u300D\u306E\u610F\u5473\u306F\u4F55\u304B\u3002", answer: "\u5FC3" },
+    { type: "text", question: "\u300C\uB0C9\uBA74\u300D\u306E\u610F\u5473\u306F\u4F55\u304B\u3002", answer: "\u51B7\u9EBA" },
+    { type: "text", question: "\u300C\uBA54\uC77C\u300D\u306E\u610F\u5473\u306F\u4F55\u304B\u3002", answer: "\u30E1\u30FC\u30EB" },
+    { type: "text", question: "\u300C\uC548\uB155\u300D\u306E\u610F\u5473\u306F\u4F55\u304B\u3002", answer: ["\u30D0\u30A4\u30D0\u30A4", "\u5143\u6C17", "\u30D0\u30A4\u30D0\u30A4\u30FB\u5143\u6C17"] },
+    { type: "text", question: "\u300C\uB9C8\uC744\u300D\u306E\u610F\u5473\u306F\u4F55\u304B\u3002", answer: "\u6751" },
+    { type: "text", question: "\u300C\uBAB8\u300D\u306E\u610F\u5473\u306F\u4F55\u304B\u3002", answer: ["\u8EAB\u4F53", "\u4F53"] },
+    { type: "text", question: "\u300C\uC601\uC5B4\u300D\u306E\u610F\u5473\u306F\u4F55\u304B\u3002", answer: "\u82F1\u8A9E" },
+    {
+      type: "text",
+      question: "\u300C\uC5B8\uB2C8\u300D\u306E\u610F\u5473\u306F\u4F55\u304B\u3002",
+      answer: ["(\u5E74\u4E0B\u306E\u5973\u6027\u304B\u3089\u307F\u305F)\u304A\u59C9\u3055\u3093", "\u5E74\u4E0B\u306E\u5973\u6027\u304B\u3089\u307F\u305F\u304A\u59C9\u3055\u3093", "\u304A\u59C9\u3055\u3093"]
+    },
+    // --- 第2課 単語 ---
+    { type: "text", question: "\u300C\uAC70\uB9AC\u300D\u306E\u610F\u5473\u306F\u4F55\u304B\u3002", answer: ["\u8857", "\u901A\u308A", "\u8857\u30FB\u901A\u308A"] },
+    { type: "text", question: "\u300C\uBC84\uC2A4\u300D\u306E\u610F\u5473\u306F\u4F55\u304B\u3002", answer: "\u30D0\u30B9" },
+    { type: "text", question: "\u300C\uC8FC\uC2A4\u300D\u306E\u610F\u5473\u306F\u4F55\u304B\u3002", answer: "\u30B8\u30E5\u30FC\u30B9" },
+    { type: "text", question: "\u300C\uB2E4\uC2DC\u300D\u306E\u610F\u5473\u306F\u4F55\u304B\u3002", answer: "\u518D\u3073" },
+    { type: "text", question: "\u300C\uC18C\uB9AC\u300D\u306E\u610F\u5473\u306F\u4F55\u304B\u3002", answer: "\u97F3" },
+    { type: "text", question: "\u300C\uC0AC\uB78C\u300D\u306E\u610F\u5473\u306F\u4F55\u304B\u3002", answer: "\u4EBA" },
+    { type: "text", question: "\u300C\uC815\uB9D0\u300D\u306E\u610F\u5473\u306F\u4F55\u304B\u3002", answer: ["\u672C\u5F53", "\u672C\u5F53\u306B"] },
+    { type: "text", question: "\u300C\uB3D9\uC0DD\u300D\u306E\u610F\u5473\u306F\u4F55\u304B\u3002", answer: ["\u5F1F", "\u59B9", "\u5F1F\u30FB\u59B9"] },
+    { type: "text", question: "\u300C\uC120\uC0DD\uB2D8\u300D\u306E\u610F\u5473\u306F\u4F55\u304B\u3002", answer: "\u5148\u751F" },
+    // --- 第4課 対話で使う単語 ---
+    { type: "text", question: "\u300C\uC800\u300D\u306E\u610F\u5473\u306F\u4F55\u304B\u3002", answer: ["\u3048\u3048\u3068", "\u79C1", "\u308F\u305F\u3057"] },
+    { type: "text", question: "\u300C\uBD84\u300D\u306E\u610F\u5473\u306F\u4F55\u304B\u3002", answer: "\u65B9" },
+    { type: "text", question: "\u300C\uC81C\u300D\u306E\u610F\u5473\u306F\u4F55\u304B\u3002", answer: "\u79C1\u306E" },
+    { type: "text", question: "\u300C\uC774\uB984\u300D\u306E\u610F\u5473\u306F\u4F55\u304B\u3002", answer: "\u540D\u524D" },
+    {
+      type: "text",
+      question: "\u300C\uBC18\uAC11\uC2B5\uB2C8\uB2E4\u300D\u306E\u610F\u5473\u306F\u4F55\u304B\u3002",
+      answer: ["(\u304A\u4F1A\u3044\u3067\u304D\u3066)\u3046\u308C\u3057\u3044\u3067\u3059", "\u304A\u4F1A\u3044\u3067\u304D\u3066\u3046\u308C\u3057\u3044\u3067\u3059", "\u3046\u308C\u3057\u3044\u3067\u3059"]
+    },
+    // --- 第5課 対話で使う単語 ---
+    { type: "text", question: "\u300C\uC528\u300D\u306E\u610F\u5473\u306F\u4F55\u304B\u3002", answer: "~\u3055\u3093" },
+    { type: "text", question: "\u300C\uADF8\uB7FC\u300D\u306E\u610F\u5473\u306F\u4F55\u304B\u3002", answer: ["\u3058\u3083\u3042", "\u3067\u306F", "\u3058\u3083\u3042\u30FB\u3067\u306F"] },
+    { type: "text", question: "\u300C\uBB50\u300D\u306E\u610F\u5473\u306F\u4F55\u304B\u3002", answer: "\u4F55" },
+    // --- 第6課 対話で使う単語 ---
+    { type: "text", question: "\u300C\uB0B4\uC77C\u300D\u306E\u610F\u5473\u306F\u4F55\u304B\u3002", answer: "\u660E\u65E5" },
+    { type: "text", question: "\u300C\uC5B4\uC81C\u300D\u306E\u610F\u5473\u306F\u4F55\u304B\u3002", answer: "\u6628\u65E5" },
+    { type: "text", question: "\u300C\uAD00\u300D\u306E\u610F\u5473\u306F\u4F55\u304B\u3002", answer: "~\u9928" },
+    { type: "text", question: "\u300C\uACC4\uB2E8\u300D\u306E\u610F\u5473\u306F\u4F55\u304B\u3002", answer: "\u968E\u6BB5" },
+    { type: "text", question: "\u300C\uBC14\uB85C\u300D\u306E\u610F\u5473\u306F\u4F55\u304B\u3002", answer: "\u3059\u3050" },
+    { type: "text", question: "\u300C\uBA87\u300D\u306E\u610F\u5473\u306F\u4F55\u304B\u3002", answer: ["\u4F55", "\u3044\u304F\u3064", "\u4F55\u30FB\u3044\u304F\u3064"] },
+    { type: "text", question: "\u300C\uAD50\uC2DC\u300D\u306E\u610F\u5473\u306F\u4F55\u304B\u3002", answer: "~\u9650\u76EE" },
+    { type: "text", question: "\u300C\uAC15\uC758\uC2E4\u300D\u306E\u610F\u5473\u306F\u4F55\u304B\u3002", answer: "\u6559\u5BA4" },
+    { type: "text", question: "\u300C\uC2DC\uACC4\u300D\u306E\u610F\u5473\u306F\u4F55\u304B\u3002", answer: "\u6642\u8A08" },
+    { type: "text", question: "\u300C\uAC00\uBC29\u300D\u306E\u610F\u5473\u306F\u4F55\u304B\u3002", answer: "\u30AB\u30D0\u30F3" }
+  ];
+
+  // src/data/4i-zenki-kimatsu/economics-choice.ts
+  var questions20 = [
     // --- 需要供給曲線のシフト ---
     {
       type: "choice",
@@ -23924,7 +24290,7 @@
   ];
 
   // src/data/4i-zenki-kimatsu/economics-handwriting.ts
-  var questions20 = [
+  var questions21 = [
     {
       type: "handwriting",
       question: "\u5B8C\u5168\u7AF6\u4E89\u5E02\u5834\u306B\u304A\u3044\u3066\u3001\u3042\u308B\u8CA1X\u3092\u751F\u7523\u3059\u308B\u4F01\u696D\u306E\u7DCF\u8CBB\u7528\u66F2\u7DDA(TC)\u304C\u751F\u7523\u91CF\u3092X\u3068\u3059\u308B\u3068 $TC = X^3 - 4X^2 + 60X + 18$ \u3067\u3042\u3063\u305F\u3002\u3053\u306E\u3068\u304D\u3001\u3053\u306E\u4F01\u696D\u306E\u640D\u76CA\u5206\u5C90\u70B9\u306B\u304A\u3051\u308B\u4FA1\u683C\u3068\u751F\u7523\u91CF\u3092\u305D\u308C\u305E\u308C\u6C42\u3081\u3088\u3002(2009\u5E74 \u5E02\u5F79\u6240A\u65E5\u7A0B)",
@@ -23948,7 +24314,7 @@
   ];
 
   // src/data/4i-zenki-kimatsu/applied-physics-choice.ts
-  var questions21 = [
+  var questions22 = [
     // --- 【1】基本公式 ---
     {
       type: "choice",
@@ -24179,7 +24545,7 @@
   ];
 
   // src/data/4i-zenki-kimatsu/applied-physics-handwriting.ts
-  var questions22 = [
+  var questions23 = [
     // --- 【1】基本公式 ---
     {
       type: "handwriting",
@@ -24257,7 +24623,7 @@
   ];
 
   // src/data/4i-zenki-kimatsu/applied-math-handwriting.ts
-  var questions23 = [
+  var questions24 = [
     // --- No.2 1変数の微分の計算(2) ---
     {
       type: "handwriting",
@@ -24514,11 +24880,12 @@
         "control-engineering-text": questions16,
         "control-engineering-handwriting": questions17,
         "korean-choice": questions18,
-        "economics-choice": questions19,
-        "economics-handwriting": questions20,
-        "applied-physics-choice": questions21,
-        "applied-physics-handwriting": questions22,
-        "applied-math-handwriting": questions23
+        "korean-vocab-text": questions19,
+        "economics-choice": questions20,
+        "economics-handwriting": questions21,
+        "applied-physics-choice": questions22,
+        "applied-physics-handwriting": questions23,
+        "applied-math-handwriting": questions24
       }
     }
   };
@@ -25136,22 +25503,6 @@
     createIcons({ root, icons: LUCIDE_ICONS });
   }
 
-  // src/countdown.ts
-  var TEST_START_MONTH = 8;
-  var TEST_START_DAY = 15;
-  var HOUR_MS = 60 * 60 * 1e3;
-  var DAY_MS = 24 * HOUR_MS;
-  function getTestCountdown(now = /* @__PURE__ */ new Date()) {
-    const target = new Date(now.getFullYear(), TEST_START_MONTH, TEST_START_DAY);
-    if (target <= now) target.setFullYear(target.getFullYear() + 1);
-    const remaining = target.getTime() - now.getTime();
-    return {
-      hours: Math.ceil(remaining / HOUR_MS),
-      days: Math.floor(remaining / DAY_MS),
-      target
-    };
-  }
-
   // src/schedule.ts
   var WEEKDAY_LABELS = ["\u65E5", "\u6708", "\u706B", "\u6C34", "\u6728", "\u91D1", "\u571F"];
   function weekdayLabel(year, month, day) {
@@ -25199,14 +25550,14 @@
           day: 18,
           periods: [
             { time: "1\u9650 9:30\u301C10:20", subject: "\u5FDC\u7528\u6570\u5B66a", room: "322" },
-            { time: "2\u9650 10:30\u301C11:20", subject: "\u6570\u5024\u8A08\u7B97\u6CD5", room: "022" },
+            { time: "2\u9650 10:30\u301C11:20", subject: "\u6570\u5024\u8A08\u7B97\u6CD5", room: "322" },
             { time: "3\u9650 11:30\u301C12:20", subject: "\u4E2D\u56FD\u8A9E\u521D\u7D1Aa", room: "022", isElective: true },
             { time: "4\u9650 13:30\u301C14:20", subject: "(\u6388\u696D\u306A\u3057)" }
           ]
         },
         {
           month: 9,
-          day: 15,
+          day: 19,
           periods: [
             { time: "1\u9650 9:30\u301C10:20", subject: "\u7D4C\u6E08\u5B66a", room: "322" },
             { time: "2\u9650 10:30\u301C11:20", subject: "\u30B2\u30FC\u30E0\u7406\u8AD6a", room: "322" },
@@ -25215,10 +25566,76 @@
           ]
         }
       ]
+    },
+    "4i-kouki-kimatsu": {
+      // 時間割はまだ未確定のため、日付だけ仮登録している(periodsは空)。
+      // 時間割が判明したらperiodsの中身を4i-zenki-kimatsuと同じ形式で追加する。
+      year: 2026,
+      days: [
+        {
+          month: 2,
+          day: 3,
+          periods: []
+        },
+        {
+          month: 2,
+          day: 4,
+          periods: []
+        },
+        {
+          month: 2,
+          day: 5,
+          periods: []
+        },
+        {
+          month: 2,
+          day: 8,
+          periods: []
+        },
+        {
+          month: 2,
+          day: 9,
+          periods: []
+        }
+      ]
     }
   };
   function getExamSchedule(examId) {
     return EXAM_SCHEDULES[examId];
+  }
+  function getAllExamPeriods() {
+    return Object.entries(EXAM_SCHEDULES).map(([examId, schedule]) => {
+      const sortedDays = [...schedule.days].sort((a, b) => a.month - b.month || a.day - b.day);
+      const first = sortedDays[0];
+      const last = sortedDays[sortedDays.length - 1];
+      return {
+        examId,
+        start: new Date(schedule.year, first.month - 1, first.day, 0, 0, 0),
+        end: new Date(schedule.year, last.month - 1, last.day, 23, 59, 59)
+      };
+    }).sort((a, b) => a.start.getTime() - b.start.getTime());
+  }
+
+  // src/countdown.ts
+  var HOUR_MS = 60 * 60 * 1e3;
+  var DAY_MS = 24 * HOUR_MS;
+  function getTestCountdown(now = /* @__PURE__ */ new Date()) {
+    const period = getAllExamPeriods().find((p) => now <= p.end);
+    if (!period) {
+      return { hours: 0, days: 0, target: now, phase: "none" };
+    }
+    const phase = now < period.start ? "before" : "during";
+    const target = phase === "before" ? period.start : period.end;
+    const remaining = target.getTime() - now.getTime();
+    const examName = QUIZ_EXAMS.find((exam) => exam.id === period.examId)?.name;
+    return {
+      hours: Math.ceil(remaining / HOUR_MS),
+      days: Math.floor(remaining / DAY_MS),
+      target,
+      phase,
+      examId: period.examId,
+      examName
+    };
   }
 
   // src/app.ts
@@ -25265,6 +25682,11 @@
   var quizProgressFill = $("quiz-progress-fill");
   var quizModeLabel = $("quiz-mode-label");
   var quizQuestion = $("quiz-question");
+  var quizImageWrap = $("quiz-image-wrap");
+  var quizImage = $("quiz-image");
+  var imageLightbox = $("image-lightbox");
+  var imageLightboxImg = $("image-lightbox-img");
+  var imageLightboxClose = $("image-lightbox-close");
   var quizChoices = $("quiz-choices");
   var quizTextInputArea = $("quiz-text-input-area");
   var quizTextInput = $("quiz-text-input");
@@ -25313,6 +25735,8 @@
   var dashboardSubjectCount = $("dashboard-subject-count");
   var dashboardRemainingHours = $("dashboard-remaining-hours");
   var dashboardRemainingDays = $("dashboard-remaining-days");
+  var dashboardRemainingHoursNote = $("dashboard-remaining-hours-note");
+  var dashboardRemainingDaysNote = $("dashboard-remaining-days-note");
   var dashboardSubjectList = $("dashboard-subject-list");
   var dashboardGoLibrary = $("dashboard-go-library");
   var confirmOverlay = $("confirm-overlay");
@@ -25705,8 +26129,22 @@
   }
   function renderTestCountdown() {
     const countdown = getTestCountdown();
+    if (countdown.phase === "none") {
+      dashboardRemainingHours.textContent = "\u2014";
+      dashboardRemainingDays.textContent = "\u2014";
+      dashboardRemainingHoursNote.textContent = "\u6B21\u306E\u8A66\u9A13\u65E5\u7A0B\u306F\u672A\u767B\u9332\u3067\u3059";
+      dashboardRemainingDaysNote.textContent = "\u6B21\u306E\u8A66\u9A13\u65E5\u7A0B\u306F\u672A\u767B\u9332\u3067\u3059";
+      return;
+    }
     dashboardRemainingHours.textContent = formatCount(countdown.hours);
     dashboardRemainingDays.textContent = formatCount(countdown.days);
+    const targetLabel = new Intl.DateTimeFormat("ja-JP", { month: "numeric", day: "numeric" }).format(
+      countdown.target
+    );
+    const examLabel = countdown.examName ?? "\u8A66\u9A13";
+    const note = countdown.phase === "before" ? `${examLabel} ${targetLabel}\u958B\u59CB\u307E\u3067` : `${examLabel} ${targetLabel}\u7D42\u4E86\u307E\u3067`;
+    dashboardRemainingHoursNote.textContent = note;
+    dashboardRemainingDaysNote.textContent = note;
   }
   function renderDashboard() {
     const entries = Object.values(learningProgress).sort((a, b) => b.lastStudied - a.lastStudied);
@@ -25837,9 +26275,9 @@
       card.style.setProperty("--stagger-index", String(index));
       const modesHtml = group.subjects.map((subject) => {
         const { modeName } = splitSubjectName(subject.name);
-        const questions24 = getQuestions(examId, subject.id);
-        const total = questions24.length;
-        const masteryLabel = questions24.some((question) => question.type === "handwriting") ? "\u5168\u554F\u78BA\u8A8D\u307E\u3067" : "\u5168\u554F\u6B63\u89E3\u307E\u3067";
+        const questions25 = getQuestions(examId, subject.id);
+        const total = questions25.length;
+        const masteryLabel = questions25.some((question) => question.type === "handwriting") ? "\u5168\u554F\u78BA\u8A8D\u307E\u3067" : "\u5168\u554F\u6B63\u89E3\u307E\u3067";
         const countOptions = [];
         if (total > 20) countOptions.push(20);
         if (total > 10) countOptions.push(10);
@@ -25933,6 +26371,13 @@
     state.answered = false;
     updateQuizProgress();
     quizQuestion.innerHTML = renderMath(q.question);
+    if (q.image) {
+      quizImage.src = q.image;
+      quizImageWrap.hidden = false;
+    } else {
+      quizImage.src = "";
+      quizImageWrap.hidden = true;
+    }
     quizFeedback.hidden = true;
     quizFeedback.textContent = "";
     quizFeedback.className = "quiz-feedback";
@@ -26132,7 +26577,8 @@
         const item = document.createElement("div");
         item.className = "wrong-item";
         const answerText = q.type === "choice" ? q.choices[q.answer] : Array.isArray(q.answer) ? q.answer[0] : q.answer;
-        item.innerHTML = `<p class="wrong-question">${renderMath(q.question)}</p><p class="wrong-answer">\u6B63\u89E3: ${renderMath(answerText)}</p>`;
+        const imageHtml = q.image ? `<img src="${q.image}" alt="" class="result-wrong-image" />` : "";
+        item.innerHTML = `<p class="wrong-question">${renderMath(q.question)}</p>${imageHtml}<p class="wrong-answer">\u6B63\u89E3: ${renderMath(answerText)}</p>`;
         resultWrongList.appendChild(item);
       }
     }
@@ -26362,8 +26808,30 @@
     if (menuPanel.contains(target) || btnMenuToggle.contains(target)) return;
     closeMenu();
   });
+  function openImageLightbox(src) {
+    imageLightboxImg.src = src;
+    imageLightbox.hidden = false;
+  }
+  function closeImageLightbox() {
+    imageLightbox.hidden = true;
+    imageLightboxImg.src = "";
+  }
+  quizImage.addEventListener("click", () => openImageLightbox(quizImage.src));
+  imageLightboxClose.addEventListener("click", closeImageLightbox);
+  imageLightbox.addEventListener("click", (e) => {
+    if (e.target === imageLightbox) closeImageLightbox();
+  });
+  resultWrongList.addEventListener("click", (e) => {
+    const img = e.target.closest(".result-wrong-image");
+    if (img) openImageLightbox(img.src);
+  });
   document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") closeMenu();
+    if (e.key !== "Escape") return;
+    if (!imageLightbox.hidden) {
+      closeImageLightbox();
+      return;
+    }
+    closeMenu();
   });
   async function openLibrary() {
     closeMenu();
@@ -26411,7 +26879,8 @@
     }
     const now = /* @__PURE__ */ new Date();
     const isToday = (month, day) => now.getFullYear() === schedule.year && now.getMonth() + 1 === month && now.getDate() === day;
-    for (const day of schedule.days) {
+    const sortedDays = [...schedule.days].sort((a, b) => a.month - b.month || a.day - b.day);
+    for (const day of sortedDays) {
       const card = document.createElement("div");
       card.className = "schedule-day";
       if (isToday(day.month, day.day)) card.classList.add("is-today");
