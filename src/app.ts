@@ -135,6 +135,8 @@ const dashboardAccuracy = $<HTMLElement>('dashboard-accuracy');
 const dashboardSubjectCount = $<HTMLElement>('dashboard-subject-count');
 const dashboardRemainingHours = $<HTMLElement>('dashboard-remaining-hours');
 const dashboardRemainingDays = $<HTMLElement>('dashboard-remaining-days');
+const dashboardRemainingHoursNote = $<HTMLElement>('dashboard-remaining-hours-note');
+const dashboardRemainingDaysNote = $<HTMLElement>('dashboard-remaining-days-note');
 const dashboardSubjectList = $<HTMLElement>('dashboard-subject-list');
 const dashboardGoLibrary = $<HTMLButtonElement>('dashboard-go-library');
 
@@ -632,8 +634,28 @@ function formatProgressDate(timestamp: number): string {
 
 function renderTestCountdown(): void {
   const countdown = getTestCountdown();
+
+  if (countdown.phase === 'none') {
+    dashboardRemainingHours.textContent = '—';
+    dashboardRemainingDays.textContent = '—';
+    dashboardRemainingHoursNote.textContent = '次の試験日程は未登録です';
+    dashboardRemainingDaysNote.textContent = '次の試験日程は未登録です';
+    return;
+  }
+
   dashboardRemainingHours.textContent = formatCount(countdown.hours);
   dashboardRemainingDays.textContent = formatCount(countdown.days);
+
+  const targetLabel = new Intl.DateTimeFormat('ja-JP', { month: 'numeric', day: 'numeric' }).format(
+    countdown.target,
+  );
+  const examLabel = countdown.examName ?? '試験';
+  const note =
+    countdown.phase === 'before'
+      ? `${examLabel} ${targetLabel}開始まで`
+      : `${examLabel} ${targetLabel}終了まで`;
+  dashboardRemainingHoursNote.textContent = note;
+  dashboardRemainingDaysNote.textContent = note;
 }
 
 function renderDashboard(): void {
@@ -1532,7 +1554,9 @@ function renderSchedule(): void {
   const isToday = (month: number, day: number) =>
     now.getFullYear() === schedule.year && now.getMonth() + 1 === month && now.getDate() === day;
 
-  for (const day of schedule.days) {
+  // 配列の並び順に関わらず、日付順に表示する(データ登録順の誤りに影響されないようにする)。
+  const sortedDays = [...schedule.days].sort((a, b) => a.month - b.month || a.day - b.day);
+  for (const day of sortedDays) {
     const card = document.createElement('div');
     card.className = 'schedule-day';
     if (isToday(day.month, day.day)) card.classList.add('is-today');

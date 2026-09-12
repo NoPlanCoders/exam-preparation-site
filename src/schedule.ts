@@ -84,7 +84,7 @@ const EXAM_SCHEDULES: Record<string, ExamSchedule> = {
       },
       {
         month: 9,
-        day: 15,
+        day: 19,
         periods: [
           { time: '1限 9:30〜10:20', subject: '経済学a', room: '322' },
           { time: '2限 10:30〜11:20', subject: 'ゲーム理論a', room: '322' },
@@ -98,4 +98,30 @@ const EXAM_SCHEDULES: Record<string, ExamSchedule> = {
 
 export function getExamSchedule(examId: string): ExamSchedule | undefined {
   return EXAM_SCHEDULES[examId];
+}
+
+export interface ExamPeriod {
+  examId: string;
+  /** 試験期間の開始(初日の午前0時)。 */
+  start: Date;
+  /** 試験期間の終了(最終日の23:59:59)。 */
+  end: Date;
+}
+
+// 登録されている全試験の日程を、開始日が早い順に並べて返す。
+// ダッシュボードのカウントダウンは、この一覧から「今日を含む・まだ終わっていない
+// 試験期間」を探して使う(開始前なら開始日まで、期間中なら終了日までをカウントする)。
+export function getAllExamPeriods(): ExamPeriod[] {
+  return Object.entries(EXAM_SCHEDULES)
+    .map(([examId, schedule]) => {
+      const sortedDays = [...schedule.days].sort((a, b) => a.month - b.month || a.day - b.day);
+      const first = sortedDays[0];
+      const last = sortedDays[sortedDays.length - 1];
+      return {
+        examId,
+        start: new Date(schedule.year, first.month - 1, first.day, 0, 0, 0),
+        end: new Date(schedule.year, last.month - 1, last.day, 23, 59, 59),
+      };
+    })
+    .sort((a, b) => a.start.getTime() - b.start.getTime());
 }
