@@ -120,6 +120,12 @@ const rawSubjects: Subject[] = [
     icon: 'languages',
   },
   {
+    id: 'korean-vocab-text',
+    name: '韓国語(単語・記述式)',
+    description: '各課の単語の意味を、韓国語→日本語で入力して確認',
+    icon: 'keyboard',
+  },
+  {
     id: 'economics-choice',
     name: '経済学(選択式)',
     description:

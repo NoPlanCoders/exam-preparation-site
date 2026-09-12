@@ -19,6 +19,7 @@ import { questions as zenkiKimatsuControlEngineeringChoice } from './4i-zenki-ki
 import { questions as zenkiKimatsuControlEngineeringText } from './4i-zenki-kimatsu/control-engineering-text.js';
 import { questions as zenkiKimatsuControlEngineeringHandwriting } from './4i-zenki-kimatsu/control-engineering-handwriting.js';
 import { questions as zenkiKimatsuKoreanChoice } from './4i-zenki-kimatsu/korean-choice.js';
+import { questions as zenkiKimatsuKoreanVocabText } from './4i-zenki-kimatsu/korean-vocab-text.js';
 import { questions as zenkiKimatsuEconomicsChoice } from './4i-zenki-kimatsu/economics-choice.js';
 import { questions as zenkiKimatsuEconomicsHandwriting } from './4i-zenki-kimatsu/economics-handwriting.js';
 import { questions as zenkiKimatsuAppliedPhysicsChoice } from './4i-zenki-kimatsu/applied-physics-choice.js';
@@ -54,6 +55,7 @@ const examData: Record<string, ExamData> = {
       'control-engineering-text': zenkiKimatsuControlEngineeringText,
       'control-engineering-handwriting': zenkiKimatsuControlEngineeringHandwriting,
       'korean-choice': zenkiKimatsuKoreanChoice,
+      'korean-vocab-text': zenkiKimatsuKoreanVocabText,
       'economics-choice': zenkiKimatsuEconomicsChoice,
       'economics-handwriting': zenkiKimatsuEconomicsHandwriting,
       'applied-physics-choice': zenkiKimatsuAppliedPhysicsChoice,

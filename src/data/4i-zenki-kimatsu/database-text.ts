@@ -232,4 +232,80 @@ export const questions: Question[] = [
       '小売店一覧表で「商品名→単価」という関数従属性はあるが「{小売店名，商品名}→単価」が完全関数従属になっていない。この関係表は第何正規形でないか。',
     answer: ['第2正規形', '第二正規形'],
   },
+  {
+    type: 'text',
+    question: 'データベースの中に実際にデータを格納する基底表を新しく定義するSQL文は何か。',
+    answer: 'CREATE TABLE',
+  },
+  {
+    type: 'text',
+    question:
+      'CREATE TABLE文で、その列に値が必ず入力されていること(NULLを許さないこと)を指定する制約は何か。',
+    answer: 'NOT NULL',
+  },
+  {
+    type: 'text',
+    question: 'CREATE TABLE文で、表の行を一意に識別する主キーとなる列を指定する句は何か。',
+    answer: 'PRIMARY KEY',
+  },
+  {
+    type: 'text',
+    question: '整数の値を格納するために使うデータ型は何か。',
+    answer: 'INTEGER',
+  },
+  {
+    type: 'text',
+    question: '桁数があらかじめ固定された文字列を格納するために使うデータ型は何か。',
+    answer: 'CHAR',
+  },
+  {
+    type: 'text',
+    question: '桁数が可変(値によって長さが変わる)の文字列を格納するために使うデータ型は何か。',
+    answer: 'VARCHAR',
+  },
+  {
+    type: 'text',
+    question: '年月日などの日付を格納するために使うデータ型は何か。',
+    answer: 'DATE',
+  },
+  {
+    type: 'text',
+    question: '既に存在する表に新しい列を追加するSQL文で使うキーワードは何か。',
+    answer: ['ADD COLUMN', 'ALTER TABLE ADD COLUMN'],
+  },
+  {
+    type: 'text',
+    question: '既に存在する表からある列を削除するSQL文で使うキーワードは何か。',
+    answer: ['DROP COLUMN', 'ALTER TABLE DROP COLUMN'],
+  },
+  {
+    type: 'text',
+    question: '表そのものを削除するSQL文は何か。',
+    answer: 'DROP TABLE',
+  },
+  {
+    type: 'text',
+    question: '既存の表に新しい1行のデータを追加するSQL文は何か。',
+    answer: ['INSERT INTO', 'INSERT'],
+  },
+  {
+    type: 'text',
+    question: 'SELECT文で表の全ての列を表示したいとき、列名の代わりに書く記号は何か。',
+    answer: '*',
+  },
+  {
+    type: 'text',
+    question: 'SELECT文で取得した列に別名をつけるときに使うキーワードは何か。',
+    answer: 'AS',
+  },
+  {
+    type: 'text',
+    question: 'SELECT文の検索結果から、値が重複する行を取り除いて表示するために使うキーワードは何か。',
+    answer: 'DISTINCT',
+  },
+  {
+    type: 'text',
+    question: 'SELECT文で検索結果を特定の条件を満たす行だけに絞り込むために使う句は何か。',
+    answer: 'WHERE',
+  },
 ];
