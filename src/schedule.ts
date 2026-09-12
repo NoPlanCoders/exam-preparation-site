@@ -94,6 +94,38 @@ const EXAM_SCHEDULES: Record<string, ExamSchedule> = {
       },
     ],
   },
+  '4i-kouki-kimatsu': {
+    // 時間割はまだ未確定のため、日付だけ仮登録している(periodsは空)。
+    // 時間割が判明したらperiodsの中身を4i-zenki-kimatsuと同じ形式で追加する。
+    year: 2026,
+    days: [
+      {
+        month: 2,
+        day: 3,
+        periods: [],
+      },
+      {
+        month: 2,
+        day: 4,
+        periods: [],
+      },
+      {
+        month: 2,
+        day: 5,
+        periods: [],
+      },
+      {
+        month: 2,
+        day: 8,
+        periods: [],
+      },
+      {
+        month: 2,
+        day: 9,
+        periods: [],
+      },
+    ],
+  },
 };
 
 export function getExamSchedule(examId: string): ExamSchedule | undefined {
