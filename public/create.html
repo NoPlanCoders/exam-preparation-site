@@ -96,6 +96,16 @@
         <p class="builder-help">改行はそのまま表示されるので、表や式を複数行に分けて書きたいときに使えます。</p>
       </div>
 
+      <div class="builder-field">
+        <label for="q-image">問題の画像(任意)</label>
+        <input type="file" id="q-image" accept="image/*" />
+        <p class="builder-help">図やグラフを問題文の下に表示したいときに追加してください。大きい画像は自動で縮小されます。</p>
+        <div id="q-image-preview-wrap" class="builder-image-preview-wrap" hidden>
+          <img id="q-image-preview" class="builder-image-preview" alt="" />
+          <button type="button" id="btn-remove-image" class="builder-text-btn">画像を削除</button>
+        </div>
+      </div>
+
       <!-- 選択式 -->
       <div class="builder-field" id="choice-fields">
         <label>選択肢(正解を1つ選んでください)</label>

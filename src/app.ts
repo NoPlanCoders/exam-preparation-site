@@ -84,6 +84,11 @@ const quizScoreText = $<HTMLElement>('quiz-score-text');
 const quizProgressFill = $<HTMLElement>('quiz-progress-fill');
 const quizModeLabel = $<HTMLElement>('quiz-mode-label');
 const quizQuestion = $<HTMLElement>('quiz-question');
+const quizImageWrap = $<HTMLElement>('quiz-image-wrap');
+const quizImage = $<HTMLImageElement>('quiz-image');
+const imageLightbox = $<HTMLElement>('image-lightbox');
+const imageLightboxImg = $<HTMLImageElement>('image-lightbox-img');
+const imageLightboxClose = $<HTMLButtonElement>('image-lightbox-close');
 const quizChoices = $<HTMLElement>('quiz-choices');
 const quizTextInputArea = $<HTMLElement>('quiz-text-input-area');
 const quizTextInput = $<HTMLInputElement>('quiz-text-input');
@@ -944,6 +949,13 @@ function renderQuestion(): void {
 
   updateQuizProgress();
   quizQuestion.innerHTML = renderMath(q.question);
+  if (q.image) {
+    quizImage.src = q.image;
+    quizImageWrap.hidden = false;
+  } else {
+    quizImage.src = '';
+    quizImageWrap.hidden = true;
+  }
 
   quizFeedback.hidden = true;
   quizFeedback.textContent = '';
@@ -1184,7 +1196,10 @@ function renderResult(): void {
       item.className = 'wrong-item';
       const answerText =
         q.type === 'choice' ? q.choices[q.answer] : Array.isArray(q.answer) ? q.answer[0] : q.answer;
-      item.innerHTML = `<p class="wrong-question">${renderMath(q.question)}</p><p class="wrong-answer">正解: ${renderMath(answerText)}</p>`;
+      const imageHtml = q.image
+        ? `<img src="${q.image}" alt="" class="result-wrong-image" />`
+        : '';
+      item.innerHTML = `<p class="wrong-question">${renderMath(q.question)}</p>${imageHtml}<p class="wrong-answer">正解: ${renderMath(answerText)}</p>`;
       resultWrongList.appendChild(item);
     }
   }
@@ -1490,8 +1505,35 @@ document.addEventListener('click', (e) => {
   closeMenu();
 });
 
+function openImageLightbox(src: string): void {
+  imageLightboxImg.src = src;
+  imageLightbox.hidden = false;
+}
+
+function closeImageLightbox(): void {
+  imageLightbox.hidden = true;
+  imageLightboxImg.src = '';
+}
+
+quizImage.addEventListener('click', () => openImageLightbox(quizImage.src));
+imageLightboxClose.addEventListener('click', closeImageLightbox);
+imageLightbox.addEventListener('click', (e) => {
+  if (e.target === imageLightbox) closeImageLightbox();
+});
+
+// 間違えた問題の一覧に表示される画像サムネイルもタップで拡大できるようにする。
+resultWrongList.addEventListener('click', (e) => {
+  const img = (e.target as HTMLElement).closest<HTMLImageElement>('.result-wrong-image');
+  if (img) openImageLightbox(img.src);
+});
+
 document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') closeMenu();
+  if (e.key !== 'Escape') return;
+  if (!imageLightbox.hidden) {
+    closeImageLightbox();
+    return;
+  }
+  closeMenu();
 });
 
 async function openLibrary(): Promise<void> {

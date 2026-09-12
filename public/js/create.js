@@ -18,6 +18,10 @@
   const btnAddChoice = document.getElementById('btn-add-choice');
   const btnAddTextAnswer = document.getElementById('btn-add-text-answer');
   const qQuestion = document.getElementById('q-question');
+  const qImage = document.getElementById('q-image');
+  const qImagePreviewWrap = document.getElementById('q-image-preview-wrap');
+  const qImagePreview = document.getElementById('q-image-preview');
+  const btnRemoveImage = document.getElementById('btn-remove-image');
   const qHandwritingAnswer = document.getElementById('q-handwriting-answer');
   const formError = document.getElementById('form-error');
   const btnSubmit = document.getElementById('btn-submit');
@@ -44,6 +48,69 @@
   let currentCategory = '履修科目';
   let questions = [];
   let editingIndex = null;
+  let currentImageDataUrl = null;
+
+  const MAX_IMAGE_DIMENSION = 1000; // px
+  const JPEG_FALLBACK_THRESHOLD = 700 * 1024; // このデータURI文字数を超えたらJPEGに切り替える
+
+  // アップロードされた画像を、大きすぎる場合は縮小・再圧縮してdata URIにする。
+  // イラストや図表向けにまずPNGで試し、大きければJPEGに落とす。
+  function readImageAsDataUrl(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onerror = () => reject(new Error('画像の読み込みに失敗しました。'));
+      reader.onload = () => {
+        const img = new Image();
+        img.onerror = () => reject(new Error('画像の読み込みに失敗しました。'));
+        img.onload = () => {
+          let { width, height } = img;
+          if (width > MAX_IMAGE_DIMENSION || height > MAX_IMAGE_DIMENSION) {
+            const scale = MAX_IMAGE_DIMENSION / Math.max(width, height);
+            width = Math.round(width * scale);
+            height = Math.round(height * scale);
+          }
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+          let dataUrl = canvas.toDataURL('image/png');
+          if (dataUrl.length > JPEG_FALLBACK_THRESHOLD) {
+            dataUrl = canvas.toDataURL('image/jpeg', 0.82);
+          }
+          resolve(dataUrl);
+        };
+        img.src = String(reader.result);
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  function showImagePreview(dataUrl) {
+    currentImageDataUrl = dataUrl;
+    qImagePreview.src = dataUrl;
+    qImagePreviewWrap.hidden = false;
+  }
+
+  function hideImagePreview() {
+    currentImageDataUrl = null;
+    qImagePreview.src = '';
+    qImagePreviewWrap.hidden = true;
+    qImage.value = '';
+  }
+
+  qImage.addEventListener('change', () => {
+    const file = qImage.files && qImage.files[0];
+    if (!file) return;
+    readImageAsDataUrl(file)
+      .then((dataUrl) => showImagePreview(dataUrl))
+      .catch((err) => {
+        showError(err.message || '画像の読み込みに失敗しました。');
+        qImage.value = '';
+      });
+  });
+
+  btnRemoveImage.addEventListener('click', () => hideImagePreview());
 
   // 保存/読み込み形式は { category, questions } のオブジェクト。
   // 以前のバージョンでは questions の配列だけを保存していたので、
@@ -196,6 +263,7 @@
     qHandwritingAnswer.value = '';
     resetChoiceRows(null, 0);
     resetAnswerRows(null);
+    hideImagePreview();
     setType('choice');
     editingIndex = null;
     btnSubmit.textContent = 'この問題を追加する';
@@ -218,6 +286,7 @@
       const explanations = rows.map((r) => r.querySelector('.builder-choice-explanation').value.trim());
       const question = { type: 'choice', question: questionText, choices, answer: checkedRow };
       if (explanations.some((e) => e)) question.explanations = explanations;
+      if (currentImageDataUrl) question.image = currentImageDataUrl;
       return { value: question };
     }
 
@@ -225,14 +294,16 @@
       const rows = Array.from(textAnswerList.children);
       const answers = rows.map((r) => r.querySelector('input[type="text"]').value.trim()).filter((a) => a);
       if (answers.length === 0) return { error: '正解を1つ以上入力してください。' };
-      return {
-        value: { type: 'text', question: questionText, answer: answers.length === 1 ? answers[0] : answers },
-      };
+      const question = { type: 'text', question: questionText, answer: answers.length === 1 ? answers[0] : answers };
+      if (currentImageDataUrl) question.image = currentImageDataUrl;
+      return { value: question };
     }
 
     const answer = qHandwritingAnswer.value.trim();
     if (!answer) return { error: '正解を入力してください。' };
-    return { value: { type: 'handwriting', question: questionText, answer } };
+    const question = { type: 'handwriting', question: questionText, answer };
+    if (currentImageDataUrl) question.image = currentImageDataUrl;
+    return { value: question };
   }
 
   function renderQuestionList() {
@@ -258,6 +329,7 @@
         answerSummary = `正解: ${q.answer}`;
       }
 
+      const imageHtml = q.image ? '<img class="builder-question-thumb" alt="" />' : '';
       card.innerHTML =
         '<div class="builder-question-head">' +
         `<span class="builder-question-badge">${TYPE_LABEL[q.type] || q.type}</span>` +
@@ -266,8 +338,10 @@
         '<button type="button" class="btn-delete is-danger">削除</button>' +
         '</div></div>' +
         '<p class="builder-question-text"></p>' +
+        imageHtml +
         '<p class="builder-question-answer"></p>';
       card.querySelector('.builder-question-text').textContent = `${index + 1}. ${q.question}`;
+      if (q.image) card.querySelector('.builder-question-thumb').src = q.image;
       card.querySelector('.builder-question-answer').textContent = answerSummary;
       card.querySelector('.btn-edit').addEventListener('click', () => startEdit(index));
       card.querySelector('.btn-delete').addEventListener('click', () => deleteQuestion(index));
@@ -288,6 +362,11 @@
       resetAnswerRows(Array.isArray(q.answer) ? q.answer : [q.answer]);
     } else {
       qHandwritingAnswer.value = q.answer;
+    }
+    if (q.image) {
+      showImagePreview(q.image);
+    } else {
+      hideImagePreview();
     }
     btnSubmit.textContent = 'この問題を更新する';
     btnCancelEdit.hidden = false;

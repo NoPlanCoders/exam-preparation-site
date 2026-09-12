@@ -1,4 +1,13 @@
-export interface ChoiceQuestion {
+/**
+ * 問題文の下に表示する画像(任意)。相対パス(例: "images/xxx.png")か
+ * data URI(例: "data:image/png;base64,...")のどちらでもよい。
+ * クイズ作成ツール(create.html)で追加した画像は自動的にdata URIになる。
+ */
+interface QuestionImage {
+  image?: string;
+}
+
+export interface ChoiceQuestion extends QuestionImage {
   type: 'choice';
   question: string;
   choices: string[];
@@ -11,13 +20,13 @@ export interface ChoiceQuestion {
   explanations?: string[];
 }
 
-export interface TextQuestion {
+export interface TextQuestion extends QuestionImage {
   type: 'text';
   question: string;
   answer: string | string[];
 }
 
-export interface HandwritingQuestion {
+export interface HandwritingQuestion extends QuestionImage {
   type: 'handwriting';
   question: string;
   answer: string;

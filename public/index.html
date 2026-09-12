@@ -200,6 +200,9 @@
       <div class="progress-bar"><div class="progress-bar-fill" id="quiz-progress-fill"></div></div>
       <div class="quiz-card">
         <p id="quiz-question" class="quiz-question"></p>
+        <div id="quiz-image-wrap" class="quiz-image-wrap" hidden>
+          <img id="quiz-image" class="quiz-image" alt="問題の画像" />
+        </div>
         <div id="quiz-choices" class="quiz-choices"></div>
         <div id="quiz-text-input-area" class="quiz-text-input-area" hidden>
           <input type="text" id="quiz-text-input" autocomplete="off" placeholder="答えを入力" />
@@ -251,6 +254,11 @@
         <button type="button" id="confirm-btn-ok" class="confirm-btn-ok">OK</button>
       </div>
     </div>
+  </div>
+
+  <div class="image-lightbox" id="image-lightbox" hidden>
+    <button type="button" class="image-lightbox-close" id="image-lightbox-close" aria-label="閉じる"><i data-lucide="x" aria-hidden="true"></i></button>
+    <img id="image-lightbox-img" class="image-lightbox-img" alt="" />
   </div>
 
   <script src="js/bundle.js"></script>

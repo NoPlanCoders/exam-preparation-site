@@ -376,6 +376,33 @@
   text-decoration: underline;
 }
 
+.builder-image-preview-wrap {
+  margin-top: 0.6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.builder-image-preview-wrap[hidden] {
+  display: none;
+}
+
+.builder-image-preview {
+  max-width: 10rem;
+  max-height: 6rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+}
+
+.builder-question-thumb {
+  display: block;
+  max-width: 8rem;
+  max-height: 5rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  margin: 0.4rem 0;
+}
+
 #question-list-empty[hidden] {
   display: none;
 }
