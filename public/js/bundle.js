@@ -26273,7 +26273,7 @@
 
   // src/data/app-version.json
   var app_version_default = {
-    version: "1.0.50"
+    version: "1.0.51"
   };
 
   // src/app.ts
@@ -26930,8 +26930,9 @@
         if (total > 10) countOptions.push(10);
         countOptions.push(total);
         const optionsHtml = countOptions.map((n) => `<option value="${n}">${n === total ? `\u5168${n}\u554F` : `${n}\u554F`}</option>`).join("");
+        const descriptionAttr = escapeHtml(subject.description).replace(/"/g, "&quot;");
         return `
-          <div class="subject-mode-row" data-subject-id="${subject.id}">
+          <div class="subject-mode-row" data-subject-id="${subject.id}" title="${descriptionAttr}">
             <div class="subject-mode-heading">
               <span class="subject-mode-name">${modeName}</span>
               <span class="subject-mode-total">\u5168${total}\u554F</span>

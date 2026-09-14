@@ -851,8 +851,10 @@ function renderSubjectView(examId: string, examName: string): void {
           .map((n) => `<option value="${n}">${n === total ? `全${n}問` : `${n}問`}</option>`)
           .join('');
 
+        const descriptionAttr = escapeHtml(subject.description).replace(/"/g, '&quot;');
+
         return `
-          <div class="subject-mode-row" data-subject-id="${subject.id}">
+          <div class="subject-mode-row" data-subject-id="${subject.id}" title="${descriptionAttr}">
             <div class="subject-mode-heading">
               <span class="subject-mode-name">${modeName}</span>
               <span class="subject-mode-total">全${total}問</span>
