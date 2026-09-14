@@ -25662,6 +25662,11 @@
     };
   }
 
+  // src/data/app-version.json
+  var app_version_default = {
+    version: "1.0.48"
+  };
+
   // src/app.ts
   function escapeHtml(text2) {
     return text2.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -25744,6 +25749,7 @@
   var menuSearchBack = $("menu-search-back");
   var menuSearchInput = $("menu-search-input");
   var menuSearchResults = $("menu-search-results");
+  var menuVersion = $("menu-version");
   var btnBackFromSettings = $("btn-back-from-settings");
   var btnBackFromSchedule = $("btn-back-from-schedule");
   var scheduleList = $("schedule-list");
@@ -26992,6 +26998,7 @@
     saveSplashAnimationEnabled(enabled);
   });
   function initApp() {
+    menuVersion.textContent = `v${app_version_default.version}`;
     refreshIcons(document);
     renderExamList();
     showView(viewExam);

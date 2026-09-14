@@ -550,6 +550,14 @@ body {
   margin: 0.25rem 0.4rem;
 }
 
+.menu-version {
+  margin: 0.4rem 0 0;
+  padding: 0.3rem 0.7rem 0.1rem;
+  font-size: 0.75rem;
+  color: var(--color-muted);
+  text-align: center;
+}
+
 .app-footer {
   position: fixed;
   left: 0;

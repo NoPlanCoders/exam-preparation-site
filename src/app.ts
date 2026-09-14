@@ -4,6 +4,7 @@ import { getExams, getSubjects, getQuestions } from './data/registry.js';
 import { ICONS, getIcon, refreshIcons } from './icons.js';
 import { getTestCountdown } from './countdown.js';
 import { getExamSchedule, weekdayLabel } from './schedule.js';
+import appVersion from './data/app-version.json';
 
 // 問題文・選択肢・解答・解説の中の数式をKaTeXでレンダリングする。
 // $...$ をインライン数式、$$...$$ をブロック数式として扱う。
@@ -123,6 +124,7 @@ const menuSearch = $<HTMLElement>('menu-search');
 const menuSearchBack = $<HTMLButtonElement>('menu-search-back');
 const menuSearchInput = $<HTMLInputElement>('menu-search-input');
 const menuSearchResults = $<HTMLElement>('menu-search-results');
+const menuVersion = $<HTMLElement>('menu-version');
 
 const btnBackFromSettings = $<HTMLButtonElement>('btn-back-from-settings');
 const btnBackFromSchedule = $<HTMLButtonElement>('btn-back-from-schedule');
@@ -1708,6 +1710,7 @@ splashAnimationToggle.addEventListener('change', () => {
 });
 
 export function initApp(): void {
+  menuVersion.textContent = `v${appVersion.version}`;
   refreshIcons(document);
   renderExamList();
   showView(viewExam);
