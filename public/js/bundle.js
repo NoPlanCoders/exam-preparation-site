@@ -14208,24 +14208,6 @@
   // src/data/4i-zenki-kimatsu/subjects.ts
   var rawSubjects2 = [
     {
-      id: "japanese-lit-choice",
-      name: "\u56FD\u8A9E(\u9078\u629E\u5F0F)",
-      description: "\u65E5\u672C\u6587\u5B66\u53F2(\u4E0A\u4EE3\u301C\u73FE\u4EE3)\u306E\u4F5C\u54C1\u3068\u4F5C\u8005\u30FB\u7DE8\u8005\u306E\u7D44\u307F\u5408\u308F\u305B\u30924\u629E\u3067\u78BA\u8A8D",
-      icon: "scroll"
-    },
-    {
-      id: "english-vocab-choice",
-      name: "\u82F1\u8A9E(\u5358\u8A9E\u30FB\u9078\u629E\u5F0F)",
-      description: "\u6559\u79D1\u66F8\u306E\u5358\u8A9E\u30FB\u719F\u8A9E\u306E\u610F\u5473\u30924\u629E\u3067\u78BA\u8A8D",
-      icon: "book-a"
-    },
-    {
-      id: "english-grammar-choice",
-      name: "\u82F1\u8A9E(\u6587\u6CD5\u30FB\u9078\u629E\u5F0F)",
-      description: "\u6587\u578B\u30FB\u6642\u5236\u30FB\u52A9\u52D5\u8A5E\u30FB\u614B\u30FB\u4E0D\u5B9A\u8A5E\u30FB\u5206\u8A5E\u30FB\u52D5\u540D\u8A5E\u306A\u3069\u306E\u6587\u6CD5\u4E8B\u9805\u30924\u629E\u3067\u78BA\u8A8D",
-      icon: "spell-check"
-    },
-    {
       id: "database-choice",
       name: "\u30C7\u30FC\u30BF\u30D9\u30FC\u30B9(\u9078\u629E\u5F0F)",
       description: "\u95A2\u4FC2\u8868\u30FB\u95A2\u4FC2\u4EE3\u6570\u30FBSQL\u306E\u7528\u8A9E\u30924\u629E\u3067\u78BA\u8A8D",
@@ -14368,6 +14350,24 @@
       name: "\u5FDC\u7528\u6570\u5B66(\u8A08\u7B97\u30FB\u624B\u66F8\u304D)",
       description: "1\u5909\u6570\u306E\u5FAE\u5206\u30FB\u504F\u5FAE\u5206\u30FB\u5168\u5FAE\u5206(\u63A5\u5E73\u9762)\u30FB\u5408\u6210\u95A2\u6570\u306E\u5FAE\u5206\u6CD5\u30FB\u9AD8\u6B21\u504F\u5C0E\u95A2\u6570\u30FB\u6975\u5927\u6975\u5C0F\u306E\u8A08\u7B97\u554F\u984C\u3092\u624B\u66F8\u304D\u3067\u89E3\u3044\u3066\u78BA\u8A8D",
       icon: "variable"
+    },
+    {
+      id: "japanese-lit-choice",
+      name: "\u56FD\u8A9E(\u9078\u629E\u5F0F)",
+      description: "\u65E5\u672C\u6587\u5B66\u53F2(\u4E0A\u4EE3\u301C\u73FE\u4EE3)\u306E\u4F5C\u54C1\u3068\u4F5C\u8005\u30FB\u7DE8\u8005\u306E\u7D44\u307F\u5408\u308F\u305B\u30924\u629E\u3067\u78BA\u8A8D",
+      icon: "scroll"
+    },
+    {
+      id: "english-vocab-choice",
+      name: "\u82F1\u8A9E(\u5358\u8A9E\u30FB\u9078\u629E\u5F0F)",
+      description: "\u6559\u79D1\u66F8\u306E\u5358\u8A9E\u30FB\u719F\u8A9E\u306E\u610F\u5473\u30924\u629E\u3067\u78BA\u8A8D",
+      icon: "book-a"
+    },
+    {
+      id: "english-grammar-choice",
+      name: "\u82F1\u8A9E(\u6587\u6CD5\u30FB\u9078\u629E\u5F0F)",
+      description: "\u6587\u578B\u30FB\u6642\u5236\u30FB\u52A9\u52D5\u8A5E\u30FB\u614B\u30FB\u4E0D\u5B9A\u8A5E\u30FB\u5206\u8A5E\u30FB\u52D5\u540D\u8A5E\u306A\u3069\u306E\u6587\u6CD5\u4E8B\u9805\u30924\u629E\u3067\u78BA\u8A8D",
+      icon: "spell-check"
     }
   ];
   var electiveIds2 = new Set(subject_types_default2["\u9078\u629E\u79D1\u76EE"]);
@@ -27489,7 +27489,7 @@
 
   // src/data/app-version.json
   var app_version_default = {
-    version: "1.0.53"
+    version: "1.0.57"
   };
 
   // src/app.ts

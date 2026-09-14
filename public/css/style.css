@@ -669,6 +669,11 @@ h2 {
   box-shadow: 0 6px 14px rgba(79, 70, 229, 0.22);
 }
 
+.dashboard-heading-mark svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
 .dashboard-stats {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
