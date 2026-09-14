@@ -1220,6 +1220,10 @@ btnEndQuiz.addEventListener('click', async () => {
   renderResult();
 });
 quizTextInput.addEventListener('keydown', (e) => {
+  // IME(日本語・韓国語などの予測変換)の変換を確定するEnterでは回答しない。
+  // e.isComposingがtrueの間に加えて、Safari(Mac)は変換確定のEnterでも
+  // isComposingがfalseになっていることがあるため、keyCode 229でも判定する。
+  if (e.isComposing || e.keyCode === 229) return;
   if (e.key === 'Enter') submitText();
 });
 
