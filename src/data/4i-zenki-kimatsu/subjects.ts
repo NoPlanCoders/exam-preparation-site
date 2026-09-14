@@ -16,6 +16,18 @@ const rawSubjects: Subject[] = [
     icon: 'scroll',
   },
   {
+    id: 'english-vocab-choice',
+    name: '英語(単語・選択式)',
+    description: '教科書の単語・熟語の意味を4択で確認',
+    icon: 'book-a',
+  },
+  {
+    id: 'english-grammar-choice',
+    name: '英語(文法・選択式)',
+    description: '文型・時制・助動詞・態・不定詞・分詞・動名詞などの文法事項を4択で確認',
+    icon: 'spell-check',
+  },
+  {
     id: 'database-choice',
     name: 'データベース(選択式)',
     description: '関係表・関係代数・SQLの用語を4択で確認',
