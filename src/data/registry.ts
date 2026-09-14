@@ -25,6 +25,7 @@ import { questions as zenkiKimatsuEconomicsHandwriting } from './4i-zenki-kimats
 import { questions as zenkiKimatsuAppliedPhysicsChoice } from './4i-zenki-kimatsu/applied-physics-choice.js';
 import { questions as zenkiKimatsuAppliedPhysicsHandwriting } from './4i-zenki-kimatsu/applied-physics-handwriting.js';
 import { questions as zenkiKimatsuAppliedMathHandwriting } from './4i-zenki-kimatsu/applied-math-handwriting.js';
+import { subjects as koukikimatsuSubjects } from './4i-kouki-kimatsu/subjects.js';
 
 interface ExamData {
   subjects: Subject[];
@@ -61,6 +62,12 @@ const examData: Record<string, ExamData> = {
       'applied-physics-choice': zenkiKimatsuAppliedPhysicsChoice,
       'applied-physics-handwriting': zenkiKimatsuAppliedPhysicsHandwriting,
       'applied-math-handwriting': zenkiKimatsuAppliedMathHandwriting,
+    },
+  },
+  '4i-kouki-kimatsu': {
+    subjects: koukikimatsuSubjects,
+    questions: {
+      
     },
   },
 };

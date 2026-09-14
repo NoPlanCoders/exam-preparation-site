@@ -17,4 +17,10 @@ export const QUIZ_EXAMS: Exam[] = [
     description: '4Iクラス 前期期末試験の対策問題',
     icon: 'graduation-cap',
   },
+  {
+    id: '4i-kouki-kimatsu',
+    name: '4I 後期期末試験',
+    description: '4Iクラス 後期期末試験の対策問題',
+    icon: 'graduation-cap',
+  },
 ];

@@ -97,7 +97,7 @@ const EXAM_SCHEDULES: Record<string, ExamSchedule> = {
   '4i-kouki-kimatsu': {
     // 時間割はまだ未確定のため、日付だけ仮登録している(periodsは空)。
     // 時間割が判明したらperiodsの中身を4i-zenki-kimatsuと同じ形式で追加する。
-    year: 2026,
+    year: 2027,
     days: [
       {
         month: 2,
