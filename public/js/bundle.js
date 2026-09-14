@@ -26250,6 +26250,14 @@
     const required = allSubjects.filter((s) => s.category !== "\u9078\u629E\u79D1\u76EE");
     const pinnedElectives = pinnedSubjects.filter((p) => p.examId === examId).map((p) => allSubjects.find((s) => s.id === p.subjectId)).filter((s) => !!s && s.category === "\u9078\u629E\u79D1\u76EE");
     const subjects2 = [...required, ...pinnedElectives];
+    if (subjects2.length === 0) {
+      const empty = document.createElement("p");
+      empty.className = "dashboard-empty";
+      empty.textContent = `${examName}\u306E\u79D1\u76EE\u306F\u307E\u3060\u767B\u9332\u3055\u308C\u3066\u3044\u307E\u305B\u3093\u3002`;
+      subjectList.appendChild(empty);
+      showView(viewSubject);
+      return;
+    }
     const groups = /* @__PURE__ */ new Map();
     for (const subject of subjects2) {
       const { groupName } = splitSubjectName(subject.name);

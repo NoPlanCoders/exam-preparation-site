@@ -797,6 +797,16 @@ function renderSubjectView(examId: string, examName: string): void {
     .map((p) => allSubjects.find((s) => s.id === p.subjectId))
     .filter((s): s is Subject => !!s && s.category === '選択科目');
   const subjects: Subject[] = [...required, ...pinnedElectives];
+
+  if (subjects.length === 0) {
+    const empty = document.createElement('p');
+    empty.className = 'dashboard-empty';
+    empty.textContent = `${examName}の科目はまだ登録されていません。`;
+    subjectList.appendChild(empty);
+    showView(viewSubject);
+    return;
+  }
+
   const groups = new Map<string, { name: string; icon?: string; isElective: boolean; subjects: Subject[] }>();
   for (const subject of subjects) {
     const { groupName } = splitSubjectName(subject.name);
