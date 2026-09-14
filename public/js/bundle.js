@@ -26273,7 +26273,7 @@
 
   // src/data/app-version.json
   var app_version_default = {
-    version: "1.0.49"
+    version: "1.0.50"
   };
 
   // src/app.ts
