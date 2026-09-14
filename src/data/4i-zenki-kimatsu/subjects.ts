@@ -10,24 +10,6 @@ import subjectTypes from './subject-types.json';
 // 検索してピン留めしたときだけ表示される)かは、同じフォルダの subject-types.json に記入する。
 const rawSubjects: Subject[] = [
   {
-    id: 'japanese-lit-choice',
-    name: '国語(選択式)',
-    description: '日本文学史(上代〜現代)の作品と作者・編者の組み合わせを4択で確認',
-    icon: 'scroll',
-  },
-  {
-    id: 'english-vocab-choice',
-    name: '英語(単語・選択式)',
-    description: '教科書の単語・熟語の意味を4択で確認',
-    icon: 'book-a',
-  },
-  {
-    id: 'english-grammar-choice',
-    name: '英語(文法・選択式)',
-    description: '文型・時制・助動詞・態・不定詞・分詞・動名詞などの文法事項を4択で確認',
-    icon: 'spell-check',
-  },
-  {
     id: 'database-choice',
     name: 'データベース(選択式)',
     description: '関係表・関係代数・SQLの用語を4択で確認',
@@ -173,6 +155,24 @@ const rawSubjects: Subject[] = [
     name: '応用数学(計算・手書き)',
     description: '1変数の微分・偏微分・全微分(接平面)・合成関数の微分法・高次偏導関数・極大極小の計算問題を手書きで解いて確認',
     icon: 'variable',
+  },
+  {
+    id: 'japanese-lit-choice',
+    name: '国語(選択式)',
+    description: '日本文学史(上代〜現代)の作品と作者・編者の組み合わせを4択で確認',
+    icon: 'scroll',
+  },
+  {
+    id: 'english-vocab-choice',
+    name: '英語(単語・選択式)',
+    description: '教科書の単語・熟語の意味を4択で確認',
+    icon: 'book-a',
+  },
+  {
+    id: 'english-grammar-choice',
+    name: '英語(文法・選択式)',
+    description: '文型・時制・助動詞・態・不定詞・分詞・動名詞などの文法事項を4択で確認',
+    icon: 'spell-check',
   },
 ];
 
