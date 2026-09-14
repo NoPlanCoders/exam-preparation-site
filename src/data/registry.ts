@@ -1,5 +1,6 @@
 import type { Exam, Subject, Question } from '../types.js';
 import { QUIZ_EXAMS } from './exams.js';
+import { subjects as quiz} from './quiz/subjects.js';
 import { subjects as zenkiKimatsuSubjects } from './4i-zenki-kimatsu/subjects.js';
 import { questions as zenkiKimatsuJapaneseLitChoice } from './4i-zenki-kimatsu/japanese-lit-choice.js';
 import { questions as zenkiKimatsuDatabaseChoice } from './4i-zenki-kimatsu/database-choice.js';
@@ -36,6 +37,12 @@ interface ExamData {
 // 新しい試験を追加するときは、上部に import を追加してから
 // ここに1エントリ追加する。既存エントリには触れなくてよい。
 const examData: Record<string, ExamData> = {
+  'quiz': {
+    subjects: quiz,
+    questions: {
+
+    },
+  },
   '4i-zenki-kimatsu': {
     subjects: zenkiKimatsuSubjects,
     questions: {

@@ -14147,6 +14147,12 @@
 
   // src/data/exams.ts
   var QUIZ_EXAMS = [
+    //{
+    //id: 'quiz',
+    //name: '小テスト',
+    //description: '直近の小テスト対策',
+    //icon: 'file-text',
+    //},
     {
       id: "4i-zenki-kimatsu",
       name: "4I \u524D\u671F\u671F\u672B\u8A66\u9A13",
@@ -14161,8 +14167,22 @@
     }
   ];
 
-  // src/data/4i-zenki-kimatsu/subject-types.json
+  // src/data/quiz/subject-types.json
   var subject_types_default = {
+    \u5C65\u4FEE\u79D1\u76EE: [],
+    \u9078\u629E\u79D1\u76EE: []
+  };
+
+  // src/data/quiz/subjects.ts
+  var rawSubjects = [];
+  var electiveIds = new Set(subject_types_default["\u9078\u629E\u79D1\u76EE"]);
+  var subjects = rawSubjects.map((subject) => ({
+    ...subject,
+    category: electiveIds.has(subject.id) ? "\u9078\u629E\u79D1\u76EE" : "\u5C65\u4FEE\u79D1\u76EE"
+  }));
+
+  // src/data/4i-zenki-kimatsu/subject-types.json
+  var subject_types_default2 = {
     \u5C65\u4FEE\u79D1\u76EE: [
       "database-choice",
       "database-text",
@@ -14186,7 +14206,7 @@
   };
 
   // src/data/4i-zenki-kimatsu/subjects.ts
-  var rawSubjects = [
+  var rawSubjects2 = [
     {
       id: "japanese-lit-choice",
       name: "\u56FD\u8A9E(\u9078\u629E\u5F0F)",
@@ -14338,10 +14358,10 @@
       icon: "variable"
     }
   ];
-  var electiveIds = new Set(subject_types_default["\u9078\u629E\u79D1\u76EE"]);
-  var subjects = rawSubjects.map((subject) => ({
+  var electiveIds2 = new Set(subject_types_default2["\u9078\u629E\u79D1\u76EE"]);
+  var subjects2 = rawSubjects2.map((subject) => ({
     ...subject,
-    category: electiveIds.has(subject.id) ? "\u9078\u629E\u79D1\u76EE" : "\u5C65\u4FEE\u79D1\u76EE"
+    category: electiveIds2.has(subject.id) ? "\u9078\u629E\u79D1\u76EE" : "\u5C65\u4FEE\u79D1\u76EE"
   }));
 
   // src/data/4i-zenki-kimatsu/japanese-lit-choice.ts
@@ -25457,23 +25477,27 @@
   ];
 
   // src/data/4i-kouki-kimatsu/subject-types.json
-  var subject_types_default2 = {
+  var subject_types_default3 = {
     \u5C65\u4FEE\u79D1\u76EE: [],
     \u9078\u629E\u79D1\u76EE: []
   };
 
   // src/data/4i-kouki-kimatsu/subjects.ts
-  var rawSubjects2 = [];
-  var electiveIds2 = new Set(subject_types_default2["\u9078\u629E\u79D1\u76EE"]);
-  var subjects2 = rawSubjects2.map((subject) => ({
+  var rawSubjects3 = [];
+  var electiveIds3 = new Set(subject_types_default3["\u9078\u629E\u79D1\u76EE"]);
+  var subjects3 = rawSubjects3.map((subject) => ({
     ...subject,
-    category: electiveIds2.has(subject.id) ? "\u9078\u629E\u79D1\u76EE" : "\u5C65\u4FEE\u79D1\u76EE"
+    category: electiveIds3.has(subject.id) ? "\u9078\u629E\u79D1\u76EE" : "\u5C65\u4FEE\u79D1\u76EE"
   }));
 
   // src/data/registry.ts
   var examData = {
-    "4i-zenki-kimatsu": {
+    "quiz": {
       subjects,
+      questions: {}
+    },
+    "4i-zenki-kimatsu": {
+      subjects: subjects2,
       questions: {
         "japanese-lit-choice": questions,
         "database-choice": questions2,
@@ -25503,7 +25527,7 @@
       }
     },
     "4i-kouki-kimatsu": {
-      subjects: subjects2,
+      subjects: subjects3,
       questions: {}
     }
   };
@@ -26273,7 +26297,7 @@
 
   // src/data/app-version.json
   var app_version_default = {
-    version: "1.0.51"
+    version: "1.0.52"
   };
 
   // src/app.ts
@@ -26888,8 +26912,8 @@
     const allSubjects = getSubjects(examId);
     const required = allSubjects.filter((s) => s.category !== "\u9078\u629E\u79D1\u76EE");
     const pinnedElectives = pinnedSubjects.filter((p) => p.examId === examId).map((p) => allSubjects.find((s) => s.id === p.subjectId)).filter((s) => !!s && s.category === "\u9078\u629E\u79D1\u76EE");
-    const subjects3 = [...required, ...pinnedElectives];
-    if (subjects3.length === 0) {
+    const subjects4 = [...required, ...pinnedElectives];
+    if (subjects4.length === 0) {
       const empty = document.createElement("p");
       empty.className = "dashboard-empty";
       empty.textContent = `${examName}\u306E\u79D1\u76EE\u306F\u307E\u3060\u767B\u9332\u3055\u308C\u3066\u3044\u307E\u305B\u3093\u3002`;
@@ -26898,7 +26922,7 @@
       return;
     }
     const groups = /* @__PURE__ */ new Map();
-    for (const subject of subjects3) {
+    for (const subject of subjects4) {
       const { groupName } = splitSubjectName(subject.name);
       const group = groups.get(groupName);
       if (group) {

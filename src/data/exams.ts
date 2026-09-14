@@ -11,6 +11,12 @@ import type { Exam } from '../types.js';
 // 追加しなければ「試験日程」画面には未登録である旨が表示されるだけで、
 // 他の機能には影響しない。
 export const QUIZ_EXAMS: Exam[] = [
+  //{
+    //id: 'quiz',
+    //name: '小テスト',
+    //description: '直近の小テスト対策',
+    //icon: 'file-text',
+  //},
   {
     id: '4i-zenki-kimatsu',
     name: '4I 前期期末試験',
