@@ -10,6 +10,12 @@ import subjectTypes from './subject-types.json';
 // 検索してピン留めしたときだけ表示される)かは、同じフォルダの subject-types.json に記入する。
 const rawSubjects: Subject[] = [
   {
+    id: 'japanese-lit-choice',
+    name: '国語(選択式)',
+    description: '日本文学史(上代〜現代)の作品と作者・編者の組み合わせを4択で確認',
+    icon: 'scroll',
+  },
+  {
     id: 'database-choice',
     name: 'データベース(選択式)',
     description: '関係表・関係代数・SQLの用語を4択で確認',

@@ -1,6 +1,7 @@
 import type { Exam, Subject, Question } from '../types.js';
 import { QUIZ_EXAMS } from './exams.js';
 import { subjects as zenkiKimatsuSubjects } from './4i-zenki-kimatsu/subjects.js';
+import { questions as zenkiKimatsuJapaneseLitChoice } from './4i-zenki-kimatsu/japanese-lit-choice.js';
 import { questions as zenkiKimatsuDatabaseChoice } from './4i-zenki-kimatsu/database-choice.js';
 import { questions as zenkiKimatsuDatabaseText } from './4i-zenki-kimatsu/database-text.js';
 import { questions as zenkiKimatsuGameTheoryChoice } from './4i-zenki-kimatsu/game-theory-choice.js';
@@ -38,6 +39,7 @@ const examData: Record<string, ExamData> = {
   '4i-zenki-kimatsu': {
     subjects: zenkiKimatsuSubjects,
     questions: {
+      'japanese-lit-choice': zenkiKimatsuJapaneseLitChoice,
       'database-choice': zenkiKimatsuDatabaseChoice,
       'database-text': zenkiKimatsuDatabaseText,
       'game-theory-choice': zenkiKimatsuGameTheoryChoice,
