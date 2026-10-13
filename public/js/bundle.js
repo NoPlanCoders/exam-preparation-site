@@ -28232,7 +28232,7 @@
 
   // src/data/app-version.json
   var app_version_default = {
-    version: "1.0.61"
+    version: "1.0.62"
   };
 
   // src/app.ts
