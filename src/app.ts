@@ -5,6 +5,15 @@ import { ICONS, getIcon, refreshIcons } from './icons.js';
 import { getTestCountdown } from './countdown.js';
 import { getExamSchedule, weekdayLabel } from './schedule.js';
 import { parseQuizLink } from './quiz-link.js';
+import {
+  SESSION_STORAGE_KEY,
+  decideStartup,
+  hashText,
+  isPermutation,
+  parseSavedSession,
+  type SavedItem,
+  type SavedSession,
+} from './quiz-session.js';
 import appVersion from './data/app-version.json';
 
 // 問題文・選択肢・解答・解説の中の数式をKaTeXでレンダリングする。
@@ -461,6 +470,9 @@ function setMainNav(section: 'library' | 'dashboard'): void {
 }
 
 function showView(view: HTMLElement): void {
+  // ライブラリ・科目一覧・ダッシュボードに移ったら、進行中のクイズの保存データは破棄する
+  // (設定・試験日程は、開いたあとクイズに戻れるので残す)。
+  if (view === viewExam || view === viewSubject || view === viewDashboard) clearSavedSession();
   for (const v of [viewExam, viewSubject, viewSettings, viewSchedule, viewDashboard, viewQuiz, viewResult]) {
     v.hidden = v !== view;
     v.classList.remove('view-entering');
@@ -740,12 +752,20 @@ function shuffle<T>(items: T[]): T[] {
   return arr;
 }
 
-// 選択肢の並びをランダム化した設問を返す(choice以外はそのまま)。
+// 出題中の設問が「元の問題データの何番目か」「選択肢をどの順に並べたか」を覚えておく
+// (進捗を保存して、更新後に同じ設問・同じ選択肢の並びで再開するため)。
+const questionOrigins = new WeakMap<Question, { orig: number; order: number[] | null }>();
+
+// 選択肢の並びをランダム化するための並び順を返す(choice以外は null)。
 // データ側で正解の位置が特定の選択肢(特にB)に偏っていても、
 // 出題時には毎回ばらけるようにするための処理。
-function withShuffledChoices(q: Question): Question {
-  if (q.type !== 'choice') return q;
-  const order = shuffle(q.choices.map((_, i) => i));
+function randomChoiceOrder(q: Question): number[] | null {
+  return q.type === 'choice' ? shuffle(q.choices.map((_, i) => i)) : null;
+}
+
+// 選択肢を order の並びにした設問を返す(choice以外はそのまま)。
+function applyChoiceOrder(q: Question, order: number[] | null): Question {
+  if (q.type !== 'choice' || !order) return q;
   return {
     ...q,
     choices: order.map((i) => q.choices[i]),
@@ -754,6 +774,13 @@ function withShuffledChoices(q: Question): Question {
       ? { explanations: order.map((i) => q.explanations?.[i] ?? '') }
       : {}),
   };
+}
+
+// 出題用の設問を作る。order を省略すると選択肢の並びをランダムにする。
+function makeVariant(q: Question, orig: number, order: number[] | null = randomChoiceOrder(q)): Question {
+  const variant = applyChoiceOrder(q, order);
+  questionOrigins.set(variant, { orig, order });
+  return variant;
 }
 
 function renderExamList(): void {
@@ -914,7 +941,8 @@ function startQuiz(
   masteryMode = false,
 ): void {
   const all = getQuestions(examId, subjectId);
-  const queue = shuffle(all).slice(0, count).map(withShuffledChoices);
+  const picked = shuffle(all.map((_, i) => i)).slice(0, count);
+  const queue = picked.map((i) => makeVariant(all[i], i));
 
   state = {
     examId,
@@ -932,12 +960,17 @@ function startQuiz(
     masteryRecorded: false,
   };
 
-  quizModeLabel.hidden = !masteryMode;
-  quizModeLabel.textContent = masteryMode
-    ? `${queue.some((question) => question.type === 'handwriting') ? '全問確認' : '全問正解'}モード`
-    : '';
+  updateQuizModeLabel();
   showView(viewQuiz);
   renderQuestion();
+}
+
+function updateQuizModeLabel(): void {
+  if (!state) return;
+  quizModeLabel.hidden = !state.masteryMode;
+  quizModeLabel.textContent = state.masteryMode
+    ? `${state.queue.some((question) => question.type === 'handwriting') ? '全問確認' : '全問正解'}モード`
+    : '';
 }
 
 function updateQuizProgress(): void {
@@ -1009,6 +1042,7 @@ function renderQuestion(): void {
   } else {
     quizHandwritingArea.hidden = false;
   }
+  saveSession('quiz');
 }
 
 function normalizeText(s: string): string {
@@ -1101,6 +1135,7 @@ function revealHandwritingAnswer(): void {
   updateQuizProgress();
   btnNext.hidden = false;
   btnNext.textContent = state.index + 1 < state.queue.length ? '次へ' : '結果を見る';
+  saveSession('quiz');
 }
 
 function finishAnswer(correct: boolean, correctText: string): void {
@@ -1130,6 +1165,7 @@ function finishAnswer(correct: boolean, correctText: string): void {
   updateQuizProgress();
   btnNext.hidden = false;
   btnNext.textContent = state.index + 1 < state.queue.length ? '次へ' : '結果を見る';
+  saveSession('quiz');
 }
 
 function nextQuestion(): void {
@@ -1219,6 +1255,7 @@ function renderResult(): void {
     }
   }
   refreshIcons(resultWrongList);
+  saveSession('result');
 }
 
 btnNext.addEventListener('click', nextQuestion);
@@ -1712,6 +1749,139 @@ splashAnimationToggle.addEventListener('change', () => {
   saveSplashAnimationEnabled(enabled);
 });
 
+// ---- 進行中のクイズの保存と再開(ページを更新しても続きから) ----
+// 保存する中身と検証は src/quiz-session.ts を参照。
+
+function clearSavedSession(): void {
+  try {
+    localStorage.removeItem(SESSION_STORAGE_KEY);
+  } catch {
+    // 消せなくても致命的ではないので無視する(プライベートモード等)
+  }
+}
+
+function saveSession(view: SavedSession['view']): void {
+  if (!state) return;
+  const all = getQuestions(state.examId, state.subjectId);
+  const items: SavedItem[] = [];
+  const itemIndex = new Map<Question, number>();
+  const toIndex = (q: Question): number => {
+    const known = itemIndex.get(q);
+    if (known !== undefined) return known;
+    const origin = questionOrigins.get(q);
+    const original = origin ? all[origin.orig] : undefined;
+    if (!origin || !original) return -1;
+    items.push({ orig: origin.orig, order: origin.order, hash: hashText(original.question) });
+    itemIndex.set(q, items.length - 1);
+    return items.length - 1;
+  };
+
+  const queue = state.queue.map(toIndex);
+  const wrong = state.wrong.map(toIndex);
+  const masteryRemaining = state.masteryRemaining ? Array.from(state.masteryRemaining, toIndex) : null;
+  if ([...queue, ...wrong, ...(masteryRemaining ?? [])].includes(-1)) {
+    // 元の問題データと対応づけられない設問がある場合は、古い保存データが残らないように破棄する。
+    clearSavedSession();
+    return;
+  }
+
+  const data: SavedSession = {
+    version: 1,
+    savedAt: Date.now(),
+    examId: state.examId,
+    examName: state.examName,
+    subjectId: state.subjectId,
+    subjectName: state.subjectName,
+    items,
+    queue,
+    wrong,
+    masteryRemaining,
+    index: state.index,
+    score: state.score,
+    answered: state.answered,
+    masteryMode: state.masteryMode,
+    masteryTotal: state.masteryTotal,
+    masteryRecorded: state.masteryRecorded,
+    view,
+  };
+  try {
+    localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(data));
+  } catch {
+    // 保存できなくても、クイズ自体は続けられる。
+  }
+}
+
+function loadSavedSession(): SavedSession | null {
+  let raw: string | null = null;
+  try {
+    raw = localStorage.getItem(SESSION_STORAGE_KEY);
+  } catch {
+    return null;
+  }
+  const saved = parseSavedSession(raw, Date.now());
+  if (raw && !saved) clearSavedSession();
+  return saved;
+}
+
+// 保存データから出題状態を組み立て直して再開する。問題データが更新されて内容が合わなくなった場合は
+// 再開せず(false)、通常の画面から始める。
+function restoreSession(saved: SavedSession): boolean {
+  const exam = getExams().find((e) => e.id === saved.examId);
+  const subject = getSubjects(saved.examId).find((s) => s.id === saved.subjectId);
+  if (!exam || !subject) return false;
+
+  const all = getQuestions(saved.examId, saved.subjectId);
+  const items: Question[] = [];
+  for (const item of saved.items) {
+    const original = all[item.orig];
+    if (!original || hashText(original.question) !== item.hash) return false;
+    if (original.type === 'choice') {
+      if (!item.order || !isPermutation(item.order, original.choices.length)) return false;
+    } else if (item.order !== null) {
+      return false;
+    }
+    items.push(makeVariant(original, item.orig, item.order));
+  }
+
+  state = {
+    examId: saved.examId,
+    examName: exam.name,
+    subjectId: saved.subjectId,
+    subjectName: subject.name,
+    queue: saved.queue.map((i) => items[i]),
+    index: saved.index,
+    score: saved.score,
+    wrong: saved.wrong.map((i) => items[i]),
+    answered: saved.answered,
+    masteryMode: saved.masteryMode,
+    masteryTotal: saved.masteryTotal,
+    masteryRemaining: saved.masteryRemaining ? new Set(saved.masteryRemaining.map((i) => items[i])) : null,
+    masteryRecorded: saved.masteryRecorded,
+  };
+  currentExam = { id: exam.id, name: exam.name };
+  menuGoSubject.hidden = false;
+  updateQuizModeLabel();
+
+  if (saved.view === 'result') {
+    renderResult();
+  } else {
+    showView(viewQuiz);
+    // 回答済み(「次へ」を押す前)の状態で保存されていた場合は、その設問の結果は記録済みなので次の設問へ進む。
+    if (saved.answered) nextQuestion();
+    else renderQuestion();
+  }
+  return true;
+}
+
+function getNavigationType(): string {
+  try {
+    const entry = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined;
+    return entry?.type ?? 'navigate';
+  } catch {
+    return 'navigate';
+  }
+}
+
 // URLのクエリ(?exam=...&subject=...)で指定された画面・クイズを開く。形式は src/quiz-link.ts を参照。
 // 開いた場合は true、指定がない・試験IDが存在しない場合は false を返す(通常のライブラリ画面を表示する)。
 function openFromUrl(search: string): boolean {
@@ -1741,7 +1911,18 @@ export function initApp(): void {
   menuVersion.textContent = `v${appVersion.version}`;
   refreshIcons(document);
   renderExamList();
-  if (!openFromUrl(location.search)) showView(viewExam);
+
+  // 更新・再起動では保存済みのクイズの続きから、新しくリンクを開いた場合はそのリンクのクイズから始める。
+  const saved = loadSavedSession();
+  const action = decideStartup({
+    hasSaved: saved !== null,
+    hasLink: parseQuizLink(location.search) !== null,
+    navigationType: getNavigationType(),
+  });
+  let opened = false;
+  if (action === 'restore' && saved) opened = restoreSession(saved);
+  if (!opened && action !== 'library') opened = openFromUrl(location.search);
+  if (!opened) showView(viewExam);
   if (splashAnimationToggle.checked) window.setTimeout(dismissSplash, 520);
   window.setInterval(() => {
     if (!viewDashboard.hidden) renderTestCountdown();

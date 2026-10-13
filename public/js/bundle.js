@@ -28230,9 +28230,91 @@
     return { examId, subjectId, count, mastery: params.get("mode") === "mastery" };
   }
 
+  // src/quiz-session.ts
+  var SESSION_STORAGE_KEY = "quiz-active-session";
+  var SESSION_MAX_AGE_MS = 24 * 60 * 60 * 1e3;
+  function hashText(text2) {
+    let h = 5381;
+    for (let i2 = 0; i2 < text2.length; i2++) h = (h << 5) + h + text2.charCodeAt(i2) | 0;
+    return (h >>> 0).toString(36);
+  }
+  function isIndexList(value, max) {
+    return Array.isArray(value) && value.every((n) => typeof n === "number" && Number.isInteger(n) && n >= 0 && n < max);
+  }
+  function isCount(value) {
+    return typeof value === "number" && Number.isInteger(value) && value >= 0;
+  }
+  function parseSavedSession(raw, now) {
+    if (!raw) return null;
+    let data;
+    try {
+      data = JSON.parse(raw);
+    } catch {
+      return null;
+    }
+    if (!data || typeof data !== "object") return null;
+    const s = data;
+    if (s.version !== 1) return null;
+    if (typeof s.savedAt !== "number" || now - s.savedAt > SESSION_MAX_AGE_MS || s.savedAt > now + 6e4) {
+      return null;
+    }
+    for (const key of ["examId", "examName", "subjectId", "subjectName"]) {
+      if (typeof s[key] !== "string" || !s[key]) return null;
+    }
+    if (s.view !== "quiz" && s.view !== "result") return null;
+    if (typeof s.answered !== "boolean" || typeof s.masteryMode !== "boolean" || typeof s.masteryRecorded !== "boolean" || !isCount(s.index) || !isCount(s.score) || !isCount(s.masteryTotal)) {
+      return null;
+    }
+    if (!Array.isArray(s.items) || s.items.length === 0) return null;
+    const items = [];
+    for (const item of s.items) {
+      if (!item || typeof item !== "object") return null;
+      const { orig, order, hash } = item;
+      if (!isCount(orig) || typeof hash !== "string") return null;
+      if (order !== null && !(Array.isArray(order) && isIndexList(order, order.length))) return null;
+      items.push({ orig, order, hash });
+    }
+    const count = items.length;
+    if (!isIndexList(s.queue, count) || s.queue.length === 0) return null;
+    if (!isIndexList(s.wrong, count)) return null;
+    if (s.masteryRemaining !== null && !isIndexList(s.masteryRemaining, count)) return null;
+    if (s.masteryMode !== (s.masteryRemaining !== null)) return null;
+    if (s.index > s.queue.length) return null;
+    return {
+      version: 1,
+      savedAt: s.savedAt,
+      examId: s.examId,
+      examName: s.examName,
+      subjectId: s.subjectId,
+      subjectName: s.subjectName,
+      items,
+      queue: s.queue,
+      wrong: s.wrong,
+      masteryRemaining: s.masteryRemaining,
+      index: s.index,
+      score: s.score,
+      answered: s.answered,
+      masteryMode: s.masteryMode,
+      masteryTotal: s.masteryTotal,
+      masteryRecorded: s.masteryRecorded,
+      view: s.view
+    };
+  }
+  function isPermutation(order, length) {
+    return order.length === length && new Set(order).size === length && order.every((n) => n >= 0 && n < length);
+  }
+  function decideStartup(options) {
+    const { hasSaved, hasLink, navigationType } = options;
+    const isReload = navigationType === "reload" || navigationType === "back_forward";
+    if (isReload && hasSaved) return "restore";
+    if (hasLink) return "link";
+    if (hasSaved) return "restore";
+    return "library";
+  }
+
   // src/data/app-version.json
   var app_version_default = {
-    version: "1.0.62"
+    version: "1.0.63"
   };
 
   // src/app.ts
@@ -28594,6 +28676,7 @@
     navDashboard.classList.toggle("is-active", section === "dashboard");
   }
   function showView(view) {
+    if (view === viewExam || view === viewSubject || view === viewDashboard) clearSavedSession();
     for (const v of [viewExam, viewSubject, viewSettings, viewSchedule, viewDashboard, viewQuiz, viewResult]) {
       v.hidden = v !== view;
       v.classList.remove("view-entering");
@@ -28808,15 +28891,23 @@
     }
     return arr;
   }
-  function withShuffledChoices(q) {
-    if (q.type !== "choice") return q;
-    const order = shuffle(q.choices.map((_, i2) => i2));
+  var questionOrigins = /* @__PURE__ */ new WeakMap();
+  function randomChoiceOrder(q) {
+    return q.type === "choice" ? shuffle(q.choices.map((_, i2) => i2)) : null;
+  }
+  function applyChoiceOrder(q, order) {
+    if (q.type !== "choice" || !order) return q;
     return {
       ...q,
       choices: order.map((i2) => q.choices[i2]),
       answer: order.indexOf(q.answer),
       ...q.explanations ? { explanations: order.map((i2) => q.explanations?.[i2] ?? "") } : {}
     };
+  }
+  function makeVariant(q, orig, order = randomChoiceOrder(q)) {
+    const variant = applyChoiceOrder(q, order);
+    questionOrigins.set(variant, { orig, order });
+    return variant;
   }
   function renderExamList() {
     const exams = getExams();
@@ -28937,7 +29028,8 @@
   }
   function startQuiz(examId, examName, subjectId, subjectName, count, masteryMode = false) {
     const all = getQuestions(examId, subjectId);
-    const queue = shuffle(all).slice(0, count).map(withShuffledChoices);
+    const picked = shuffle(all.map((_, i2) => i2)).slice(0, count);
+    const queue = picked.map((i2) => makeVariant(all[i2], i2));
     state = {
       examId,
       examName,
@@ -28953,10 +29045,14 @@
       masteryRemaining: masteryMode ? new Set(queue) : null,
       masteryRecorded: false
     };
-    quizModeLabel.hidden = !masteryMode;
-    quizModeLabel.textContent = masteryMode ? `${queue.some((question) => question.type === "handwriting") ? "\u5168\u554F\u78BA\u8A8D" : "\u5168\u554F\u6B63\u89E3"}\u30E2\u30FC\u30C9` : "";
+    updateQuizModeLabel();
     showView(viewQuiz);
     renderQuestion();
+  }
+  function updateQuizModeLabel() {
+    if (!state) return;
+    quizModeLabel.hidden = !state.masteryMode;
+    quizModeLabel.textContent = state.masteryMode ? `${state.queue.some((question) => question.type === "handwriting") ? "\u5168\u554F\u78BA\u8A8D" : "\u5168\u554F\u6B63\u89E3"}\u30E2\u30FC\u30C9` : "";
   }
   function updateQuizProgress() {
     if (!state) return;
@@ -29020,6 +29116,7 @@
     } else {
       quizHandwritingArea.hidden = false;
     }
+    saveSession("quiz");
   }
   function normalizeText(s) {
     return s.trim().toLowerCase();
@@ -29093,6 +29190,7 @@
     updateQuizProgress();
     btnNext.hidden = false;
     btnNext.textContent = state.index + 1 < state.queue.length ? "\u6B21\u3078" : "\u7D50\u679C\u3092\u898B\u308B";
+    saveSession("quiz");
   }
   function finishAnswer(correct, correctText) {
     if (!state) return;
@@ -29120,6 +29218,7 @@
     updateQuizProgress();
     btnNext.hidden = false;
     btnNext.textContent = state.index + 1 < state.queue.length ? "\u6B21\u3078" : "\u7D50\u679C\u3092\u898B\u308B";
+    saveSession("quiz");
   }
   function nextQuestion() {
     if (!state) return;
@@ -29190,6 +29289,7 @@
       }
     }
     refreshIcons(resultWrongList);
+    saveSession("result");
   }
   btnNext.addEventListener("click", nextQuestion);
   btnSubmitText.addEventListener("click", submitText);
@@ -29566,6 +29666,120 @@
     applySplashAnimationSetting(enabled);
     saveSplashAnimationEnabled(enabled);
   });
+  function clearSavedSession() {
+    try {
+      localStorage.removeItem(SESSION_STORAGE_KEY);
+    } catch {
+    }
+  }
+  function saveSession(view) {
+    if (!state) return;
+    const all = getQuestions(state.examId, state.subjectId);
+    const items = [];
+    const itemIndex = /* @__PURE__ */ new Map();
+    const toIndex = (q) => {
+      const known = itemIndex.get(q);
+      if (known !== void 0) return known;
+      const origin = questionOrigins.get(q);
+      const original = origin ? all[origin.orig] : void 0;
+      if (!origin || !original) return -1;
+      items.push({ orig: origin.orig, order: origin.order, hash: hashText(original.question) });
+      itemIndex.set(q, items.length - 1);
+      return items.length - 1;
+    };
+    const queue = state.queue.map(toIndex);
+    const wrong = state.wrong.map(toIndex);
+    const masteryRemaining = state.masteryRemaining ? Array.from(state.masteryRemaining, toIndex) : null;
+    if ([...queue, ...wrong, ...masteryRemaining ?? []].includes(-1)) {
+      clearSavedSession();
+      return;
+    }
+    const data = {
+      version: 1,
+      savedAt: Date.now(),
+      examId: state.examId,
+      examName: state.examName,
+      subjectId: state.subjectId,
+      subjectName: state.subjectName,
+      items,
+      queue,
+      wrong,
+      masteryRemaining,
+      index: state.index,
+      score: state.score,
+      answered: state.answered,
+      masteryMode: state.masteryMode,
+      masteryTotal: state.masteryTotal,
+      masteryRecorded: state.masteryRecorded,
+      view
+    };
+    try {
+      localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(data));
+    } catch {
+    }
+  }
+  function loadSavedSession() {
+    let raw = null;
+    try {
+      raw = localStorage.getItem(SESSION_STORAGE_KEY);
+    } catch {
+      return null;
+    }
+    const saved = parseSavedSession(raw, Date.now());
+    if (raw && !saved) clearSavedSession();
+    return saved;
+  }
+  function restoreSession(saved) {
+    const exam = getExams().find((e) => e.id === saved.examId);
+    const subject = getSubjects(saved.examId).find((s) => s.id === saved.subjectId);
+    if (!exam || !subject) return false;
+    const all = getQuestions(saved.examId, saved.subjectId);
+    const items = [];
+    for (const item of saved.items) {
+      const original = all[item.orig];
+      if (!original || hashText(original.question) !== item.hash) return false;
+      if (original.type === "choice") {
+        if (!item.order || !isPermutation(item.order, original.choices.length)) return false;
+      } else if (item.order !== null) {
+        return false;
+      }
+      items.push(makeVariant(original, item.orig, item.order));
+    }
+    state = {
+      examId: saved.examId,
+      examName: exam.name,
+      subjectId: saved.subjectId,
+      subjectName: subject.name,
+      queue: saved.queue.map((i2) => items[i2]),
+      index: saved.index,
+      score: saved.score,
+      wrong: saved.wrong.map((i2) => items[i2]),
+      answered: saved.answered,
+      masteryMode: saved.masteryMode,
+      masteryTotal: saved.masteryTotal,
+      masteryRemaining: saved.masteryRemaining ? new Set(saved.masteryRemaining.map((i2) => items[i2])) : null,
+      masteryRecorded: saved.masteryRecorded
+    };
+    currentExam = { id: exam.id, name: exam.name };
+    menuGoSubject.hidden = false;
+    updateQuizModeLabel();
+    if (saved.view === "result") {
+      renderResult();
+    } else {
+      showView(viewQuiz);
+      if (saved.answered) nextQuestion();
+      else renderQuestion();
+    }
+    return true;
+  }
+  function getNavigationType() {
+    try {
+      const entry = performance.getEntriesByType("navigation")[0];
+      return entry?.type ?? "navigate";
+    } catch {
+      return "navigate";
+    }
+  }
   function openFromUrl(search) {
     const link = parseQuizLink(search);
     if (!link) return false;
@@ -29587,7 +29801,16 @@
     menuVersion.textContent = `v${app_version_default.version}`;
     refreshIcons(document);
     renderExamList();
-    if (!openFromUrl(location.search)) showView(viewExam);
+    const saved = loadSavedSession();
+    const action = decideStartup({
+      hasSaved: saved !== null,
+      hasLink: parseQuizLink(location.search) !== null,
+      navigationType: getNavigationType()
+    });
+    let opened = false;
+    if (action === "restore" && saved) opened = restoreSession(saved);
+    if (!opened && action !== "library") opened = openFromUrl(location.search);
+    if (!opened) showView(viewExam);
     if (splashAnimationToggle.checked) window.setTimeout(dismissSplash, 520);
     window.setInterval(() => {
       if (!viewDashboard.hidden) renderTestCountdown();
