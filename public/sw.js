@@ -1,4 +1,4 @@
-const CACHE_NAME = 'quiz-app-v47';
+const CACHE_NAME = 'quiz-app-v48';
 const APP_SHELL = [
   './',
   './index.html',
@@ -30,7 +30,8 @@ self.addEventListener('fetch', (event) => {
   // ponytail: cache-first app shell; bump CACHE_NAME when deployed assets change.
   event.respondWith(
     caches.open(CACHE_NAME).then((cache) => {
-      return cache.match(event.request).then((cached) => {
+      // ?exam=...&subject=... のようなクエリ付きURL(クイズへの直リンク)でも、キャッシュ済みのindex.htmlを使えるようにする。
+      return cache.match(event.request, { ignoreSearch: true }).then((cached) => {
         if (cached) return cached;
 
         return fetch(event.request).then((response) => {

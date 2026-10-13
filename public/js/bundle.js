@@ -28218,9 +28218,21 @@
     };
   }
 
+  // src/quiz-link.ts
+  function parseQuizLink(search) {
+    const params = new URLSearchParams(search);
+    const examId = params.get("exam")?.trim();
+    if (!examId) return null;
+    const subjectId = params.get("subject")?.trim() || void 0;
+    const rawCount = params.get("count")?.trim();
+    const parsedCount = rawCount ? Number(rawCount) : NaN;
+    const count = Number.isInteger(parsedCount) && parsedCount > 0 ? parsedCount : void 0;
+    return { examId, subjectId, count, mastery: params.get("mode") === "mastery" };
+  }
+
   // src/data/app-version.json
   var app_version_default = {
-    version: "1.0.60"
+    version: "1.0.61"
   };
 
   // src/app.ts
@@ -29554,11 +29566,28 @@
     applySplashAnimationSetting(enabled);
     saveSplashAnimationEnabled(enabled);
   });
+  function openFromUrl(search) {
+    const link = parseQuizLink(search);
+    if (!link) return false;
+    const exam = getExams().find((e) => e.id === link.examId);
+    if (!exam) return false;
+    const subject = link.subjectId ? getSubjects(exam.id).find((s) => s.id === link.subjectId) : void 0;
+    const total = subject ? getQuestions(exam.id, subject.id).length : 0;
+    if (!subject || total === 0) {
+      renderSubjectView(exam.id, exam.name);
+      return true;
+    }
+    const count = link.count ? Math.min(link.count, total) : total;
+    currentExam = { id: exam.id, name: exam.name };
+    menuGoSubject.hidden = false;
+    startQuiz(exam.id, exam.name, subject.id, subject.name, count, link.mastery);
+    return true;
+  }
   function initApp() {
     menuVersion.textContent = `v${app_version_default.version}`;
     refreshIcons(document);
     renderExamList();
-    showView(viewExam);
+    if (!openFromUrl(location.search)) showView(viewExam);
     if (splashAnimationToggle.checked) window.setTimeout(dismissSplash, 520);
     window.setInterval(() => {
       if (!viewDashboard.hidden) renderTestCountdown();

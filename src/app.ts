@@ -4,6 +4,7 @@ import { getExams, getSubjects, getQuestions } from './data/registry.js';
 import { ICONS, getIcon, refreshIcons } from './icons.js';
 import { getTestCountdown } from './countdown.js';
 import { getExamSchedule, weekdayLabel } from './schedule.js';
+import { parseQuizLink } from './quiz-link.js';
 import appVersion from './data/app-version.json';
 
 // 問題文・選択肢・解答・解説の中の数式をKaTeXでレンダリングする。
@@ -1711,11 +1712,36 @@ splashAnimationToggle.addEventListener('change', () => {
   saveSplashAnimationEnabled(enabled);
 });
 
+// URLのクエリ(?exam=...&subject=...)で指定された画面・クイズを開く。形式は src/quiz-link.ts を参照。
+// 開いた場合は true、指定がない・試験IDが存在しない場合は false を返す(通常のライブラリ画面を表示する)。
+function openFromUrl(search: string): boolean {
+  const link = parseQuizLink(search);
+  if (!link) return false;
+
+  const exam = getExams().find((e) => e.id === link.examId);
+  if (!exam) return false;
+
+  const subject = link.subjectId ? getSubjects(exam.id).find((s) => s.id === link.subjectId) : undefined;
+  const total = subject ? getQuestions(exam.id, subject.id).length : 0;
+  if (!subject || total === 0) {
+    // 科目の指定がない、または存在しない・問題がない場合は、その試験の科目一覧を開く。
+    renderSubjectView(exam.id, exam.name);
+    return true;
+  }
+
+  const count = link.count ? Math.min(link.count, total) : total;
+  // 科目一覧から開いたときと同じ状態にしておく(メニューの「科目選択に戻る」などが使えるように)。
+  currentExam = { id: exam.id, name: exam.name };
+  menuGoSubject.hidden = false;
+  startQuiz(exam.id, exam.name, subject.id, subject.name, count, link.mastery);
+  return true;
+}
+
 export function initApp(): void {
   menuVersion.textContent = `v${appVersion.version}`;
   refreshIcons(document);
   renderExamList();
-  showView(viewExam);
+  if (!openFromUrl(location.search)) showView(viewExam);
   if (splashAnimationToggle.checked) window.setTimeout(dismissSplash, 520);
   window.setInterval(() => {
     if (!viewDashboard.hidden) renderTestCountdown();
