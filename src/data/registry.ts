@@ -1,6 +1,7 @@
 import type { Exam, Subject, Question } from '../types.js';
 import { QUIZ_EXAMS } from './exams.js';
 import { subjects as quiz} from './quiz/subjects.js';
+import { questions as quizSoftwareEngineeringChoice } from './quiz/software-engineering-choice.js';
 import { subjects as zenkiKimatsuSubjects } from './4i-zenki-kimatsu/subjects.js';
 import { questions as zenkiKimatsuJapaneseLitChoice } from './4i-zenki-kimatsu/japanese-lit-choice.js';
 import { questions as zenkiKimatsuEnglishVocabChoice } from './4i-zenki-kimatsu/english-vocab-choice.js';
@@ -42,7 +43,7 @@ const examData: Record<string, ExamData> = {
   'quiz': {
     subjects: quiz,
     questions: {
-
+      'software-engineering-choice': quizSoftwareEngineeringChoice,
     },
   },
   '4i-zenki-kimatsu': {

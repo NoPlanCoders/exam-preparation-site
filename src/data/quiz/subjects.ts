@@ -9,7 +9,12 @@ import subjectTypes from './subject-types.json';
 // 履修科目(通常の科目一覧に表示される)か選択科目(メニューの「選択科目を追加」で
 // 検索してピン留めしたときだけ表示される)かは、同じフォルダの subject-types.json に記入する。
 const rawSubjects: Subject[] = [
-  
+  {
+    id: 'software-engineering-choice',
+    name: 'ソフトウェア工学(選択式)',
+    description: '開発プロセス・各開発モデル(ウォーターフォール/プロトタイピング/インクリメンタル/イテレーティブ)・アジャイル・Scrumを4択で確認',
+    icon: 'workflow',
+  },
 ];
 
 const electiveIds = new Set<string>(subjectTypes['選択科目']);
