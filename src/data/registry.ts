@@ -43,7 +43,7 @@ const examData: Record<string, ExamData> = {
   'quiz': {
     subjects: quiz,
     questions: {
-      'software-engineering-choice': quizSoftwareEngineeringChoice,
+      //'software-engineering-choice': quizSoftwareEngineeringChoice,
     },
   },
   '4i-zenki-kimatsu': {
