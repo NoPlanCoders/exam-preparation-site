@@ -19,8 +19,8 @@ const rawSubjects: Subject[] = [
     id: 'english-unit16',
     name: '英語Unit16単語',
     description: '英語Unit16の単語を確認する',
-    icon: 'book'
-  }
+    icon: 'book-a'
+  },
 ];
 
 const electiveIds = new Set<string>(subjectTypes['選択科目']);
