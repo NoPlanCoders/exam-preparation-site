@@ -15,6 +15,12 @@ const rawSubjects: Subject[] = [
     //description: '開発プロセス・各開発モデル(ウォーターフォール/プロトタイピング/インクリメンタル/イテレーティブ)・アジャイル・Scrumを4択で確認',
     //icon: 'workflow',
   //},
+  {
+    id: 'english-unit16',
+    name: '英語Unit16単語',
+    description: '英語Unit16の単語を確認する',
+    icon: 'book'
+  }
 ];
 
 const electiveIds = new Set<string>(subjectTypes['選択科目']);
