@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="public/icons/icon-512.png" alt="テスト対策クイズのアイコン" width="144" />
+  <img src="public/icons/icon.svg" alt="テスト対策クイズのアイコン" width="144" />
 </p>
 
 <h1 align="center">テスト対策用クイズサイト</h1>

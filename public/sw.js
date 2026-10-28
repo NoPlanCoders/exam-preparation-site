@@ -1,10 +1,11 @@
-const CACHE_NAME = 'quiz-app-v51';
+const CACHE_NAME = 'quiz-app-v52';
 const APP_SHELL = [
   './',
   './index.html',
   './css/style.css',
   './js/bundle.js',
   './manifest.webmanifest',
+  './icons/icon.svg',
   './icons/icon-192.png?v=2',
   './icons/icon-512.png?v=2',
 ];
