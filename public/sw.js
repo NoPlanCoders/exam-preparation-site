@@ -1,12 +1,12 @@
-const CACHE_NAME = 'quiz-app-v50';
+const CACHE_NAME = 'quiz-app-v51';
 const APP_SHELL = [
   './',
   './index.html',
   './css/style.css',
   './js/bundle.js',
   './manifest.webmanifest',
-  './icons/icon-192.png',
-  './icons/icon-512.png',
+  './icons/icon-192.png?v=2',
+  './icons/icon-512.png?v=2',
 ];
 // ネットワークがこの時間内に応答しないときは、キャッシュ済みのものを先に返す。
 const NETWORK_TIMEOUT_MS = 4000;
