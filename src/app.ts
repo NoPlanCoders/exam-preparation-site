@@ -516,7 +516,7 @@ function applyTheme(theme: Theme): void {
   document.documentElement.dataset.theme = theme;
   darkModeToggle.checked = theme === 'dark';
   themeSettingSummary.textContent = theme === 'dark' ? 'ダークモードが有効です' : 'ライトモードが有効です';
-  themeColorMeta?.setAttribute('content', theme === 'dark' ? '#11162a' : '#6366f1');
+  themeColorMeta?.setAttribute('content', theme === 'dark' ? '#202d27' : '#fffefa');
 }
 
 const SPLASH_STORAGE_KEY = 'quiz-splash-enabled';
