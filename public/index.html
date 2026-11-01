@@ -41,14 +41,23 @@
   <header class="app-header">
     <div class="app-header-bar">
       <h1><span class="app-header-icon"><i data-lucide="clipboard-check" aria-hidden="true"></i></span>テスト対策クイズ</h1>
-      <button type="button" class="menu-toggle" id="btn-menu-toggle" aria-label="メニューを開く" aria-expanded="false" aria-controls="menu-panel">
-        <i data-lucide="menu" aria-hidden="true"></i>
-      </button>
+      <div class="header-actions">
+        <button type="button" class="menu-toggle" id="btn-announcements" aria-label="お知らせを開く" aria-expanded="false" aria-controls="announcements-panel">
+          <i data-lucide="bell" aria-hidden="true"></i>
+        </button>
+        <button type="button" class="menu-toggle" id="btn-menu-toggle" aria-label="メニューを開く" aria-expanded="false" aria-controls="menu-panel">
+          <i data-lucide="menu" aria-hidden="true"></i>
+        </button>
+      </div>
     </div>
     <nav class="app-main-nav" aria-label="メインナビゲーション">
       <button type="button" class="app-nav-item is-active" id="nav-library"><i data-lucide="library" aria-hidden="true"></i><span>ライブラリ</span></button>
       <button type="button" class="app-nav-item" id="nav-dashboard"><i data-lucide="layout-dashboard" aria-hidden="true"></i><span>ダッシュボード</span></button>
     </nav>
+    <section class="menu-panel announcements-panel" id="announcements-panel" aria-labelledby="announcements-title" hidden>
+      <h2 id="announcements-title">お知らせ</h2>
+      <div id="announcements-list"></div>
+    </section>
     <nav class="menu-panel" id="menu-panel" hidden>
       <div class="menu-main" id="menu-main">
         <button type="button" class="menu-item" id="menu-go-exam"><i data-lucide="library" aria-hidden="true"></i><span>ライブラリ</span></button>

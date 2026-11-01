@@ -15,6 +15,7 @@ import {
   type SavedSession,
 } from './quiz-session.js';
 import appVersion from './data/app-version.json';
+import { announcements } from './data/announcements.js';
 
 // 問題文・選択肢・解答・解説の中の数式をKaTeXでレンダリングする。
 // $...$ をインライン数式、$$...$$ をブロック数式として扱う。
@@ -119,6 +120,9 @@ const btnNext = $<HTMLButtonElement>('btn-next');
 const btnEndQuiz = $<HTMLButtonElement>('btn-end-quiz');
 
 const btnMenuToggle = $<HTMLButtonElement>('btn-menu-toggle');
+const btnAnnouncements = $<HTMLButtonElement>('btn-announcements');
+const announcementsPanel = $<HTMLElement>('announcements-panel');
+const announcementsList = $<HTMLElement>('announcements-list');
 const menuPanel = $<HTMLElement>('menu-panel');
 const menuMain = $<HTMLElement>('menu-main');
 const menuGoExam = $<HTMLButtonElement>('menu-go-exam');
@@ -867,6 +871,9 @@ function renderSubjectView(examId: string, examName: string): void {
         const { modeName } = splitSubjectName(subject.name);
         const questions = getQuestions(examId, subject.id);
         const total = questions.length;
+        if (total === 0) {
+          return `<div class="subject-mode-row"><span class="subject-mode-total">問題はまだ登録されていません</span></div>`;
+        }
         const masteryLabel = questions.some((question) => question.type === 'handwriting')
           ? '全問確認まで'
           : '全問正解まで';
@@ -903,7 +910,7 @@ function renderSubjectView(examId: string, examName: string): void {
       <span class="card-icon">${getIcon(group.icon, DEFAULT_SUBJECT_ICON)}</span>
       <span class="card-body">
         <h3>${group.name}${group.isElective ? ' <span class="elective-badge">選択科目</span>' : ''}</h3>
-        <p>全${totalQuestions}問・${group.subjects.length}形式</p>
+        <p>${totalQuestions > 0 ? `全${totalQuestions}問・${group.subjects.length}形式` : '問題準備中'}</p>
         <div class="subject-mode-list">${modesHtml}</div>
       </span>
     `;
@@ -1531,6 +1538,7 @@ function closeMenu(): void {
 }
 
 function openMenu(): void {
+  closeAnnouncements();
   renderPinnedMenu();
   menuPanel.hidden = false;
   menuPanel.classList.remove('menu-panel-entering');
@@ -1538,6 +1546,60 @@ function openMenu(): void {
   menuPanel.classList.add('menu-panel-entering');
   btnMenuToggle.setAttribute('aria-expanded', 'true');
 }
+
+function closeAnnouncements(): void {
+  announcementsPanel.hidden = true;
+  btnAnnouncements.setAttribute('aria-expanded', 'false');
+}
+
+function renderAnnouncements(): void {
+  announcementsList.replaceChildren();
+  if (announcements.length === 0) {
+    const empty = document.createElement('p');
+    empty.className = 'announcements-empty';
+    empty.textContent = '現在お知らせはありません。';
+    announcementsList.appendChild(empty);
+    return;
+  }
+  for (const announcement of announcements) {
+    const item = document.createElement('article');
+    item.className = 'announcement-item';
+    const date = document.createElement('time');
+    date.dateTime = announcement.date;
+    date.textContent = announcement.date.replace(/-/g, '/');
+    const title = document.createElement('h3');
+    title.textContent = announcement.title;
+    const body = document.createElement('p');
+    body.textContent = announcement.body;
+    item.append(date, title, body);
+    announcementsList.appendChild(item);
+  }
+}
+
+btnAnnouncements.addEventListener('click', () => {
+  if (!announcementsPanel.hidden) {
+    closeAnnouncements();
+    return;
+  }
+  closeMenu();
+  renderAnnouncements();
+  announcementsPanel.hidden = false;
+  btnAnnouncements.setAttribute('aria-expanded', 'true');
+});
+
+document.addEventListener('click', (event) => {
+  const target = event.target as Node;
+  if (!announcementsPanel.hidden && !announcementsPanel.contains(target) && !btnAnnouncements.contains(target)) {
+    closeAnnouncements();
+  }
+});
+
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape' && !announcementsPanel.hidden) {
+    closeAnnouncements();
+    btnAnnouncements.focus();
+  }
+});
 
 function confirmLeaveQuizIfNeeded(): Promise<boolean> {
   if (!viewQuiz.hidden && state) {

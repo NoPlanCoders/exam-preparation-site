@@ -88,6 +88,10 @@ public/
 npm run build
 ```
 
+## 🔔 お知らせを追加する
+
+`src/data/announcements.ts` の配列の先頭に `{ date: '2026-11-01', title: 'タイトル', body: 'お知らせ本文' }` の形式で追加し、`npm run build` を実行します。お知らせがない場合は、ベルの中にその旨が表示されます。
+
 ## 📱 PWA・シェア用メタデータ
 
 `public/manifest.webmanifest` とサービスワーカーを利用してPWAとしてインストールできます。

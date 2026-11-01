@@ -1,6 +1,7 @@
 import {
   ArrowLeft,
   Atom,
+  Bell,
   BookA,
   Brain,
   Calculator,
@@ -47,6 +48,7 @@ import {
 const LUCIDE_ICONS = {
   ArrowLeft,
   Atom,
+  Bell,
   BookA,
   Brain,
   Calculator,

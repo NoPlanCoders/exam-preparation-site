@@ -36,6 +36,14 @@ export function weekdayLabel(year: number, month: number, day: number): string {
 
 // examId(src/data/exams.ts の id と一致させる)ごとの時間割。
 const EXAM_SCHEDULES: Record<string, ExamSchedule> = {
+  're-exam': {
+    year: 2026,
+    days: [
+      { month: 11, day: 4, periods: [{ time: '時間未定', subject: '国語' }] },
+      { month: 11, day: 14, periods: [{ time: '時間未定', subject: 'データベース' }] },
+      { month: 11, day: 28, periods: [{ time: '時間未定', subject: 'データ構造とアルゴリズム' }] },
+    ],
+  },
   '4i-zenki-kimatsu': {
     // 出典: 2026年度 4年生 前期期末 時間割(I組分を抜粋)。
     // 注意: 配布された時間割PDF自体の日付表記は実際より1日前にずれていたため、

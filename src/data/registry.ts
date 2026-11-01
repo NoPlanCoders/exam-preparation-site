@@ -32,6 +32,11 @@ import { questions as zenkiKimatsuAppliedPhysicsChoice } from './4i-zenki-kimats
 import { questions as zenkiKimatsuAppliedPhysicsHandwriting } from './4i-zenki-kimatsu/applied-physics-handwriting.js';
 import { questions as zenkiKimatsuAppliedMathHandwriting } from './4i-zenki-kimatsu/applied-math-handwriting.js';
 import { subjects as koukikimatsuSubjects } from './4i-kouki-kimatsu/subjects.js';
+import { subjects as reExamSubjects } from './re-exam/subjects.js';
+import { questions as reExamDatabaseText } from './re-exam/database-text.js';
+import { questions as reExamDataStructuresText } from './re-exam/data-structures-text.js';
+import { questions as reExamEnglishChoice } from './re-exam/english-choice.js';
+import { questions as reExamEnglishOrder } from './re-exam/english-order.js';
 
 interface ExamData {
   subjects: Subject[];
@@ -41,6 +46,15 @@ interface ExamData {
 // 新しい試験を追加するときは、上部に import を追加してから
 // ここに1エントリ追加する。既存エントリには触れなくてよい。
 const examData: Record<string, ExamData> = {
+  're-exam': {
+    subjects: reExamSubjects,
+    questions: {
+      'database-text': reExamDatabaseText,
+      'data-structures-text': reExamDataStructuresText,
+      'english-choice': reExamEnglishChoice,
+      'english-order': reExamEnglishOrder,
+    },
+  },
   'quiz': {
     subjects: quiz,
     questions: {

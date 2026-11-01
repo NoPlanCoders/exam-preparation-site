@@ -18,6 +18,12 @@ export const QUIZ_EXAMS: Exam[] = [
     icon: 'file-text',
   },
   {
+    id: 're-exam',
+    name: '試験落ちた馬鹿ども用',
+    description: '再試験の対策問題',
+    icon: 'file-text',
+  },
+  {
     id: '4i-zenki-kimatsu',
     name: '4I 前期期末試験',
     description: '4Iクラス 前期期末試験の対策問題',
