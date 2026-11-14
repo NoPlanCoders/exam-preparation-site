@@ -5,6 +5,8 @@
  */
 interface QuestionImage {
   image?: string;
+  /** 正解の理由や解き方。回答後に表示する。 */
+  explanation?: string;
 }
 
 export interface ChoiceQuestion extends QuestionImage {

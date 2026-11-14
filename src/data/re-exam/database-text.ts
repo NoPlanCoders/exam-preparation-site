@@ -1,11 +1,12 @@
 import type { Question } from '../../types.js';
+import { explainDatabase } from './database-explanations.js';
 
 // 判別対象を限定し、追加の従属性を仮定せずに一意に答えられるようにする。
-const prompt = '各列は単一値を持ち、記載したもの以外に独立な非自明の関数従属はないとする。第1・第2・第3正規形とBCNFのうち、満たす最も高い正規形を答えよ。';
+const prompt = '各列は単一値を持ち、記載した関数従属から導かれるもの以外に非自明な関数従属・多値従属はないとする。第1・第2・第3・第4正規形とボイスコッドの正規形のうち、満たす最も高い正規形を答えよ。';
 const first = ['第1正規形', '第一正規形', '1NF', '1', '第１正規形', '１'];
 const second = ['第2正規形', '第二正規形', '2NF', '2', '第２正規形', '２'];
 const third = ['第3正規形', '第三正規形', '3NF', '3', '第３正規形', '３'];
-const bcnf = ['BCNF', 'ボイスコッド正規形', 'ボイス・コッド正規形', 'ボイスコッドの正規形', 'ボイス・コッドの正規形'];
+const bcnf = ['ボイスコッドの正規形', 'ボイスコッド正規形', 'ボイス・コッド正規形', 'ボイス・コッドの正規形', 'BCNF'];
 const fourth = ['第4正規形', '第四正規形', '4NF', '4', '第４正規形', '４'];
 
 // 同じ業務設定について、正規形とその判断に使う従属性を別々に確認する。
@@ -26,23 +27,23 @@ const cases: { relation: string; normal: string[]; followUp: string; answer: str
   { relation: '契約(契約番号, 担当者番号, 担当者名)。候補キーは契約番号。契約番号→担当者番号、担当者番号→担当者名。', normal: second, followUp: '担当者名を直接決める列は何か。', answer: '担当者番号' },
   { relation: '店舗(店舗番号, 支店区分, 区分名称)。候補キーは店舗番号。店舗番号→支店区分、支店区分→区分名称。', normal: second, followUp: '店舗番号から支店区分を経由して区分名称が決まる従属性を何というか。', answer: ['推移的関数従属', '推移的関数従属性'] },
   { relation: '機器(機器番号, メーカー番号, メーカー名)。候補キーは機器番号。機器番号→メーカー番号、メーカー番号→メーカー名。', normal: second, followUp: 'メーカー名を直接決める列は何か。', answer: 'メーカー番号' },
-  { relation: '部署(部署番号, 部署名, 所在地)。候補キーは部署番号。部署番号→部署名、部署番号→所在地。', normal: bcnf, followUp: '部署名を決める候補キーは何か。', answer: '部署番号' },
-  { relation: '会員(会員番号, 会員名, 電話番号)。候補キーは会員番号。会員番号→会員名、会員番号→電話番号。', normal: bcnf, followUp: '会員名を決める候補キーは何か。', answer: '会員番号' },
-  { relation: '教員(教員番号, 教員名, 研究室)。候補キーは教員番号。教員番号→教員名、教員番号→研究室。', normal: bcnf, followUp: '研究室を決める候補キーは何か。', answer: '教員番号' },
-  { relation: '在庫(倉庫番号, 商品番号, 在庫数)。候補キーは{倉庫番号, 商品番号}。{倉庫番号, 商品番号}→在庫数。', normal: bcnf, followUp: '在庫数は複合キーの全体に何関数従属しているか。', answer: ['完全関数従属', '完全関数従属性'] },
+  { relation: '部署(部署番号, 部署名, 所在地)。候補キーは部署番号。部署番号→部署名、部署番号→所在地。', normal: fourth, followUp: '部署名を決める候補キーは何か。', answer: '部署番号' },
+  { relation: '会員(会員番号, 会員名, 電話番号)。候補キーは会員番号。会員番号→会員名、会員番号→電話番号。', normal: fourth, followUp: '会員名を決める候補キーは何か。', answer: '会員番号' },
+  { relation: '教員(教員番号, 教員名, 研究室)。候補キーは教員番号。教員番号→教員名、教員番号→研究室。', normal: fourth, followUp: '研究室を決める候補キーは何か。', answer: '教員番号' },
+  { relation: '在庫(倉庫番号, 商品番号, 在庫数)。候補キーは{倉庫番号, 商品番号}。{倉庫番号, 商品番号}→在庫数。', normal: fourth, followUp: '在庫数は複合キーの全体に何関数従属しているか。', answer: ['完全関数従属', '完全関数従属性'] },
   { relation: '面接(応募者, 職種, 面接官)。候補キーは{応募者, 職種}と{応募者, 面接官}。{応募者, 職種}→面接官、面接官→職種。', normal: third, followUp: 'スーパーキーではないが職種を決める列は何か。', answer: '面接官' },
   { relation: '配送(顧客, 地域, 配達員)。候補キーは{顧客, 地域}と{顧客, 配達員}。{顧客, 地域}→配達員、配達員→地域。', normal: third, followUp: 'スーパーキーではないが地域を決める列は何か。', answer: '配達員' },
   { relation: '診察(患者, 病院, 担当医)。候補キーは{患者, 病院}と{患者, 担当医}。{患者, 病院}→担当医、担当医→病院。', normal: third, followUp: 'スーパーキーではないが病院を決める列は何か。', answer: '担当医' },
   { relation: '演習(学生, 分野, 指導者)。候補キーは{学生, 分野}と{学生, 指導者}。{学生, 分野}→指導者、指導者→分野。', normal: third, followUp: 'スーパーキーではないが分野を決める列は何か。', answer: '指導者' },
 ];
 
-export const questions: Question[] = [
+const rawQuestions: Question[] = [
   { type: 'text', question: '第4正規形では、すべての自明でない多値従属 X→→Y の決定項Xは何でなければならないか。', answer: ['スーパーキー', '大キー'] },
   { type: 'text', question: '関係R(X,Y,Z)で、X→→Yが成立するとき、X→→何も成立するか。YとZは互いに重ならず、X,Y,Zで全属性を構成する。', answer: 'Z' },
   { type: 'text', question: '関係R(X,Y,Z)で、Xの値ごとにYとZの値が独立に組み合わされる。このときX→→Yとともに成立する多値従属の右辺を、Y以外の1文字で答えよ。', answer: 'Z' },
-  { type: 'text', question: '関係R(X,Y,Z)がBCNFを満たす一方、スーパーキーではないXに自明でない多値従属 X→→Y がある。第4正規形を満たすか。「はい」か「いいえ」で答えよ。', answer: 'いいえ' },
-  { type: 'text', question: '関係R(X,Y,Z)はBCNFを満たし、スーパーキーでないXからの自明でない多値従属 X→→Y がある。第4正規形までの中で満たす最も高い正規形は何か。', answer: bcnf },
-  { type: 'text', question: '関係R(X,Y,Z)はBCNFを満たし、自明でない多値従属の決定項はすべてスーパーキーである。第4正規形までの中で満たす最も高い正規形は何か。', answer: fourth },
+  { type: 'text', question: '関係R(X,Y,Z)がボイスコッドの正規形を満たす一方、スーパーキーではないXに自明でない多値従属 X→→Y がある。第4正規形を満たすか。「はい」か「いいえ」で答えよ。', answer: 'いいえ' },
+  { type: 'text', question: '関係R(X,Y,Z)はボイスコッドの正規形を満たし、スーパーキーでないXからの自明でない多値従属 X→→Y がある。第4正規形までの中で満たす最も高い正規形は何か。', answer: bcnf },
+  { type: 'text', question: '関係R(X,Y,Z)はボイスコッドの正規形を満たし、自明でない多値従属の決定項はすべてスーパーキーである。第4正規形までの中で満たす最も高い正規形は何か。', answer: fourth },
   { type: 'text', question: '授業(授業名, 講師, 参考図書)において、授業ごとに講師と参考図書が独立に決まり、すべての組合せを登録する。候補キーは全3列のみで、非自明な関数従属はない。授業名→→講師があるとき、第4正規形までで満たす最も高い正規形は何か。', answer: bcnf },
   { type: 'text', question: '学生(学生番号, 趣味, 使用言語)で、各学生の趣味と使用言語は独立し、すべての組合せを登録する。候補キーは全3列のみで、非自明な関数従属はない。第4正規形までで満たす最も高い正規形は何か。', answer: bcnf },
   { type: 'text', question: '商品(商品番号, 色, 販売地域)で、各商品の色と販売地域は独立し、すべての組合せを登録する。候補キーは全3列のみで、非自明な関数従属はない。第4正規形までで満たす最も高い正規形は何か。', answer: bcnf },
@@ -69,10 +70,10 @@ export const questions: Question[] = [
   { type: 'text', question: `${prompt}\n注文(注文番号, 注文日, 顧客番号, 顧客名)。候補キーは注文番号。注文番号→注文日、注文番号→顧客番号、顧客番号→顧客名。`, answer: second },
   { type: 'text', question: `${prompt}\n科目(科目番号, 科目名, 教員番号, 教員名)。候補キーは科目番号。科目番号→科目名、科目番号→教員番号、教員番号→教員名。`, answer: second },
   { type: 'text', question: `${prompt}\n受注行(受注番号, 商品番号, 数量, 受注日, 顧客番号, 顧客名)。候補キーは{受注番号, 商品番号}。{受注番号, 商品番号}→数量、受注番号→受注日、受注番号→顧客番号、顧客番号→顧客名。`, answer: first },
-  { type: 'text', question: `${prompt}\n履修(学生番号, 科目番号, 成績)。候補キーは{学生番号, 科目番号}。{学生番号, 科目番号}→成績。`, answer: bcnf },
-  { type: 'text', question: `${prompt}\n商品(商品番号, 商品名, 単価)。候補キーは商品番号。商品番号→商品名、商品番号→単価。`, answer: bcnf },
-  { type: 'text', question: `${prompt}\n学生(学生番号, 氏名, 住所)。候補キーは学生番号。学生番号→氏名、学生番号→住所。`, answer: bcnf },
-  { type: 'text', question: `${prompt}\n成績(学生番号, 科目番号, 点数, 評価)。候補キーは{学生番号, 科目番号}。{学生番号, 科目番号}→点数、{学生番号, 科目番号}→評価。`, answer: bcnf },
+  { type: 'text', question: `${prompt}\n履修(学生番号, 科目番号, 成績)。候補キーは{学生番号, 科目番号}。{学生番号, 科目番号}→成績。`, answer: fourth },
+  { type: 'text', question: `${prompt}\n商品(商品番号, 商品名, 単価)。候補キーは商品番号。商品番号→商品名、商品番号→単価。`, answer: fourth },
+  { type: 'text', question: `${prompt}\n学生(学生番号, 氏名, 住所)。候補キーは学生番号。学生番号→氏名、学生番号→住所。`, answer: fourth },
+  { type: 'text', question: `${prompt}\n成績(学生番号, 科目番号, 点数, 評価)。候補キーは{学生番号, 科目番号}。{学生番号, 科目番号}→点数、{学生番号, 科目番号}→評価。`, answer: fourth },
   { type: 'text', question: `${prompt}\n担当(患者, 診療科, 医師)。候補キーは{患者, 診療科}と{患者, 医師}。{患者, 診療科}→医師、医師→診療科。`, answer: third },
   { type: 'text', question: `${prompt}\n指導(学生, 科目, 教員)。候補キーは{学生, 科目}と{学生, 教員}。{学生, 科目}→教員、教員→科目。`, answer: third },
   { type: 'text', question: `${prompt}\n予約(利用者, 部屋, 管理者)。候補キーは{利用者, 部屋}と{利用者, 管理者}。{利用者, 部屋}→管理者、管理者→部屋。`, answer: third },
@@ -103,7 +104,7 @@ export const questions: Question[] = [
   { type: 'text', question: '各セルに複数の値が入る繰り返し部分を含む表を何というか。', answer: ['非正規形', '非正規形の表'] },
   { type: 'text', question: '第1正規形から第2正規形への分解では、非キー列の何関数従属を除くか。', answer: ['部分関数従属', '部分関数従属性'] },
   { type: 'text', question: '第2正規形から第3正規形への分解では、非キー列の何関数従属を除くか。', answer: ['推移的関数従属', '推移的関数従属性'] },
-  { type: 'text', question: 'BCNFでは、自明でない関数従属のすべての決定項は何でなければならないか。', answer: ['スーパーキー', '大キー'] },
+  { type: 'text', question: 'ボイスコッドの正規形では、自明でない関数従属のすべての決定項は何でなければならないか。', answer: ['スーパーキー', '大キー'] },
   { type: 'text', question: '第4正規形の判定では、関数従属に加えて何という従属性を考えるか。', answer: ['多値従属', '多値従属性'] },
   { type: 'text', question: '最後の注文行を削除すると顧客情報まで失われる。この問題を何というか。', answer: ['削除時異常', '削除異常', '削除時の異常'] },
   { type: 'text', question: 'SQLで表の全列を選択する記号は何か。', answer: '*' },
@@ -116,3 +117,5 @@ export const questions: Question[] = [
   { type: 'text', question: 'SQLで最小値を求める集約関数の名前は何か。', answer: 'MIN' },
   { type: 'text', question: 'SQLで既存の表の定義を変更する文の冒頭2語を答えよ。', answer: 'ALTER TABLE' },
 ];
+
+export const questions: Question[] = rawQuestions.map((question, index) => ({ ...question, explanation: explainDatabase(question, index) }));

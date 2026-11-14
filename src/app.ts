@@ -1110,6 +1110,7 @@ function renderChoiceExplanation(
   if (correctExp) {
     addExplanationLine(`正解 ${CHOICE_LABELS[q.answer] ?? q.answer + 1}`, 'is-correct', correctExp);
   }
+  if (q.explanation?.trim()) addExplanationLine('解説', 'is-correct', q.explanation);
   quizExplanation.hidden = quizExplanation.childElementCount === 0;
 }
 
@@ -1125,6 +1126,11 @@ function submitText(): void {
 
   const correctText = Array.isArray(q.answer) ? q.answer[0] : q.answer;
   finishAnswer(correct, correctText);
+  if (q.explanation?.trim()) {
+    quizExplanation.innerHTML = '';
+    addExplanationLine('解説', 'is-correct', q.explanation);
+    quizExplanation.hidden = false;
+  }
 }
 
 function revealHandwritingAnswer(): void {
@@ -1135,6 +1141,11 @@ function revealHandwritingAnswer(): void {
   state.masteryRemaining?.delete(q);
 
   handwritingCorrectAnswer.innerHTML = renderMath(q.answer);
+  if (q.explanation?.trim()) {
+    quizExplanation.innerHTML = '';
+    addExplanationLine('解説', 'is-correct', q.explanation);
+    quizExplanation.hidden = false;
+  }
   handwritingAnswerReveal.hidden = false;
   btnCheckHandwriting.hidden = true;
   quizCanvas.style.pointerEvents = 'none';

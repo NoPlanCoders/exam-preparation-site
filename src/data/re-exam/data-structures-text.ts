@@ -1,4 +1,5 @@
 import type { Question } from '../../types.js';
+import { explanations } from './data-structures-explanations.js';
 
 type Entry = [string, string | string[]];
 
@@ -136,4 +137,4 @@ const entries: Entry[] = [
   ['[8,5,2,10,7]を昇順に整列したとき、4番目の値は？', '8'],
 ];
 
-export const questions: Question[] = entries.map(([question, answer]) => ({ type: 'text', question, answer }));
+export const questions: Question[] = entries.map(([question, answer], index) => ({ type: 'text', question, answer, explanation: explanations[index] }));

@@ -1,7 +1,30 @@
 import type { Question } from '../../types.js';
 
 // 配布資料の選択肢を原文の順に掲載する。
-export const questions: Question[] = [
+const explanations = [
+  'make A for B は「BのためにAを作る」。犬のために犬小屋を作ったので for。',
+  'explain は explain something to someone の形を取る。人を動詞の直後に置かず、to us を使う。',
+  '主語 Everyone は単数扱い。現在の習慣を表すので三人称単数現在形 falls を使う。',
+  'every time we met が過去の繰り返しを表すため、主節も過去形 complained にする。',
+  '未来のことでも、時を表す after 節では通常 will を使わず現在形 arrive を使う。',
+  '搭乗する予定だったが取り消された、という過去の予定には was going to take が合う。',
+  'at this time next year は未来のある時点を示すため、その時に進行中の動作を will be working で表す。',
+  'own は所有という状態を表す動詞で、通常は進行形にせず owns を使う。',
+  'もう一度読めば合計4回読み終えたことになるので、未来完了 will have read を使う。',
+  'recently とともに最近までの状況を表す受動態なので、現在完了の受動態 has been sold とする。',
+  '薬を飲んだときによく起こる結果を述べるので will feel。should は助言・義務を表す。',
+  '薬の飲み方について助言を求めたので how I should take とする。',
+  '建設中であるという進行中の受動態は is being built。',
+  '助動詞 can の後は動詞の原形を使う。受動態なので can be maintained。',
+  'hope の後には to 不定詞を置き、hope to advance とする。',
+  '使役動詞 let の目的語 the patient の後は原形不定詞 leave を使う。',
+  'self-made は「自力で成功した」という形容詞で、millionaire を修飾する。',
+  '仕事そのものが「人を魅了する」ので fascinating。fascinated は人が魅了された状態。',
+  'prevent A from の後には動名詞を置くため buying とする。',
+  'stop purchasing は「購入するのをやめる」。stop to purchase なら「購入するために立ち止まる」。',
+];
+
+const rawQuestions: Question[] = [
   { type: 'choice', question: 'Peter made a doghouse (　　) his dog.', choices: ['to', 'for'], answer: 1 },
   { type: 'choice', question: 'She explained (　　).', choices: ['us her reading plan', 'her reading plan to us'], answer: 1 },
   { type: 'choice', question: 'Everyone who meets Tom (　　) in love with him at a first sight.', choices: ['fall', 'falls', 'fell'], answer: 1 },
@@ -23,3 +46,5 @@ export const questions: Question[] = [
   { type: 'choice', question: 'A shopping list will prevent you from (　　) useless items.', choices: ['buy', 'buying', 'to buy'], answer: 1 },
   { type: 'choice', question: 'You should stop (　　) things on impulse.', choices: ['purchase', 'purchasing', 'to purchase'], answer: 1 },
 ];
+
+export const questions: Question[] = rawQuestions.map((question, index) => ({ ...question, explanation: explanations[index] }));

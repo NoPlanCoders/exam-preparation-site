@@ -102,6 +102,27 @@ test('再試験のデータベースは記述式問題を含む', () => {
   assertUnique(questions.map((question) => question.question), 'データベースの問題文');
 });
 
+test('データベースのボイスコッドの正規形は表示名と略称の両方に対応する', () => {
+  const questions = registry.getQuestions('re-exam', 'database-text');
+  const items = questions.filter((question) => Array.isArray(question.answer) && question.answer.includes('BCNF'));
+  assert.ok(items.length > 0);
+  for (const question of items) {
+    assert.equal(question.answer[0], 'ボイスコッドの正規形');
+    assert.ok(question.explanation?.trim());
+  }
+  assert.ok(questions.every((question) => !question.question.includes('BCNF') && !question.explanation?.includes('BCNF')));
+});
+
+test('正規形の判別問題は第4正規形も含めて採点する', () => {
+  const questions = registry.getQuestions('re-exam', 'database-text');
+  const examples = questions.filter((question) => question.question.startsWith('各列は単一値'));
+  assert.ok(examples.length > 0);
+  assert.ok(examples.every((question) => question.question.includes('第1・第2・第3・第4正規形')));
+  const item = examples.find((question) => question.question.includes('履修(学生番号, 科目番号, 成績)'));
+  assert.equal(item.answer[0], '第4正規形');
+  assert.ok(item.explanation.includes('第4正規形を満たす'));
+});
+
 test('再試験のデータ構造は100問以上の重複しない記述式問題を含む', () => {
   const questions = registry.getQuestions('re-exam', 'data-structures-text');
   assert.ok(questions.length >= 100);
@@ -116,4 +137,12 @@ test('再試験の英語は選択問題と並び替え問題を各20問含む', 
   assert.equal(ordering.length, 20);
   assert.ok(choices.every((question) => question.type === 'choice'));
   assert.ok(ordering.every((question) => question.type === 'text'));
+});
+
+test('再試験のすべての問題に回答後の解説がある', () => {
+  for (const subject of registry.getSubjects('re-exam')) {
+    for (const question of registry.getQuestions('re-exam', subject.id)) {
+      assert.ok(question.explanation?.trim(), `${subject.id}: ${question.question} に解説がありません`);
+    }
+  }
 });
