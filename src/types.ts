@@ -28,13 +28,20 @@ export interface TextQuestion extends QuestionImage {
   answer: string | string[];
 }
 
+export interface OrderingQuestion extends QuestionImage {
+  type: 'ordering';
+  question: string;
+  /** 正解順に並べた語句。同じ語句を複数回含めてもよい。 */
+  items: string[];
+}
+
 export interface HandwritingQuestion extends QuestionImage {
   type: 'handwriting';
   question: string;
   answer: string;
 }
 
-export type Question = ChoiceQuestion | TextQuestion | HandwritingQuestion;
+export type Question = ChoiceQuestion | TextQuestion | OrderingQuestion | HandwritingQuestion;
 
 export type SubjectCategory = '履修科目' | '選択科目';
 

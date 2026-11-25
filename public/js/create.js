@@ -12,6 +12,8 @@
   const typeHelp = document.getElementById('type-help');
   const choiceFields = document.getElementById('choice-fields');
   const textFields = document.getElementById('text-fields');
+  const orderingFields = document.getElementById('ordering-fields');
+  const qOrderingItems = document.getElementById('q-ordering-items');
   const handwritingFields = document.getElementById('handwriting-fields');
   const choiceList = document.getElementById('choice-list');
   const textAnswerList = document.getElementById('text-answer-list');
@@ -38,11 +40,12 @@
   const TYPE_HELP = {
     choice: '4択などの選択問題です。選択肢は2〜6個まで追加できます。',
     text: '答えを入力してもらう形式です。読み方や表記が複数ある場合は「別の答え方を追加」してください。',
+    ordering: '語句を正解の順に1行ずつ入力します。出題時には順番がシャッフルされます。',
     handwriting:
       '自己採点形式です。回答者は画面に手書きし、「答えを確認」を押すと正解が表示されます(自動採点はしません)。',
   };
 
-  const TYPE_LABEL = { choice: '選択式', text: '記述式', handwriting: '手書き' };
+  const TYPE_LABEL = { choice: '選択式', text: '記述式', ordering: '並び替え式', handwriting: '手書き' };
 
   let currentType = 'choice';
   let currentCategory = '履修科目';
@@ -167,6 +170,7 @@
     });
     choiceFields.hidden = type !== 'choice';
     textFields.hidden = type !== 'text';
+    orderingFields.hidden = type !== 'ordering';
     handwritingFields.hidden = type !== 'handwriting';
     typeHelp.textContent = TYPE_HELP[type];
   }
@@ -261,6 +265,7 @@
   function resetForm() {
     qQuestion.value = '';
     qHandwritingAnswer.value = '';
+    qOrderingItems.value = '';
     resetChoiceRows(null, 0);
     resetAnswerRows(null);
     hideImagePreview();
@@ -299,6 +304,15 @@
       return { value: question };
     }
 
+    if (currentType === 'ordering') {
+      const items = qOrderingItems.value.split(/\r?\n/).map((item) => item.trim());
+      if (items.length < 2 || items.some((item) => !item)) return { error: '語句を2つ以上、空行を入れずに1行ずつ入力してください。' };
+      if (new Set(items).size < 2) return { error: '異なる語句を2種類以上入力してください。' };
+      const question = { type: 'ordering', question: questionText, items };
+      if (currentImageDataUrl) question.image = currentImageDataUrl;
+      return { value: question };
+    }
+
     const answer = qHandwritingAnswer.value.trim();
     if (!answer) return { error: '正解を入力してください。' };
     const question = { type: 'handwriting', question: questionText, answer };
@@ -325,6 +339,8 @@
       } else if (q.type === 'text') {
         const arr = Array.isArray(q.answer) ? q.answer : [q.answer];
         answerSummary = `正解: ${arr.join(' / ')}`;
+      } else if (q.type === 'ordering') {
+        answerSummary = `正解: ${q.items.join(' → ')}`;
       } else {
         answerSummary = `正解: ${q.answer}`;
       }
@@ -360,6 +376,8 @@
       resetChoiceRows(q.choices, q.answer, q.explanations);
     } else if (q.type === 'text') {
       resetAnswerRows(Array.isArray(q.answer) ? q.answer : [q.answer]);
+    } else if (q.type === 'ordering') {
+      qOrderingItems.value = q.items.join('\n');
     } else {
       qHandwritingAnswer.value = q.answer;
     }

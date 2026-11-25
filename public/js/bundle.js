@@ -26786,7 +26786,7 @@
   var subjects4 = [
     { id: "japanese", name: "\u56FD\u8A9E", description: "\u554F\u984C\u306F\u307E\u3060\u767B\u9332\u3055\u308C\u3066\u3044\u307E\u305B\u3093", icon: "scroll" },
     { id: "english-choice", name: "\u82F1\u8A9E(\u9078\u629E\u5F0F)", description: "\u518D\u8A66\u9A13\u5BFE\u7B56\u306E\u9078\u629E\u554F\u984C", icon: "book-a" },
-    { id: "english-order", name: "\u82F1\u8A9E(\u4E26\u3073\u66FF\u3048\u30FB\u8A18\u8FF0\u5F0F)", description: "\u518D\u8A66\u9A13\u5BFE\u7B56\u306E\u4E26\u3073\u66FF\u3048\u554F\u984C", icon: "keyboard" },
+    { id: "english-order", name: "\u82F1\u8A9E(\u4E26\u3073\u66FF\u3048\u5F0F)", description: "\u8A9E\u53E5\u3092\u9078\u3093\u3067\u82F1\u6587\u3092\u5B8C\u6210\u3055\u305B\u308B", icon: "book-a" },
     { id: "database-text", name: "\u30C7\u30FC\u30BF\u30D9\u30FC\u30B9(\u8A18\u8FF0\u5F0F)", description: "\u7B2C4\u6B63\u898F\u5F62\u307E\u3067\u306E\u5224\u5225\u30FB\u95A2\u6570\u5F93\u5C5E\u30FBSQL\u3092\u8A18\u8FF0\u5F0F\u3067\u78BA\u8A8D", icon: "database" },
     { id: "data-structures-text", name: "\u30C7\u30FC\u30BF\u69CB\u9020\u3068\u30A2\u30EB\u30B4\u30EA\u30BA\u30E0(\u8A18\u8FF0\u5F0F)", description: "\u30D7\u30ED\u30B0\u30E9\u30E0\u306E\u8FFD\u8DE1\u30FB\u30C7\u30FC\u30BF\u69CB\u9020\u30FB\u6574\u5217\u3092\u8A18\u8FF0\u5F0F\u3067\u78BA\u8A8D", icon: "tree" }
   ];
@@ -27355,6 +27355,18 @@ ${followUp}`, answer }
   ];
   var questions32 = rawQuestions3.map((question, index) => ({ ...question, explanation: explanations3[index] }));
 
+  // src/data/re-exam/english-ordering.ts
+  var questions33 = questions32.map((question) => {
+    if (question.type !== "text") throw new Error("\u82F1\u8A9E\u306E\u4E26\u3073\u66FF\u3048\u554F\u984C\u306F\u8A18\u8FF0\u5F0F\u3067\u3042\u308B\u5FC5\u8981\u304C\u3042\u308A\u307E\u3059");
+    const answer = Array.isArray(question.answer) ? question.answer[0] : question.answer;
+    return {
+      type: "ordering",
+      question: question.question.replace("\u62EC\u5F27\u5185\u3060\u3051\u3092\u4E26\u3079\u66FF\u3048\u3066\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044\u3002", "\u62EC\u5F27\u5185\u306E\u8A9E\u53E5\u3092\u6B63\u3057\u3044\u9806\u306B\u4E26\u3079\u3066\u304F\u3060\u3055\u3044\u3002"),
+      items: answer.split(" "),
+      explanation: question.explanation
+    };
+  });
+
   // src/data/registry.ts
   var examData = {
     "re-exam": {
@@ -27363,7 +27375,7 @@ ${followUp}`, answer }
         "database-text": questions29,
         "data-structures-text": questions30,
         "english-choice": questions31,
-        "english-order": questions32
+        "english-order": questions33
       }
     },
     "quiz": {
@@ -28240,6 +28252,11 @@ ${followUp}`, answer }
     };
   }
 
+  // src/ordering.ts
+  function isOrderingCorrect(items, selected) {
+    return selected.length === items.length && new Set(selected).size === items.length && selected.every((index, position) => Number.isInteger(index) && index >= 0 && index < items.length && items[index] === items[position]);
+  }
+
   // src/quiz-link.ts
   function parseQuizLink(search) {
     const params = new URLSearchParams(search);
@@ -28336,7 +28353,7 @@ ${followUp}`, answer }
 
   // src/data/app-version.json
   var app_version_default = {
-    version: "1.0.73"
+    version: "1.0.74"
   };
 
   // src/data/announcements.ts
@@ -28397,6 +28414,11 @@ ${followUp}`, answer }
   var quizTextInputArea = $("quiz-text-input-area");
   var quizTextInput = $("quiz-text-input");
   var btnSubmitText = $("btn-submit-text");
+  var quizOrderingArea = $("quiz-ordering-area");
+  var orderingSelected = $("ordering-selected");
+  var orderingAvailable = $("ordering-available");
+  var btnSubmitOrdering = $("btn-submit-ordering");
+  var selectedOrdering = [];
   var quizHandwritingArea = $("quiz-handwriting-area");
   var quizCanvas = $("quiz-canvas");
   var btnClearCanvas = $("btn-clear-canvas");
@@ -28923,7 +28945,16 @@ ${followUp}`, answer }
   }
   var questionOrigins = /* @__PURE__ */ new WeakMap();
   function randomChoiceOrder(q) {
-    return q.type === "choice" ? shuffle(q.choices.map((_, i2) => i2)) : null;
+    if (q.type === "choice") return shuffle(q.choices.map((_, i2) => i2));
+    if (q.type === "ordering") {
+      const order = shuffle(q.items.map((_, i2) => i2));
+      if (isOrderingCorrect(q.items, order)) {
+        const different = order.findIndex((index) => q.items[index] !== q.items[order[0]]);
+        if (different > 0) [order[0], order[different]] = [order[different], order[0]];
+      }
+      return order;
+    }
+    return null;
   }
   function applyChoiceOrder(q, order) {
     if (q.type !== "choice" || !order) return q;
@@ -29002,12 +29033,12 @@ ${followUp}`, answer }
       card.style.setProperty("--stagger-index", String(index));
       const modesHtml = group.subjects.map((subject) => {
         const { modeName } = splitSubjectName(subject.name);
-        const questions33 = getQuestions(examId, subject.id);
-        const total = questions33.length;
+        const questions34 = getQuestions(examId, subject.id);
+        const total = questions34.length;
         if (total === 0) {
           return `<div class="subject-mode-row"><span class="subject-mode-total">\u554F\u984C\u306F\u307E\u3060\u767B\u9332\u3055\u308C\u3066\u3044\u307E\u305B\u3093</span></div>`;
         }
-        const masteryLabel = questions33.some((question) => question.type === "handwriting") ? "\u5168\u554F\u78BA\u8A8D\u307E\u3067" : "\u5168\u554F\u6B63\u89E3\u307E\u3067";
+        const masteryLabel = questions34.some((question) => question.type === "handwriting") ? "\u5168\u554F\u78BA\u8A8D\u307E\u3067" : "\u5168\u554F\u6B63\u89E3\u307E\u3067";
         const countOptions = [];
         if (total > 20) countOptions.push(20);
         if (total > 10) countOptions.push(10);
@@ -29123,6 +29154,8 @@ ${followUp}`, answer }
     quizChoices.innerHTML = "";
     quizChoices.hidden = true;
     quizTextInputArea.hidden = true;
+    quizOrderingArea.hidden = true;
+    selectedOrdering = [];
     quizTextInput.value = "";
     quizTextInput.disabled = false;
     btnSubmitText.disabled = false;
@@ -29146,10 +29179,51 @@ ${followUp}`, answer }
     } else if (q.type === "text") {
       quizTextInputArea.hidden = false;
       quizTextInput.focus();
+    } else if (q.type === "ordering") {
+      quizOrderingArea.hidden = false;
+      renderOrdering(q);
     } else {
       quizHandwritingArea.hidden = false;
     }
     saveSession("quiz");
+  }
+  function renderOrdering(q) {
+    const order = questionOrigins.get(q)?.order ?? q.items.map((_, i2) => i2);
+    orderingSelected.replaceChildren();
+    orderingAvailable.replaceChildren();
+    const makeTile = (index, selected) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "ordering-tile";
+      button.textContent = q.items[index];
+      button.disabled = !!state?.answered;
+      button.setAttribute("aria-label", `${q.items[index]}\u3092${selected ? "\u9078\u629E\u304B\u3089\u623B\u3059" : "\u9078\u3076"}`);
+      button.addEventListener("click", () => {
+        selectedOrdering = selected ? selectedOrdering.filter((item) => item !== index) : [...selectedOrdering, index];
+        renderOrdering(q);
+        const destination = selected ? orderingAvailable : orderingSelected;
+        destination.querySelector(`[data-item-index="${index}"]`)?.focus();
+      });
+      button.dataset.itemIndex = String(index);
+      return button;
+    };
+    selectedOrdering.forEach((index) => orderingSelected.appendChild(makeTile(index, true)));
+    order.filter((index) => !selectedOrdering.includes(index)).forEach((index) => orderingAvailable.appendChild(makeTile(index, false)));
+    btnSubmitOrdering.disabled = !!state?.answered || selectedOrdering.length !== q.items.length;
+  }
+  function submitOrdering() {
+    if (!state || state.answered) return;
+    const q = state.queue[state.index];
+    if (q.type !== "ordering" || selectedOrdering.length !== q.items.length) return;
+    state.answered = true;
+    const correct = isOrderingCorrect(q.items, selectedOrdering);
+    renderOrdering(q);
+    finishAnswer(correct, q.items.join(" "));
+    if (q.explanation?.trim()) {
+      quizExplanation.innerHTML = "";
+      addExplanationLine("\u89E3\u8AAC", "is-correct", q.explanation);
+      quizExplanation.hidden = false;
+    }
   }
   function normalizeText(s) {
     return s.trim().toLowerCase();
@@ -29326,7 +29400,7 @@ ${followUp}`, answer }
       for (const q of state.wrong) {
         const item = document.createElement("div");
         item.className = "wrong-item";
-        const answerText = q.type === "choice" ? q.choices[q.answer] : Array.isArray(q.answer) ? q.answer[0] : q.answer;
+        const answerText = q.type === "choice" ? q.choices[q.answer] : q.type === "ordering" ? q.items.join(" ") : Array.isArray(q.answer) ? q.answer[0] : q.answer;
         const imageHtml = q.image ? `<img src="${q.image}" alt="" class="result-wrong-image" />` : "";
         item.innerHTML = `<p class="wrong-question">${renderMath(q.question)}</p>${imageHtml}<p class="wrong-answer">\u6B63\u89E3: ${renderMath(answerText)}</p>`;
         resultWrongList.appendChild(item);
@@ -29337,6 +29411,7 @@ ${followUp}`, answer }
   }
   btnNext.addEventListener("click", nextQuestion);
   btnSubmitText.addEventListener("click", submitText);
+  btnSubmitOrdering.addEventListener("click", submitOrdering);
   btnCheckHandwriting.addEventListener("click", revealHandwritingAnswer);
   btnEndQuiz.addEventListener("click", async () => {
     if (!state) return;
@@ -29834,6 +29909,8 @@ ${followUp}`, answer }
       if (!original || hashText(original.question) !== item.hash) return false;
       if (original.type === "choice") {
         if (!item.order || !isPermutation(item.order, original.choices.length)) return false;
+      } else if (original.type === "ordering") {
+        if (!item.order || !isPermutation(item.order, original.items.length)) return false;
       } else if (item.order !== null) {
         return false;
       }

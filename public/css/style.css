@@ -2337,3 +2337,13 @@ button:focus-visible, a:focus-visible, select:focus-visible, input:focus-visible
 @media (max-width: 380px) {
   .library-heading-art { display: none; }
 }
+
+.quiz-ordering-area[hidden] { display: none; }
+.ordering-hint { margin: 0 0 0.75rem; color: var(--color-muted); font-size: 0.9rem; }
+.ordering-tiles { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.8rem; }
+.ordering-selected { min-height: 3.5rem; padding: 0.5rem; border: 1px dashed var(--color-border); border-radius: var(--radius-sm); }
+.ordering-tile { padding: 0.55rem 0.8rem; border: 1px solid var(--color-border); border-radius: var(--radius-sm); background: var(--color-surface); color: var(--color-text); font: inherit; cursor: pointer; }
+.ordering-tile:hover:not(:disabled) { background: var(--color-primary-light); }
+.ordering-tile:disabled { opacity: 0.8; cursor: default; }
+#btn-submit-ordering { padding: 0.6rem 1rem; border: 0; border-radius: var(--radius-sm); background: var(--color-primary); color: #fff; font: inherit; font-weight: 700; cursor: pointer; }
+#btn-submit-ordering:disabled { opacity: 0.5; cursor: not-allowed; }

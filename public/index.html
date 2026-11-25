@@ -221,6 +221,12 @@
           <input type="text" id="quiz-text-input" autocomplete="off" placeholder="答えを入力" />
           <button type="button" id="btn-submit-text">回答する</button>
         </div>
+        <div id="quiz-ordering-area" class="quiz-ordering-area" hidden>
+          <p class="ordering-hint">語句をタップして正しい順に並べてください。並べた語句をタップすると戻せます。</p>
+          <div id="ordering-selected" class="ordering-tiles ordering-selected" aria-label="選んだ語句" aria-live="polite"></div>
+          <div id="ordering-available" class="ordering-tiles" aria-label="選べる語句"></div>
+          <button type="button" id="btn-submit-ordering" disabled>回答する</button>
+        </div>
         <div id="quiz-handwriting-area" class="quiz-handwriting-area" hidden>
           <canvas id="quiz-canvas" class="quiz-canvas" width="840" height="330"></canvas>
           <div class="handwriting-controls">

@@ -86,6 +86,7 @@
         <div class="builder-type-tabs" id="type-tabs">
           <button type="button" class="builder-type-tab is-active" data-type="choice">選択式(4択など)</button>
           <button type="button" class="builder-type-tab" data-type="text">記述式(入力)</button>
+          <button type="button" class="builder-type-tab" data-type="ordering">並び替え式</button>
           <button type="button" class="builder-type-tab" data-type="handwriting">手書き(自己採点)</button>
         </div>
         <p class="builder-help" id="type-help"></p>
@@ -122,6 +123,11 @@
         <label>正解(表記ゆれがある場合は複数登録できます)</label>
         <div id="text-answer-list" class="builder-answer-list"></div>
         <button type="button" id="btn-add-text-answer" class="builder-add-btn">+ 別の答え方を追加</button>
+      </div>
+
+      <div class="builder-field" id="ordering-fields" hidden>
+        <label for="q-ordering-items">語句（正解の順に1行ずつ入力）</label>
+        <textarea id="q-ordering-items" rows="5" placeholder="例:&#10;I&#10;like&#10;apples"></textarea>
       </div>
 
       <!-- 手書き -->

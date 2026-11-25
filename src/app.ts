@@ -4,6 +4,7 @@ import { getExams, getSubjects, getQuestions } from './data/registry.js';
 import { ICONS, getIcon, refreshIcons } from './icons.js';
 import { getTestCountdown } from './countdown.js';
 import { getExamSchedule, weekdayLabel } from './schedule.js';
+import { isOrderingCorrect } from './ordering.js';
 import { parseQuizLink } from './quiz-link.js';
 import {
   SESSION_STORAGE_KEY,
@@ -105,6 +106,11 @@ const quizChoices = $<HTMLElement>('quiz-choices');
 const quizTextInputArea = $<HTMLElement>('quiz-text-input-area');
 const quizTextInput = $<HTMLInputElement>('quiz-text-input');
 const btnSubmitText = $<HTMLButtonElement>('btn-submit-text');
+const quizOrderingArea = $<HTMLElement>('quiz-ordering-area');
+const orderingSelected = $<HTMLElement>('ordering-selected');
+const orderingAvailable = $<HTMLElement>('ordering-available');
+const btnSubmitOrdering = $<HTMLButtonElement>('btn-submit-ordering');
+let selectedOrdering: number[] = [];
 const quizHandwritingArea = $<HTMLElement>('quiz-handwriting-area');
 const quizCanvas = $<HTMLCanvasElement>('quiz-canvas');
 const btnClearCanvas = $<HTMLButtonElement>('btn-clear-canvas');
@@ -764,7 +770,16 @@ const questionOrigins = new WeakMap<Question, { orig: number; order: number[] | 
 // データ側で正解の位置が特定の選択肢(特にB)に偏っていても、
 // 出題時には毎回ばらけるようにするための処理。
 function randomChoiceOrder(q: Question): number[] | null {
-  return q.type === 'choice' ? shuffle(q.choices.map((_, i) => i)) : null;
+  if (q.type === 'choice') return shuffle(q.choices.map((_, i) => i));
+  if (q.type === 'ordering') {
+    const order = shuffle(q.items.map((_, i) => i));
+    if (isOrderingCorrect(q.items, order)) {
+      const different = order.findIndex((index) => q.items[index] !== q.items[order[0]]);
+      if (different > 0) [order[0], order[different]] = [order[different], order[0]];
+    }
+    return order;
+  }
+  return null;
 }
 
 // 選択肢を order の並びにした設問を返す(choice以外はそのまま)。
@@ -1022,6 +1037,8 @@ function renderQuestion(): void {
   quizChoices.innerHTML = '';
   quizChoices.hidden = true;
   quizTextInputArea.hidden = true;
+  quizOrderingArea.hidden = true;
+  selectedOrdering = [];
   quizTextInput.value = '';
   quizTextInput.disabled = false;
   btnSubmitText.disabled = false;
@@ -1046,10 +1063,53 @@ function renderQuestion(): void {
   } else if (q.type === 'text') {
     quizTextInputArea.hidden = false;
     quizTextInput.focus();
+  } else if (q.type === 'ordering') {
+    quizOrderingArea.hidden = false;
+    renderOrdering(q);
   } else {
     quizHandwritingArea.hidden = false;
   }
   saveSession('quiz');
+}
+
+function renderOrdering(q: Extract<Question, { type: 'ordering' }>): void {
+  const order = questionOrigins.get(q)?.order ?? q.items.map((_, i) => i);
+  orderingSelected.replaceChildren();
+  orderingAvailable.replaceChildren();
+  const makeTile = (index: number, selected: boolean): HTMLButtonElement => {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'ordering-tile';
+    button.textContent = q.items[index];
+    button.disabled = !!state?.answered;
+    button.setAttribute('aria-label', `${q.items[index]}を${selected ? '選択から戻す' : '選ぶ'}`);
+    button.addEventListener('click', () => {
+      selectedOrdering = selected ? selectedOrdering.filter((item) => item !== index) : [...selectedOrdering, index];
+      renderOrdering(q);
+      const destination = selected ? orderingAvailable : orderingSelected;
+      destination.querySelector<HTMLButtonElement>(`[data-item-index="${index}"]`)?.focus();
+    });
+    button.dataset.itemIndex = String(index);
+    return button;
+  };
+  selectedOrdering.forEach((index) => orderingSelected.appendChild(makeTile(index, true)));
+  order.filter((index) => !selectedOrdering.includes(index)).forEach((index) => orderingAvailable.appendChild(makeTile(index, false)));
+  btnSubmitOrdering.disabled = !!state?.answered || selectedOrdering.length !== q.items.length;
+}
+
+function submitOrdering(): void {
+  if (!state || state.answered) return;
+  const q = state.queue[state.index];
+  if (q.type !== 'ordering' || selectedOrdering.length !== q.items.length) return;
+  state.answered = true;
+  const correct = isOrderingCorrect(q.items, selectedOrdering);
+  renderOrdering(q);
+  finishAnswer(correct, q.items.join(' '));
+  if (q.explanation?.trim()) {
+    quizExplanation.innerHTML = '';
+    addExplanationLine('解説', 'is-correct', q.explanation);
+    quizExplanation.hidden = false;
+  }
 }
 
 function normalizeText(s: string): string {
@@ -1264,7 +1324,7 @@ function renderResult(): void {
       const item = document.createElement('div');
       item.className = 'wrong-item';
       const answerText =
-        q.type === 'choice' ? q.choices[q.answer] : Array.isArray(q.answer) ? q.answer[0] : q.answer;
+        q.type === 'choice' ? q.choices[q.answer] : q.type === 'ordering' ? q.items.join(' ') : Array.isArray(q.answer) ? q.answer[0] : q.answer;
       const imageHtml = q.image
         ? `<img src="${q.image}" alt="" class="result-wrong-image" />`
         : '';
@@ -1278,6 +1338,7 @@ function renderResult(): void {
 
 btnNext.addEventListener('click', nextQuestion);
 btnSubmitText.addEventListener('click', submitText);
+btnSubmitOrdering.addEventListener('click', submitOrdering);
 btnCheckHandwriting.addEventListener('click', revealHandwritingAnswer);
 
 btnEndQuiz.addEventListener('click', async () => {
@@ -1910,6 +1971,8 @@ function restoreSession(saved: SavedSession): boolean {
     if (!original || hashText(original.question) !== item.hash) return false;
     if (original.type === 'choice') {
       if (!item.order || !isPermutation(item.order, original.choices.length)) return false;
+    } else if (original.type === 'ordering') {
+      if (!item.order || !isPermutation(item.order, original.items.length)) return false;
     } else if (item.order !== null) {
       return false;
     }

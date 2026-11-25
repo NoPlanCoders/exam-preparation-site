@@ -72,6 +72,12 @@ test('試験・科目・問題の登録が一貫している', () => {
           continue;
         }
 
+        if (question.type === 'ordering') {
+          assert.ok(question.items.length >= 2 && question.items.every((item) => item.trim()), `${subject.id} の並び替え語句が不正です`);
+          assert.ok(new Set(question.items).size >= 2, `${subject.id} の並び替え語句がすべて同じです`);
+          continue;
+        }
+
         assert.equal(question.type, 'handwriting', `${subject.id} の問題形式が不正です`);
         assert.ok(question.answer.trim(), `${subject.id} の手書き問題の正解が空です`);
       }
@@ -86,7 +92,7 @@ test('存在しない試験・科目は空配列を返す', () => {
 
 test('再試験の科目と日程を、問題が未登録でも確認できる', () => {
   assert.deepEqual(registry.getSubjects('re-exam').map((subject) => subject.name), [
-    '国語', '英語(選択式)', '英語(並び替え・記述式)', 'データベース(記述式)', 'データ構造とアルゴリズム(記述式)',
+    '国語', '英語(選択式)', '英語(並び替え式)', 'データベース(記述式)', 'データ構造とアルゴリズム(記述式)',
   ]);
   const examSchedule = schedule.getExamSchedule('re-exam');
   assert.equal(examSchedule.year, 2026);
@@ -136,7 +142,7 @@ test('再試験の英語は選択問題と並び替え問題を各20問含む', 
   assert.equal(choices.length, 20);
   assert.equal(ordering.length, 20);
   assert.ok(choices.every((question) => question.type === 'choice'));
-  assert.ok(ordering.every((question) => question.type === 'text'));
+  assert.ok(ordering.every((question) => question.type === 'ordering'));
 });
 
 test('再試験のすべての問題に回答後の解説がある', () => {

@@ -36,7 +36,7 @@ import { subjects as reExamSubjects } from './re-exam/subjects.js';
 import { questions as reExamDatabaseText } from './re-exam/database-text.js';
 import { questions as reExamDataStructuresText } from './re-exam/data-structures-text.js';
 import { questions as reExamEnglishChoice } from './re-exam/english-choice.js';
-import { questions as reExamEnglishOrder } from './re-exam/english-order.js';
+import { questions as reExamEnglishOrdering } from './re-exam/english-ordering.js';
 
 interface ExamData {
   subjects: Subject[];
@@ -52,7 +52,7 @@ const examData: Record<string, ExamData> = {
       'database-text': reExamDatabaseText,
       'data-structures-text': reExamDataStructuresText,
       'english-choice': reExamEnglishChoice,
-      'english-order': reExamEnglishOrder,
+      'english-order': reExamEnglishOrdering,
     },
   },
   'quiz': {

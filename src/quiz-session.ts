@@ -13,7 +13,7 @@ export const SESSION_MAX_AGE_MS = 24 * 60 * 60 * 1000;
 export interface SavedItem {
   /** 元の問題データ(getQuestions)の何番目か。 */
   orig: number;
-  /** 選択肢の並び順(元の選択肢番号を表示順に並べたもの)。選択式以外は null。 */
+  /** 選択肢・並び替え語句の表示順。その他の形式は null。 */
   order: number[] | null;
   /** 元の問題文のハッシュ。問題データが更新されて別の問題になっていないか確認するため。 */
   hash: string;
